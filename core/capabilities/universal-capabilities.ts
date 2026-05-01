@@ -6,27 +6,28 @@
  * from the organisation's IT administrator or authorised owner.
  *
  * Permission model:
- *   STANDARD  — always available to all agents
- *   ELEVATED  — granted per-tenant by IT admin
- *   ADMIN     — granted explicitly by organisation owner
+ *   STANDARD: always available to all agents
+ *   ELEVATED: granted per-tenant by IT admin
+ *   ADMIN:    granted explicitly by organisation owner
  *
  * Capability categories:
- *   FILE       — create, read, analyse, convert, transform all file types
- *   SCREEN     — capture, read, and understand any screen or UI
- *   WEB        — access, scrape, automate, and interact with any website
- *   SERVER     — connect to databases, APIs, SSH, cloud storage
- *   CODE       — write, run, test, and debug code in any language
- *   AI         — invoke vision models, LLMs, embeddings, speech, and OCR
- *   COMMS      — send and receive across email, Slack, Teams, SMS, voice
- *   STORAGE    — read and write cloud and local storage of any kind
- *   SYSTEM     — interact with the operating system and running processes
- *   SOFTWARE   — automate any desktop or web application
+ *   FILE:     create, read, analyse, convert, transform all file types
+ *   SCREEN:   capture, read, and understand any screen or UI
+ *   WEB:      access, scrape, automate, and interact with any website
+ *   SERVER:   connect to databases, APIs, SSH, cloud storage
+ *   CODE:     write, run, test, and debug code in any language
+ *   AI:       invoke vision models, LLMs, embeddings, speech, and OCR
+ *   COMMS:    send and receive across email, Slack, Teams, SMS, voice
+ *   STORAGE:  read and write cloud and local storage of any kind
+ *   SYSTEM:   interact with the operating system and running processes
+ *   SOFTWARE: automate any desktop or web application
  *
  * Created by BBMW0 Technologies | bbmw0.com
  */
 
 import { selfScripting } from "./self-scripting";
 import { PLUGIN_MANIFEST_PROMPT } from "./plugin-manifest";
+import { COMPOSIO_PROMPT } from "./composio-connectors";
 
 // ─── Permission Tiers ─────────────────────────────────────────────────────────
 
@@ -939,6 +940,8 @@ ${selfScripting.getSelfScriptingPrompt()}
 - Use Context7 MCP (mcp__plugin_context7__resolve-library-id then query-docs) before any API call.
 
 ${PLUGIN_MANIFEST_PROMPT}
+
+${COMPOSIO_PROMPT}
 `;
 }
 
@@ -1004,7 +1007,7 @@ export class PermissionSystem {
     const cap = ALL_CAPABILITIES.find(c =>
       c.mcpTools.includes(toolId) || c.nativeTools.includes(toolId)
     );
-    if (!cap) return true; // unknown tool — allow by default, let MCP handle auth
+    if (!cap) return true; // unknown tool: allow by default, let MCP handle auth
     return this.hasPermission(tenantId, agentId, cap.tier);
   }
 

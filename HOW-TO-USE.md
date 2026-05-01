@@ -1,4 +1,4 @@
-# OmniOrg — How to Use Everything
+# OmniOrg: How to Use Everything
 
 ## ── STEP 1: OPEN THIS PROJECT IN CLAUDE CODE ──────────────────────
 
@@ -55,7 +55,7 @@ The orchestrator:
   npm install
   npm run dev
 
-Opens at http://localhost:5173 — visual command centre with:
+Opens at http://localhost:5173: visual command centre with:
   • All 900 agents visible as animated cards
   • Filter by department, tier, status
   • Type any order → agents deploy

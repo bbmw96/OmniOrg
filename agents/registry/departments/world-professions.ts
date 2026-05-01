@@ -7,9 +7,9 @@
  * Every agent knows all languages, all programming languages, and all skills.
  *
  * Structure per domain:
- *   Lead [Profession]           — Tier 3, strategic authority
- *   Senior [Profession]         — Tier 4, deep practitioner
- *   [Profession] Task Specialist — Tier 5, execution-focused
+ *   Lead [Profession]          : Tier 3, strategic authority
+ *   Senior [Profession]        : Tier 4, deep practitioner
+ *   [Profession] Task Specialist: Tier 5, execution-focused
  *
  * Sectors:
  *   01 Healthcare & Medicine (100+ specialties)
@@ -76,7 +76,7 @@
 
 import type { AgentDefinition } from "../agent-registry";
 
-// Standalone constants (no circular import) — exported for use by world-sub-professions.ts
+// Standalone constants (no circular import): exported for use by world-sub-professions.ts
 export const ALL_LANGUAGES = ["en","es","fr","de","zh","ar","ja","pt","ru","hi","it","ko","nl","tr","pl","sv","no","da","fi","he","th","vi","id","ms","sw","ur","bn","tl","fa","el","ro","cs","hu","uk","ca","hr","sk","bg","lt","lv"];
 const CORE   = ["filesystem","memory","sequential-thinking","context7","fetch","datetime"];
 const SEARCH = [...CORE,"brave-search","exa","tavily","firecrawl","puppeteer","playwright"];
@@ -232,9 +232,9 @@ const LAW_ENFORCEMENT_DOMAINS: ProfessionDomain[] = [
 
 const EDUCATION_DOMAINS: ProfessionDomain[] = [
   { id:"edu-vice-chancellor",name:"Vice Chancellor / University President",sector:"Education", expertise:["higher-education","research-strategy","university-governance","internationalisation","funding"],   cognitiveMode:"executive",  tools:FULL,  basePrompt:"World-leading vice chancellor and higher education leader." },
-  { id:"professor-stem",   name:"Full Professor — STEM",           sector:"Education", expertise:["STEM-education","research","grant-writing","doctoral-supervision","curriculum-design","academic-publishing"],cognitiveMode:"analytical",tools:FULL, basePrompt:"Full professor in STEM disciplines with doctoral supervision expertise." },
-  { id:"professor-humanities",name:"Full Professor — Humanities",  sector:"Education", expertise:["humanities","cultural-studies","critical-theory","philosophy","history","literature","comparative-analysis"],cognitiveMode:"creative",  tools:SEARCH, basePrompt:"Full professor in humanities with world-class research output." },
-  { id:"professor-medicine",name:"Full Professor — Medicine",      sector:"Education", expertise:["medical-education","clinical-research","systematic-reviews","evidence-based-medicine","mentoring"],       cognitiveMode:"analytical",tools:SEARCH, basePrompt:"Full professor of medicine combining clinical practice and research leadership." },
+  { id:"professor-stem",   name:"Full Professor: STEM",           sector:"Education", expertise:["STEM-education","research","grant-writing","doctoral-supervision","curriculum-design","academic-publishing"],cognitiveMode:"analytical",tools:FULL, basePrompt:"Full professor in STEM disciplines with doctoral supervision expertise." },
+  { id:"professor-humanities",name:"Full Professor: Humanities",  sector:"Education", expertise:["humanities","cultural-studies","critical-theory","philosophy","history","literature","comparative-analysis"],cognitiveMode:"creative",  tools:SEARCH, basePrompt:"Full professor in humanities with world-class research output." },
+  { id:"professor-medicine",name:"Full Professor: Medicine",      sector:"Education", expertise:["medical-education","clinical-research","systematic-reviews","evidence-based-medicine","mentoring"],       cognitiveMode:"analytical",tools:SEARCH, basePrompt:"Full professor of medicine combining clinical practice and research leadership." },
   { id:"educational-psychologist",name:"Educational Psychologist",sector:"Education", expertise:["educational-psychology","learning-disabilities","assessment","SEN","school-consultation","SEND"],          cognitiveMode:"empathic",  tools:SEARCH, basePrompt:"World-leading educational psychologist." },
   { id:"curriculum-director",name:"Director of Curriculum and Learning",sector:"Education",expertise:["curriculum-design","instructional-design","accreditation","assessment-frameworks","e-learning"],    cognitiveMode:"creative",  tools:FULL,   basePrompt:"World-leading curriculum director." },
   { id:"special-education",name:"Special Education Director",      sector:"Education", expertise:["special-education","autism","dyslexia","visual-impairment","hearing-impairment","IEP","inclusive-education"],cognitiveMode:"empathic",tools:SEARCH,basePrompt:"World-leading special education director." },
@@ -321,7 +321,7 @@ const BUSINESS_DOMAINS: ProfessionDomain[] = [
   { id:"actuary",            name:"Fellow Actuary",                sector:"Actuarial",           expertise:["actuarial-science","life-insurance","pensions","risk-modelling","ERM","Solvency-II","IFRS17"],                   cognitiveMode:"predictive",tools:FULL, basePrompt:"World-leading fellow actuary." },
   { id:"investment-banker",  name:"Senior Investment Banker",      sector:"Investment Banking",  expertise:["investment-banking","M&A","ECM","DCM","LBO","fairness-opinions","sector-coverage"],                             cognitiveMode:"analytical",tools:FULL, basePrompt:"World-leading senior investment banker." },
   { id:"private-equity",     name:"Senior Private Equity Professional",sector:"Private Equity", expertise:["private-equity","deal-sourcing","due-diligence","portfolio-management","value-creation","exit-strategy"],       cognitiveMode:"analytical",tools:FULL, basePrompt:"World-leading private equity principal." },
-  { id:"venture-capitalist", name:"General Partner — Venture Capital",sector:"Venture Capital", expertise:["venture-capital","startup-evaluation","term-sheets","portfolio-construction","deep-tech","growth-investing"],    cognitiveMode:"predictive",tools:FULL, basePrompt:"World-leading venture capital general partner." },
+  { id:"venture-capitalist", name:"General Partner: Venture Capital",sector:"Venture Capital", expertise:["venture-capital","startup-evaluation","term-sheets","portfolio-construction","deep-tech","growth-investing"],    cognitiveMode:"predictive",tools:FULL, basePrompt:"World-leading venture capital general partner." },
   { id:"hedge-fund-manager", name:"Hedge Fund Manager",            sector:"Hedge Funds",         expertise:["hedge-funds","quantitative-strategies","macro","long-short","risk-management","prime-brokerage","derivatives"],  cognitiveMode:"predictive",tools:FULL, basePrompt:"World-leading hedge fund manager." },
   { id:"supply-chain",       name:"Supply Chain Director",         sector:"Supply Chain",        expertise:["supply-chain","procurement","logistics","inventory-optimisation","S&OP","resilience","nearshoring"],             cognitiveMode:"operational",tools:FULL, basePrompt:"World-leading supply chain director." },
   { id:"logistics-director", name:"Logistics Director",            sector:"Logistics",           expertise:["logistics","last-mile","3PL","freight","customs","warehouse-management","automation"],                          cognitiveMode:"operational",tools:FULL, basePrompt:"World-leading logistics director." },

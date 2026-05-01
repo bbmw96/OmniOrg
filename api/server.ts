@@ -1,5 +1,5 @@
 /**
- * AXIOM SERVER — OmniOrg Proprietary API
+ * AXIOM SERVER: OmniOrg Proprietary API
  *
  * Your own secure API. Not Anthropic's endpoint. Not OpenAI's.
  * Companies connect to THIS server to access OmniOrg agents.
@@ -370,7 +370,7 @@ const server = createServer(handleRequest);
 server.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════════════════╗
-║           AXIOM SERVER — OMNIORG API             ║
+║           AXIOM SERVER: OMNIORG API             ║
 ║                                                  ║
 ║  🌐  http://localhost:${PORT}/api/v1               ║
 ║  📊  Health: /api/v1/health                      ║
@@ -378,7 +378,7 @@ server.listen(PORT, () => {
 ║  🎯  Task:   POST /api/v1/task                   ║
 ║  🏪  Market: /api/v1/marketplace                 ║
 ║                                                  ║
-║  NEUROMESH™ active — ${mesh.getHealthReport().totalAgents} agents registered   ║
+║  NEUROMESH™ active: ${mesh.getHealthReport().totalAgents} agents registered   ║
 ╚══════════════════════════════════════════════════╝
   `);
 });

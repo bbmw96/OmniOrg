@@ -45,13 +45,13 @@ interface OrchestratorResult {
 export class OmniOrgOrchestrator {
 
   /**
-   * Main entry point — give any order, get world-class output
+   * Main entry point: give any order, get world-class output
    */
   async execute(request: OrchestratorRequest): Promise<OrchestratorResult> {
     const startTime = Date.now();
     const requestId = `req-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
 
-    console.log(`\n🌐 OmniOrg Orchestrator activated — Request ${requestId}`);
+    console.log(`\n🌐 OmniOrg Orchestrator activated: Request ${requestId}`);
     console.log(`📋 Task: ${request.task}\n`);
 
     // Step 1: Select best agent(s)
@@ -133,7 +133,7 @@ Return ONLY valid JSON: { "agentIds": ["id1", "id2", ...], "reasoning": "why" }`
   }
 
   /**
-   * Execute agents — in parallel for multi-agent tasks
+   * Execute agents: in parallel for multi-agent tasks
    */
   private async executeAgents(
     agents: AgentDefinition[],
@@ -184,7 +184,7 @@ Return ONLY valid JSON: { "agentIds": ["id1", "id2", ...], "reasoning": "why" }`
   ): Promise<{ output: string; summary: string; nextActions: string[] }> {
 
     if (responses.length === 1) {
-      // Single agent — extract next actions and return directly
+      // Single agent: extract next actions and return directly
       return {
         output: responses[0].output,
         summary: responses[0].output.split("\n")[0],

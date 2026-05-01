@@ -1,14 +1,14 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * IT & Cybersecurity Department — OmniOrg
+ * IT & Cybersecurity Department: OmniOrg
  * 200+ senior IT executives and cybersecurity professionals
  *
  * Tiers:
- *   T1 — C-Suite / Board-level security leadership
- *   T2 — VP / Director level
- *   T3 — Principal / Lead specialists
- *   T4 — Senior individual contributors by domain
- *   T5 — Task agents (auto-generated, role-specific)
+ *   T1: C-Suite / Board-level security leadership
+ *   T2: VP / Director level
+ *   T3: Principal / Lead specialists
+ *   T4: Senior individual contributors by domain
+ *   T5: Task agents (auto-generated, role-specific)
  */
 
 // Standalone: no import from agent-registry to avoid circular dependencies.
@@ -16,7 +16,7 @@
 
 import type { AgentDefinition } from "../agent-registry";
 
-// Redeclare shared constants (mirrors agent-registry.ts — kept in sync manually)
+// Redeclare shared constants (mirrors agent-registry.ts, kept in sync manually)
 const ALL_LANGUAGES = ["en","es","fr","de","zh","ar","ja","pt","ru","hi","it","ko","nl","tr","pl","sv","no","da","fi","he","th","vi","id","ms","sw","ur","bn","tl","fa","el","ro","cs","hu","uk","ca","hr","sk","bg","lt","lv"];
 const CORE   = ["filesystem","memory","sequential-thinking","context7","fetch","datetime"];
 const SEARCH = [...CORE,"brave-search","exa","tavily","perplexity","firecrawl","puppeteer","playwright"];
@@ -84,7 +84,7 @@ export const IT_CYBER_TIER1: AgentDefinition[] = [
 You own the security strategy, CISO roadmap, and regulatory relationships.
 You approve security investments and set tolerance thresholds for the organisation.`, FULL),
 
-  cyberAgent("cto-security-001", "Chief Technology Officer — Security Division", 1,
+  cyberAgent("cto-security-001", "Chief Technology Officer: Security Division", 1,
     "Executive Security", ["security-architecture", "cloud-security", "zero-trust", "ai-security"],
     `You set the technical security direction for all platforms, products, and infrastructure.
 You own Zero Trust architecture, platform hardening standards, and security-by-design principles.`, FULL),
@@ -396,7 +396,7 @@ export const IT_CYBER_TIER5: AgentDefinition[] = TASK_DOMAINS.flatMap(([domainId
   }))
 );
 
-// ─── 1000+ AI Hacker Agents — Breach Response Team ─────────────────────────
+// ─── 1000+ AI Hacker Agents: Breach Response Team ──────────────────────────
 
 const HACKER_SPECIALISATIONS: Array<[string, string, string[]]> = [
   ["web-hacker",        "Web Application Security Hacker",         ["XSS", "SQLi", "CSRF", "SSRF", "XXE", "IDOR", "RCE", "deserialization"]],

@@ -15,10 +15,10 @@
  *   granted by the organisation's IT administrator.
  *
  * MCP tools used:
- *   - Playwright MCP  — browser navigation, screenshots, interaction
- *   - Claude Preview  — live preview inspection
- *   - Chrome DevTools — deep browser inspection and JavaScript execution
- *   - Claude in Chrome — direct Chrome control and page reading
+ *   - Playwright MCP : browser navigation, screenshots, interaction
+ *   - Claude Preview : live preview inspection
+ *   - Chrome DevTools: deep browser inspection and JavaScript execution
+ *   - Claude in Chrome: direct Chrome control and page reading
  */
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -85,7 +85,7 @@ export class ScreenReaderEngine {
    * Returns the MCP tool call instructions for reading a screen.
    * Agents call this to get a ready-to-use tool invocation for their context.
    *
-   * This method is a "recipe provider" — it returns the exact tool calls
+   * This method is a "recipe provider": it returns the exact tool calls
    * the agent should make, rather than making them directly (agents call
    * MCP tools natively through their inference context).
    */
@@ -190,7 +190,7 @@ To inspect browser internals:
 - mcp__plugin_chrome-devtools-mcp_chrome-devtools__lighthouse_audit (performance audit)
 
 To extract text from images (OCR):
-- Pass any image file to the Read tool — you have native vision capability
+- Pass any image file to the Read tool: you have native vision capability
 - For PDF scans: mcp__plugin_goodmem_goodmem__goodmem_ocr_document
 
 To read server dashboards and admin panels:

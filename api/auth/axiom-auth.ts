@@ -1,5 +1,5 @@
 /**
- * AXIOM AUTH — OmniOrg Proprietary Authentication
+ * AXIOM AUTH: OmniOrg Proprietary Authentication
  * JWT-based with tenant isolation, API key hashing, and role-based access.
  * No third-party auth dependency. Fully owned.
  */
@@ -31,7 +31,7 @@ export class AxiomAuth {
     const rawKey = `omniorg_${randomBytes(32).toString("hex")}`;
     const hashedKey = createHash("sha256").update(rawKey).digest("hex");
     API_KEY_STORE.set(tenantId, { tenantId, plan, hashedKey });
-    return rawKey; // Only returned once — store it securely
+    return rawKey; // Only returned once: store it securely
   }
 
   /** Generate a short-lived JWT from an API key */
@@ -53,7 +53,7 @@ export class AxiomAuth {
     return AxiomAuth.signJWT(payload);
   }
 
-  /** Verify a request — checks Bearer token or X-API-Key header */
+  /** Verify a request: checks Bearer token or X-API-Key header */
   static verifyRequest(req: IncomingMessage): AuthResult {
     const authHeader = req.headers["authorization"] ?? "";
     const apiKeyHeader = req.headers["x-api-key"] as string | undefined;
@@ -64,7 +64,7 @@ export class AxiomAuth {
     }
 
     if (apiKeyHeader) {
-      // Direct API key auth (less preferred — use for server-to-server)
+      // Direct API key auth (less preferred: use for server-to-server)
       for (const [tenantId, stored] of API_KEY_STORE.entries()) {
         const hashed = createHash("sha256").update(apiKeyHeader).digest("hex");
         if (hashed === stored.hashedKey) {

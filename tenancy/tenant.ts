@@ -2,7 +2,7 @@
  * OMNIORG MULTI-TENANT MODEL
  *
  * Any company, any size. They start with a plan, expand when ready.
- * The 900 agents exist for everyone — companies just unlock more over time.
+ * The 900 agents exist for everyone: companies just unlock more over time.
  *
  * Plans:
  *  SOLO      → 1 user, 10 agents (free tier)
@@ -58,7 +58,7 @@ const PLAN_LIMITS: Record<TenantPlan, { maxUsers: number; maxAgents: number; tas
 const PLAN_DEFAULT_AGENT_IDS: Record<TenantPlan, string[]> = {
   solo:       ["ceo-001", "cto-001", "eng-fe-001", "eng-be-001", "cre-ux-001",
                 "law-corp-001", "fin-ib-001", "sci-mat-001", "med-gp-001", "cre-cpy-001"],
-  starter:    [], // resolved dynamically — first 50 by score
+  starter:    [], // resolved dynamically: first 50 by score
   growth:     [], // first 150
   business:   [], // first 350
   scale:      [], // first 600
@@ -91,7 +91,7 @@ export class TenantManager {
       companyName: params.companyName,
       email: params.email,
       plan,
-      apiKey: rawApiKey, // stored raw here — in production, hash before storing to DB
+      apiKey: rawApiKey, // stored raw here: in production, hash before storing to DB
       unlockedAgentIds: defaultIds,
       subscribedPackages: [],
       maxUsers: limits.maxUsers,
@@ -104,7 +104,7 @@ export class TenantManager {
     };
 
     tenantStore.set(tenantId, tenant);
-    console.log(`[TenantManager] Created tenant ${tenantId} (${plan}) — ${defaultIds.length} agents unlocked`);
+    console.log(`[TenantManager] Created tenant ${tenantId} (${plan}): ${defaultIds.length} agents unlocked`);
     return tenant;
   }
 

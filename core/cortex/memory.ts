@@ -1,20 +1,20 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * CORTEX MEMORY ARCHITECTURE — OmniOrg Proprietary
+ * CORTEX MEMORY ARCHITECTURE: OmniOrg Proprietary
  *
  * 3-layer cognitive memory system.
  * No other agent framework implements memory at this level.
  *
- * Layer 1 — WORKING MEMORY
+ * Layer 1: WORKING MEMORY
  *   Active context for the current task. Fast, volatile.
  *   Analogous to RAM. Cleared when task completes.
  *
- * Layer 2 — EPISODIC MEMORY
+ * Layer 2: EPISODIC MEMORY
  *   Records of past interactions, decisions, and outcomes.
  *   Survives sessions. Used for learning from experience.
  *   "I handled a similar legal contract request for TechCorp in March..."
  *
- * Layer 3 — SEMANTIC MEMORY
+ * Layer 3: SEMANTIC MEMORY
  *   Accumulated factual knowledge, domain expertise, and collective learning.
  *   Shared across agents (with tenant isolation).
  *   "GDPR Article 17 requires data erasure within 30 days..."
@@ -127,7 +127,7 @@ export class CortexMemory {
   // ── SEMANTIC MEMORY ─────────────────────────────────────────────────────────
 
   promoteFact(partial: Omit<SemanticMemoryEntry, "factId" | "verificationCount" | "createdAt" | "lastVerifiedAt">): string {
-    // Check if similar fact already exists — if so, strengthen it
+    // Check if similar fact already exists: if so, strengthen it
     const existing = this.semantic.find(
       f => f.tenantId === partial.tenantId &&
            f.fact.toLowerCase().includes(partial.fact.toLowerCase().slice(0, 40))
@@ -193,6 +193,6 @@ export class CortexMemory {
   }
 }
 
-// Singleton — shared across all agents in the runtime
+// Singleton: shared across all agents in the runtime
 export const globalMemory = new CortexMemory();
 export default CortexMemory;

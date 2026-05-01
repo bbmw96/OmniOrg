@@ -82,7 +82,7 @@ const FILE_TYPE_MAP: Record<string, FileTypeInfo> = {
   ".ini":  { category: "data",         description: "INI Configuration",         canRead: true,  canWrite: true,  canAnalyse: true,  mimeType: "text/plain" },
   ".env":  { category: "config",       description: "Environment Variables",     canRead: true,  canWrite: true,  canAnalyse: true,  mimeType: "text/plain" },
 
-  // Code — selection (detected dynamically for 700+ languages)
+  // Code: selection (detected dynamically for 700+ languages)
   ".ts":   { category: "code", description: "TypeScript",   canRead: true, canWrite: true, canAnalyse: true, mimeType: "text/typescript" },
   ".tsx":  { category: "code", description: "TypeScript+JSX",canRead: true,canWrite: true, canAnalyse: true, mimeType: "text/typescript" },
   ".js":   { category: "code", description: "JavaScript",   canRead: true, canWrite: true, canAnalyse: true, mimeType: "text/javascript" },
@@ -207,7 +207,7 @@ export class UniversalFileEngine {
           const content = readFileSync(filePath, "utf-8");
           lines = content.split("\n").length;
         } catch {
-          // Binary file — skip line count
+          // Binary file: skip line count
         }
       }
     }
@@ -305,9 +305,9 @@ export class UniversalFileEngine {
       ".pdf":   "Use the mcp__plugin_pdf-viewer_pdf__read_pdf_bytes tool or pass the file path to the Read tool (Claude natively reads PDFs).",
       ".xlsx":  "Use the mcp__excel__read MCP tool or the Bash tool with a Python script using openpyxl.",
       ".docx":  "Use the Bash tool with python-docx: python3 -c \"import docx; doc=docx.Document('file.docx'); print('\\n'.join([p.text for p in doc.paragraphs]))\"",
-      ".png":   "Pass to the Read tool — Claude has native vision capability to analyse images.",
-      ".jpg":   "Pass to the Read tool — Claude has native vision capability to analyse images.",
-      ".jpeg":  "Pass to the Read tool — Claude has native vision capability to analyse images.",
+      ".png":   "Pass to the Read tool: Claude has native vision capability to analyse images.",
+      ".jpg":   "Pass to the Read tool: Claude has native vision capability to analyse images.",
+      ".jpeg":  "Pass to the Read tool: Claude has native vision capability to analyse images.",
       ".svg":   "Read as text (SVG is XML). Use the Read tool directly.",
       ".ipynb": "Use the Read tool (Claude natively reads notebooks) or the mcp__plugin_data-agent-kit-starter-pack tools.",
       ".zip":   "Use Bash: unzip -l file.zip (list) or unzip file.zip -d output/ (extract).",
