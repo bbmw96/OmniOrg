@@ -26,6 +26,8 @@ import { AuditLogger } from "./middleware/audit-logger";
 import { SynapseSignalFactory } from "../core/synapse/protocol";
 import { AGENT_REGISTRY } from "../agents/registry/agent-registry";
 import type { AgentDefinition } from "../agents/registry/agent-registry";
+import { contentOrchestrator } from "../intelligence/content/content-orchestrator";
+import type { ChannelProfile } from "../intelligence/content/content-orchestrator";
 
 // ── SERVER CONFIG ─────────────────────────────────────────────────────────────
 
@@ -130,6 +132,41 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       return handleMarketplaceSubscribe(res, body, tenantId);
     }
 
+    // ── CONTENT INTELLIGENCE: INSTAGRAM + YOUTUBE ────────────────────────────
+
+    if (path === `${BASE_PATH}/content/weekly-plan` && method === "POST") {
+      return handleWeeklyPlan(res, body, tenantId);
+    }
+
+    if (path === `${BASE_PATH}/content/trend-sprint` && method === "POST") {
+      return handleTrendSprint(res, body, tenantId);
+    }
+
+    if (path === `${BASE_PATH}/content/enhance-video` && method === "POST") {
+      return handleEnhanceVideo(res, body, tenantId);
+    }
+
+    if (path === `${BASE_PATH}/content/monetisation` && method === "POST") {
+      return handleMonetisationAudit(res, body, tenantId);
+    }
+
+    if (path === `${BASE_PATH}/content/revenue-projection` && method === "POST") {
+      return handleRevenueProjection(res, body);
+    }
+
+    if (path === `${BASE_PATH}/content/queue` && method === "GET") {
+      return jsonResponse(res, 200, { queue: contentOrchestrator.getContentQueue(tenantId) });
+    }
+
+    if (path === `${BASE_PATH}/content/pending-approvals` && method === "GET") {
+      return jsonResponse(res, 200, { posts: contentOrchestrator.getPendingApprovals(tenantId) });
+    }
+
+    if (path.startsWith(`${BASE_PATH}/content/approve/`) && method === "POST") {
+      const postId = path.split("/").pop() ?? "";
+      return handleApprovePost(res, body, postId);
+    }
+
     // 404
     return jsonResponse(res, 404, { error: "Not found", path });
 
@@ -141,8 +178,8 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
 // ── ROUTE HANDLERS ────────────────────────────────────────────────────────────
 
-async function handleAuthToken(res: ServerResponse, body: Record<string, string>): Promise<void> {
-  const { apiKey, tenantId } = body;
+async function handleAuthToken(res: ServerResponse, body: Record<string, unknown>): Promise<void> {
+  const { apiKey, tenantId } = body as Record<string, string>;
   if (!apiKey || !tenantId) return jsonResponse(res, 400, { error: "apiKey and tenantId required" });
 
   const token = AxiomAuth.generateToken(tenantId, apiKey);
@@ -151,8 +188,8 @@ async function handleAuthToken(res: ServerResponse, body: Record<string, string>
   return jsonResponse(res, 200, { token, expiresIn: 3600, tokenType: "Bearer" });
 }
 
-async function handleRegister(res: ServerResponse, body: Record<string, string>): Promise<void> {
-  const { companyName, email, plan } = body;
+async function handleRegister(res: ServerResponse, body: Record<string, unknown>): Promise<void> {
+  const { companyName, email, plan } = body as Record<string, string>;
   if (!companyName || !email) return jsonResponse(res, 400, { error: "companyName and email required" });
 
   const tenant = TenantManager.create({ companyName, email, plan: (plan ?? "starter") as any });
@@ -344,6 +381,109 @@ async function handleMarketplaceSubscribe(
   return jsonResponse(res, 200, result);
 }
 
+// ── CONTENT INTELLIGENCE HANDLERS ─────────────────────────────────────────────
+
+async function handleWeeklyPlan(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+  tenantId: string
+): Promise<void> {
+  const profile = body as Partial<ChannelProfile>;
+  if (!profile.niche) return jsonResponse(res, 400, { error: "niche is required" });
+
+  const channelProfile: ChannelProfile = {
+    tenantId,
+    channelName:           (profile.channelName as string)         ?? "My Channel",
+    niche:                 profile.niche as string,
+    brandVoice:            (profile.brandVoice as string)          ?? "Educational, engaging, authentic",
+    targetAudience:        (profile.targetAudience as string)      ?? "People learning " + profile.niche,
+    platforms:             (profile.platforms as any)              ?? ["instagram", "youtube"],
+    contentGoal:           (profile.contentGoal as any)            ?? "grow-fast",
+    monetisationGoal:      (profile.monetisationGoal as string)    ?? "AdSense + brand deals",
+    postsPerWeekTarget:    (profile.postsPerWeekTarget as number)  ?? 7,
+    youtubeSubscribers:    (profile.youtubeSubscribers as number)  ?? 0,
+    youtubeWatchHours:     (profile.youtubeWatchHours as number)   ?? 0,
+    instagramFollowers:    (profile.instagramFollowers as number)  ?? 0,
+  };
+
+  const result = await contentOrchestrator.runWeeklyPlan(channelProfile);
+  return jsonResponse(res, 200, result);
+}
+
+async function handleTrendSprint(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+  tenantId: string
+): Promise<void> {
+  const { trendTopic, niche, platforms, brandVoice } = body as Record<string, any>;
+  if (!trendTopic || !niche) return jsonResponse(res, 400, { error: "trendTopic and niche are required" });
+
+  const result = await contentOrchestrator.runTrendSprint({
+    trendTopic,
+    niche,
+    platforms:  platforms ?? ["instagram", "youtube"],
+    tenantId,
+    brandVoice,
+  });
+  return jsonResponse(res, 200, result);
+}
+
+async function handleEnhanceVideo(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+  tenantId: string
+): Promise<void> {
+  const input = { ...body, tenantId } as any;
+  if (!input.title || !input.duration || !input.platform || !input.niche) {
+    return jsonResponse(res, 400, { error: "title, duration, platform, and niche are required" });
+  }
+
+  const result = await contentOrchestrator.enhanceVideo(input);
+  return jsonResponse(res, 200, result);
+}
+
+async function handleMonetisationAudit(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+  tenantId: string
+): Promise<void> {
+  const data = { ...body, tenantId } as any;
+  const result = contentOrchestrator.monetisationAudit(data);
+  return jsonResponse(res, 200, result);
+}
+
+async function handleRevenueProjection(
+  res: ServerResponse,
+  body: Record<string, unknown>
+): Promise<void> {
+  const { currentAudience, monthlyGrowthPercent, months } = body as Record<string, number>;
+  if (!currentAudience || !monthlyGrowthPercent || !months) {
+    return jsonResponse(res, 400, { error: "currentAudience, monthlyGrowthPercent, and months are required" });
+  }
+
+  const result = contentOrchestrator.projectRevenue(currentAudience, monthlyGrowthPercent, months);
+  return jsonResponse(res, 200, { projections: result });
+}
+
+async function handleApprovePost(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+  postId: string
+): Promise<void> {
+  if (!postId) return jsonResponse(res, 400, { error: "postId is required" });
+
+  const { approvedBy, notes } = body as { approvedBy?: string; notes?: string };
+  if (!approvedBy) return jsonResponse(res, 400, { error: "approvedBy is required" });
+
+  try {
+    const post = contentOrchestrator.approvePost(postId, approvedBy, notes);
+    if (!post) return jsonResponse(res, 404, { error: "Post not found" });
+    return jsonResponse(res, 200, { post, message: "Post approved. Ready for Composio delivery." });
+  } catch (err: any) {
+    return jsonResponse(res, 422, { error: err.message });
+  }
+}
+
 // ── UTILITIES ─────────────────────────────────────────────────────────────────
 
 function jsonResponse(res: ServerResponse, status: number, data: unknown): void {
@@ -369,17 +509,26 @@ const server = createServer(handleRequest);
 
 server.listen(PORT, () => {
   console.log(`
-╔══════════════════════════════════════════════════╗
-║           AXIOM SERVER: OMNIORG API             ║
-║                                                  ║
-║  🌐  http://localhost:${PORT}/api/v1               ║
-║  📊  Health: /api/v1/health                      ║
-║  🤖  Agents: /api/v1/agents                      ║
-║  🎯  Task:   POST /api/v1/task                   ║
-║  🏪  Market: /api/v1/marketplace                 ║
-║                                                  ║
-║  NEUROMESH™ active: ${mesh.getHealthReport().totalAgents} agents registered   ║
-╚══════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════╗
+║          AXIOM SERVER: OMNIORG API v1                 ║
+║                                                        ║
+║  🌐  http://localhost:${PORT}/api/v1                     ║
+║  📊  Health:         GET  /api/v1/health               ║
+║  🤖  Agents:         GET  /api/v1/agents               ║
+║  🎯  Task:           POST /api/v1/task                 ║
+║  🏪  Market:         GET  /api/v1/marketplace          ║
+║                                                        ║
+║  ── CONTENT INTELLIGENCE ──────────────────────────── ║
+║  📅  Weekly Plan:    POST /api/v1/content/weekly-plan  ║
+║  ⚡  Trend Sprint:   POST /api/v1/content/trend-sprint ║
+║  🎬  Enhance Video:  POST /api/v1/content/enhance-video║
+║  💰  Monetisation:   POST /api/v1/content/monetisation ║
+║  📈  Revenue Proj:   POST /api/v1/content/revenue-projection║
+║  ✅  Approve Post:   POST /api/v1/content/approve/:id  ║
+║  📋  Queue:          GET  /api/v1/content/queue        ║
+║                                                        ║
+║  NEUROMESH: ${mesh.getHealthReport().totalAgents} agents | InsForge + YouTubeForge LIVE ║
+╚════════════════════════════════════════════════════════╝
   `);
 });
 

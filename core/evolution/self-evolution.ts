@@ -162,15 +162,16 @@ export class SelfEvolutionEngine {
 
     const newAgent: AgentDefinition = {
       id,
-      role:          proposal.definition.role,
-      tier:          proposal.definition.tier ?? 5,
-      department:    proposal.definition.department,
-      cognitiveMode: proposal.definition.cognitiveMode ?? "analytical",
-      languages:     proposal.definition.languages ?? ["en"],
-      expertise:     proposal.definition.expertise ?? [],
-      tools:         proposal.definition.tools ?? ["Read", "Write", "Bash"],
-      systemPrompt:  proposal.definition.systemPrompt,
-      capabilities:  proposal.definition.capabilities ?? [],
+      role:                 proposal.definition.role,
+      tier:                 proposal.definition.tier ?? 5,
+      department:           proposal.definition.department,
+      status:               "active",
+      primaryCognitiveMode: (proposal.definition as any).cognitiveMode ?? (proposal.definition as any).primaryCognitiveMode ?? "analytical",
+      languages:            proposal.definition.languages ?? ["en"],
+      expertise:            proposal.definition.expertise ?? [],
+      tools:                proposal.definition.tools ?? ["Read", "Write", "Bash"],
+      systemPrompt:         proposal.definition.systemPrompt,
+      capabilities:         proposal.definition.capabilities ?? [],
     };
 
     this.evolvedAgents.set(id, newAgent);
@@ -246,11 +247,11 @@ export class SelfEvolutionEngine {
     tenantId: string,
     triggeredBy: string
   ): AgentDefinition {
-    if (agentDef.capabilities.includes(capability)) return agentDef;
+    if ((agentDef.capabilities ?? []).includes(capability)) return agentDef;
 
     const updated: AgentDefinition = {
       ...agentDef,
-      capabilities: [...agentDef.capabilities, capability],
+      capabilities: [...(agentDef.capabilities ?? []), capability],
     };
 
     this.evolvedAgents.set(agentDef.id, updated);
