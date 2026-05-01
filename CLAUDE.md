@@ -1,9 +1,9 @@
-# OmniOrg — NEUROMESH™ Enterprise AI Organisation
+# OmniOrg: NEUROMESH™ Enterprise AI Organisation
 # 255+ Agents (expandable to 900+) · 53 Departments · 40+ Languages
 # Architecture: NEUROMESH™ v2.0 | CORTEX Engine | SYNAPSE Protocol | AXIOM API
 # Created: 2026-04-30 | Last Updated: 2026-05-01
 
-## ████ ULTRATHINK PROTOCOL — MANDATORY ████
+## ████ ULTRATHINK PROTOCOL: MANDATORY ████
 UNDERSTAND → CONSTRAINTS → EDGE CASES → ALTERNATIVES →
 DEPENDENCIES → SECURITY → ARCHITECTURE → PLAN → EXECUTE
 
@@ -14,15 +14,15 @@ DEPENDENCIES → SECURITY → ARCHITECTURE → PLAN → EXECUTE
 Unlike LangGraph (fixed edges), CrewAI (sequential pipelines),
 OpenAI Swarm (flat routing), or AWS Bedrock Multi-Agent (rule-based):
 
-### NEUROMESH™ — Adaptive Cognitive Mesh
+### NEUROMESH™: Adaptive Cognitive Mesh
   Agents are neurons with connection weights that evolve after every task.
   High-performing agent pairs strengthen their connection automatically.
-  The topology is ALIVE — not configured, not static.
+  The topology is ALIVE: not configured, not static.
   Teams form, execute, and dissolve dynamically.
   4 topologies: parallel / hierarchical / mesh / sequential.
   EMERGENT BEHAVIOUR: The mesh discovers agent combinations no human designed.
 
-### CORTEX Engine — Proprietary AI Inference Layer
+### CORTEX Engine: Proprietary AI Inference Layer
   Not a wrapper. Not a prompt template library.
   - COGNITIVE PERSONAS: Agents have state (confidence drift, fatigue, peer trust)
   - COGNITIVE MODES: 10 modes (analytical, creative, forensic, guardian, etc.)
@@ -31,13 +31,13 @@ OpenAI Swarm (flat routing), or AWS Bedrock Multi-Agent (rule-based):
   - CONFIDENCE CALIBRATION: Every output scored on 5 dimensions
   - COLLECTIVE INTELLIGENCE: High-confidence outputs promote to shared knowledge
 
-### SYNAPSE Protocol — Inter-Agent Communication
+### SYNAPSE Protocol: Inter-Agent Communication
   Typed semantic signals, not function calls.
   Every message carries: cognitive signature, confidence vector, provenance chain,
   semantic routing tags, TTL, retry policy.
   Agents EMIT signals; the mesh decides who receives them.
 
-### AXIOM Server — Your Own Secure API
+### AXIOM Server: Your Own Secure API
   No Anthropic endpoint exposed externally.
   Custom JWT auth (no third-party dependency).
   Rate limiting per tenant tier.
@@ -45,7 +45,7 @@ OpenAI Swarm (flat routing), or AWS Bedrock Multi-Agent (rule-based):
   REST + WebSocket.
   Agent marketplace for tenant subscriptions.
 
-### Multi-Tenant Model — Any Company Size
+### Multi-Tenant Model: Any Company Size
   SOLO: 10 agents | STARTER: 50 | GROWTH: 150 |
   BUSINESS: 350 | SCALE: 600 | ENTERPRISE: All 900+
   Companies expand on demand.
@@ -79,7 +79,7 @@ OpenAI Swarm (flat routing), or AWS Bedrock Multi-Agent (rule-based):
 ## ██ HOW TO USE IN CLAUDE CODE (COWORK) ██
 
 This CLAUDE.md is loaded automatically when you run `claude` in this folder.
-Give any order — the full system is available:
+Give any order: the full system is available:
 
   "Build a full SaaS product with Stripe, auth, and database"
   → CTO + Sr. Frontend + Sr. Backend + DevOps + Security activate in NEUROMESH

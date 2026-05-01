@@ -1,30 +1,30 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * CORTEX ENGINE — OmniOrg Proprietary AI Inference Layer
+ * CORTEX ENGINE: OmniOrg Proprietary AI Inference Layer
  *
  * This is NOT a wrapper around Claude. It is an inference orchestration
  * engine that:
  *
- *  1. COGNITIVE PERSONA SYSTEM — Agents aren't just system prompts.
+ *  1. COGNITIVE PERSONA SYSTEM: Agents aren't just system prompts.
  *     They have emotional state, confidence drift, specialisation focus,
  *     fatigue model, and peer trust scores. These evolve over time.
  *
- *  2. MODEL MIXER — Not locked to one provider. Routes to the optimal
+ *  2. MODEL MIXER: Not locked to one provider. Routes to the optimal
  *     model based on task type, cost budget, latency requirement,
  *     and agent specialisation. Claude for reasoning, smaller models for
  *     classification, custom fine-tunes for domain specifics.
  *
- *  3. CHAIN-OF-THOUGHT INJECTION — Automatically injects structured
+ *  3. CHAIN-OF-THOUGHT INJECTION: Automatically injects structured
  *     reasoning scaffolds appropriate to the cognitive mode.
  *     A "forensic" agent gets different reasoning structure than a
  *     "creative" one.
  *
- *  4. CONFIDENCE CALIBRATION — Post-processes every output to
+ *  4. CONFIDENCE CALIBRATION: Post-processes every output to
  *     compute a calibrated confidence vector. Flags low-confidence
  *     outputs for peer review automatically.
  *
- *  5. OUTPUT SCHEMAS — Enforces structured output contracts.
- *     Agents can't return freeform text to the mesh — outputs must
+ *  5. OUTPUT SCHEMAS: Enforces structured output contracts.
+ *     Agents can't return freeform text to the mesh: outputs must
  *     conform to the declared schema for that signal type.
  */
 
@@ -90,7 +90,7 @@ Before responding, conduct a rigorous review:
   synthetic: `
 Before responding, integrate all inputs:
 1. INVENTORY: List all inputs and their source quality
-2. CONFLICTS: Identify where inputs disagree — resolve with evidence
+2. CONFLICTS: Identify where inputs disagree: resolve with evidence
 3. WEIGHTS: Which inputs are most credible and why?
 4. UNIFY: Build the synthesis that honours all strong inputs
 5. EMERGENT: What insight emerges from the combination that wasn't in any single input?`,
@@ -113,7 +113,7 @@ Before responding, centre the human:
 
   forensic: `
 Before responding, investigate deeply:
-1. EVIDENCE: Gather all available facts — nothing assumed
+1. EVIDENCE: Gather all available facts: nothing assumed
 2. TIMELINE: Reconstruct the sequence of events precisely
 3. CAUSALITY: Distinguish cause from correlation
 4. MECHANISM: Explain exactly HOW something happened
@@ -244,7 +244,7 @@ export class CortexEngine {
     // Persona-adjusted system prompt
     const personaAdjustment = persona
       ? `\nYour current confidence level: ${(persona.confidenceLevel * 100).toFixed(0)}%. ` +
-        `Focus depth: ${persona.focusDepth > 0.7 ? "DEEP — go comprehensive" : "BROAD — prioritise coverage"}. ` +
+        `Focus depth: ${persona.focusDepth > 0.7 ? "DEEP: go comprehensive" : "BROAD: prioritise coverage"}. ` +
         `Task count: ${persona.taskCount} (experienced). `
       : "";
 

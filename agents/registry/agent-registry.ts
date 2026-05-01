@@ -1,17 +1,17 @@
 /**
- * OmniOrg Agent Registry — 20,000+ Specialist Agents
+ * OmniOrg Agent Registry: 20,000+ Specialist Agents
  * Every agent: PhD / Super-Senior Executive level
  * Every agent: All 40+ languages
  * Every agent: 150+ MCP tools (auto-injected at registration)
  * Every agent: Universal capabilities (file, screen, server, software, code, AI)
- * Every agent: Self-scripting — can write and run scripts in any language
+ * Every agent: Self-scripting: can write and run scripts in any language
  * Every agent: All engines, plugins, and MCP servers embedded
  * Every agent: Assigned to NEUROMESH on registration
  *
  * Departments:
  *   - Core tiers (C-Suite, Division Heads, Domain Experts, Stack/Vertical, Task)
  *   - IT & Cybersecurity (200+ executives, 1000+ hacker agents)
- *   - World Professions (all careers, all sectors — 60+ industries, 210+ domains)
+ *   - World Professions (all careers, all sectors: 60+ industries, 210+ domains)
  *   - World Sub-Professions (25 universal × 210 domains + 750 specific = 18,000+ agents)
  *
  * Created by BBMW0 Technologies | bbmw0.com
@@ -75,7 +75,7 @@ function agent(
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 1 — C-SUITE (10)
+// TIER 1: C-SUITE (10)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TIER1: AgentDefinition[] = [
@@ -92,7 +92,7 @@ const TIER1: AgentDefinition[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 2 — DIVISION HEADS (30)
+// TIER 2: DIVISION HEADS (30)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TIER2: AgentDefinition[] = [
@@ -129,7 +129,7 @@ const TIER2: AgentDefinition[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 3 — DOMAIN EXPERTS (100+) — grouped by department
+// TIER 3: DOMAIN EXPERTS (100+): grouped by department
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TIER3_ENGINEERING: AgentDefinition[] = [
@@ -221,7 +221,7 @@ const TIER3_CREATIVE: AgentDefinition[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 4 — TECHNOLOGY STACK SPECIALISTS (50)
+// TIER 4: TECHNOLOGY STACK SPECIALISTS (50)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const STACK_SPECIALISTS = [
@@ -244,7 +244,7 @@ const STACK_SPECIALISTS = [
 ));
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 4 — INDUSTRY VERTICAL SPECIALISTS (50)
+// TIER 4: INDUSTRY VERTICAL SPECIALISTS (50)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const VERTICAL_SPECIALISTS = [
@@ -284,7 +284,7 @@ const VERTICAL_SPECIALISTS = [
 ));
 
 // ═══════════════════════════════════════════════════════════════════════════
-// TIER 5 — TASK AGENTS (assembled dynamically)
+// TIER 5: TASK AGENTS (assembled dynamically)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TASK_DOMAINS = ["Research","Writing","Code","Data","Legal","Financial","Design","Strategy","Operations","Analysis","Review","Planning","Translation","Summarisation","Testing","Debugging","Optimisation"];
@@ -320,7 +320,7 @@ const ALL_AGENTS: AgentDefinition[] = [
   ...TIER5,
   // IT & Cybersecurity Department: 200+ executives, 1000+ hacker agents
   ...IT_CYBERSECURITY_DEPARTMENT,
-  // World Professions: all careers, all sectors — PhD + Super-Senior Executive level
+  // World Professions: all careers, all sectors: PhD + Super-Senior Executive level
   ...WORLD_PROFESSION_AGENTS,
   // World Sub-Professions: 25 universal templates × 210 domains + 750 specific sub-specialties
   ...WORLD_SUB_PROFESSION_AGENTS,
@@ -362,9 +362,9 @@ class AgentRegistryClass {
       canReadFiles:           true,
       canCreateFiles:         true,
       canExecuteCode:         true,
-      canReadScreen:          false, // elevated permission required — granted at runtime
-      canAccessServers:       false, // elevated permission required — granted at runtime
-      canUseSoftware:         false, // elevated permission required — granted at runtime
+      canReadScreen:          false, // elevated permission required: granted at runtime
+      canAccessServers:       false, // elevated permission required: granted at runtime
+      canUseSoftware:         false, // elevated permission required: granted at runtime
     };
   }
 

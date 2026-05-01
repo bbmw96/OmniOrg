@@ -74,7 +74,7 @@ export const MCP_SERVERS: MCPServer[] = [
   { id:"stripe",          name:"Stripe",            category:"finance",      alwaysOn:false, tools:["list_customers","create_customer","list_charges","create_charge","list_subscriptions","create_payment_intent"], description:"Stripe payment processing: customers, charges, subscriptions, invoices." },
   { id:"hubspot",         name:"HubSpot",           category:"productivity", alwaysOn:false, tools:["list_contacts","create_contact","list_deals","create_deal","list_companies"], description:"HubSpot CRM: contacts, deals, companies, pipelines." },
   { id:"salesforce",      name:"Salesforce",        category:"productivity", alwaysOn:false, tools:["query","create_record","update_record","list_objects"], description:"Salesforce CRM: SOQL queries, record CRUD, object metadata." },
-  { id:"zendesk",         name:"Zendesk",           category:"productivity", alwaysOn:false, tools:["list_tickets","create_ticket","update_ticket","list_users"], description:"Zendesk support: tickets, users, organizations, macros." },
+  { id:"zendesk",         name:"Zendesk",           category:"productivity", alwaysOn:false, tools:["list_tickets","create_ticket","update_ticket","list_users"], description:"Zendesk support: tickets, users, organisations, macros." },
   { id:"jira",            name:"Jira",              category:"productivity", alwaysOn:false, tools:["search_issues","create_issue","update_issue","list_projects","get_issue","add_comment"], description:"Jira: issue management, project boards, sprints, epics." },
   { id:"linear",          name:"Linear",            category:"productivity", alwaysOn:false, tools:["list_issues","create_issue","update_issue","list_projects","list_teams"], description:"Linear: engineering issue tracking, cycles, roadmaps." },
   { id:"sentry",          name:"Sentry",            category:"monitoring",   alwaysOn:false, tools:["list_issues","get_issue","list_events","resolve_issue","list_projects"], description:"Sentry error monitoring: issues, events, releases, performance." },
@@ -100,6 +100,9 @@ export const MCP_SERVERS: MCPServer[] = [
   { id:"todoist",         name:"Todoist",           category:"productivity", alwaysOn:false, tools:["list_tasks","create_task","complete_task","list_projects"], description:"Todoist: personal task management, projects, labels, priorities." },
   { id:"pinecone",        name:"Pinecone",          category:"database",     alwaysOn:false, tools:["search-records","upsert-records","describe-index","list-indexes","create-index-for-model"], description:"Pinecone vector database: high-scale semantic search and retrieval." },
   { id:"datadog",         name:"Datadog",           category:"monitoring",   alwaysOn:false, tools:["list_monitors","create_monitor","list_metrics","query_metrics","list_logs"], description:"Datadog observability: metrics, logs, traces, monitors, dashboards." },
+
+  // ── Composio (500+ app connectors: always-on via HTTP MCP) ─────────────────
+  { id:"composio",        name:"Composio",          category:"productivity", alwaysOn:true,  tools:["GMAIL_SEND_EMAIL","SLACK_SEND_MESSAGE","NOTION_CREATE_PAGE","GITHUB_CREATE_ISSUE","HUBSPOT_CREATE_CONTACT","TWITTER_CREATE_TWEET","LINKEDIN_CREATE_POST","WORDPRESS_CREATE_POST","MAILCHIMP_SEND_CAMPAIGN","SALESFORCE_QUERY_RECORDS","JIRA_CREATE_ISSUE","GOOGLE_SHEETS_UPDATE_VALUES","STRIPE_CREATE_CUSTOMER","SHOPIFY_CREATE_PRODUCT","ZOOM_CREATE_MEETING"], description:"500+ app connectors via Composio MCP. Pattern: APPNAME_ACTION_NAME. Workspace: bbmw0_workspace." },
 ];
 
 // ─── Claude Plugins Registry ──────────────────────────────────────────────────
@@ -159,7 +162,7 @@ export const CLAUDE_PLUGINS: ClaudePlugin[] = [
   { id:"skill-creator",      name:"Skill Creator",      marketplace:"official",     category:"Dev Workflow",  description:"Create new agent skills following best practices." },
   { id:"remember",           name:"Remember",           marketplace:"official",     category:"Dev Workflow",  description:"Memory persistence: remember facts and recall them across sessions." },
   { id:"session-report",     name:"Session Report",     marketplace:"official",     category:"Dev Workflow",  description:"Generate session summaries and progress reports." },
-  { id:"code-modernization", name:"Code Modernization", marketplace:"official",     category:"Dev Workflow",  description:"Legacy code analysis, business rule extraction, modernization." },
+  { id:"code-modernization", name:"Code Modernisation", marketplace:"official",     category:"Dev Workflow",  description:"Legacy code analysis, business rule extraction, modernisation." },
   { id:"atomic-agents",      name:"Atomic Agents",      marketplace:"official",     category:"Dev Workflow",  description:"Atomic agent patterns for composable AI workflows." },
   { id:"superpowers",        name:"Superpowers",        marketplace:"official",     category:"Dev Workflow",  skills:["brainstorming","tdd","debugging","code-architect"], description:"TDD, brainstorming, debugging, architecture skills by obra." },
 
@@ -172,10 +175,10 @@ export const CLAUDE_PLUGINS: ClaudePlugin[] = [
   { id:"atlassian",          name:"Atlassian",          marketplace:"official",     category:"Integration",  description:"Jira, Confluence, Bitbucket: issue tracking, docs, repos." },
   { id:"atlassian-forge-skills", name:"Atlassian Forge", marketplace:"official",   category:"Integration",  description:"Atlassian Forge app development and deployment." },
   { id:"vercel-plugin",      name:"Vercel Plugin",      marketplace:"official",     category:"Integration",  description:"Vercel deployment, CI/CD, analytics, edge config." },
-  { id:"aws-dev-toolkit",    name:"AWS Dev Toolkit",    marketplace:"official",     category:"Integration",  description:"AWS architecture, serverless, cost optimization, Well-Architected review." },
+  { id:"aws-dev-toolkit",    name:"AWS Dev Toolkit",    marketplace:"official",     category:"Integration",  description:"AWS architecture, serverless, cost optimisation, Well-Architected review." },
   { id:"aws-serverless",     name:"AWS Serverless",     marketplace:"official",     category:"Integration",  description:"Lambda, API Gateway, SAM, Step Functions, EventBridge." },
   { id:"azure",              name:"Azure",              marketplace:"official",     category:"Integration",  description:"Full Azure platform: compute, storage, databases, AI, DevOps." },
-  { id:"azure-cosmos-db-assistant", name:"Azure Cosmos DB", marketplace:"official", category:"Integration",  description:"Cosmos DB schema design, partitioning, query optimization." },
+  { id:"azure-cosmos-db-assistant", name:"Azure Cosmos DB", marketplace:"official", category:"Integration",  description:"Cosmos DB schema design, partitioning, query optimisation." },
   { id:"cloudflare-plugin",  name:"Cloudflare Plugin",  marketplace:"official",     category:"Integration",  description:"Cloudflare Workers, Pages, R2, KV, D1, DNS management." },
   { id:"shopify-plugin",     name:"Shopify Plugin",     marketplace:"official",     category:"Integration",  description:"Shopify storefront, admin API, theme development, app integration." },
   { id:"sentry-plugin",      name:"Sentry Plugin",      marketplace:"official",     category:"Integration",  description:"Sentry error tracking and performance monitoring integration." },
@@ -293,14 +296,14 @@ FULL TOOL & PLUGIN MANIFEST (${PLUGIN_MANIFEST_SUMMARY.mcpServerCount} MCP serve
 ━━━ ALWAYS-ON MCP SERVERS (${alwaysOn.length}) ━━━
 ${alwaysOn.map(s => `  ${s.name.padEnd(22)}: ${s.description.slice(0, 80)}`).join("\n")}
 
-━━━ API-KEY MCP SERVERS (${apiKey.length} — configure in claude_desktop_config.json) ━━━
+━━━ API-KEY MCP SERVERS (${apiKey.length}: configure in claude_desktop_config.json) ━━━
 ${apiKey.map(s => `  ${s.name.padEnd(22)}: ${s.description.slice(0, 80)}`).join("\n")}
 
 ━━━ CLAUDE PLUGINS BY CATEGORY ━━━
 ${pluginLines}
 
 ━━━ AGENT SKILLS (invoke with Skill tool) ━━━
-${AGENT_SKILLS.map(s => `  ${s.command.padEnd(15)}: ${s.name} — ${s.description.slice(0, 60)}`).join("\n")}
+${AGENT_SKILLS.map(s => `  ${s.command.padEnd(15)}: ${s.name}: ${s.description.slice(0, 60)}`).join("\n")}
 
 ━━━ NATIVE CLAUDE CODE TOOLS ━━━
   ${NATIVE_CLAUDE_TOOLS.join(", ")}
@@ -316,6 +319,19 @@ ${AGENT_SKILLS.map(s => `  ${s.command.padEnd(15)}: ${s.name} — ${s.descriptio
 
 When a task needs a tool, always choose the most specific MCP server or plugin available.
 Prefer always-on servers for speed; use API-key servers when their specialised data is needed.
+
+━━━ COMPOSIO MCP (500+ APP CONNECTORS: ALWAYS ON) ━━━
+  Server   : https://connect.composio.dev/mcp (workspace: bbmw0_workspace)
+  Pattern  : APPNAME_ACTION_NAME (e.g. GMAIL_SEND_EMAIL, SLACK_SEND_MESSAGE)
+  Content  : NOTION, WORDPRESS, WEBFLOW, TWITTER, LINKEDIN, INSTAGRAM, FACEBOOK,
+             YOUTUBE, TIKTOK, MAILCHIMP, KLAVIYO, SENDGRID
+  CRM      : HUBSPOT, SALESFORCE, ZENDESK, INTERCOM
+  Dev      : GITHUB, JIRA, LINEAR, ASANA, TRELLO
+  Data     : GOOGLESHEETS, GOOGLEDOCS, GOOGLEDRIVE, AIRTABLE
+  Comms    : GMAIL, SLACK, MICROSOFT_TEAMS, DISCORD, ZOOM, CALENDLY
+  Commerce : SHOPIFY, STRIPE
+  Use Composio for any cross-app automation. If an app is not listed, check
+  Composio MCP tool list: 500+ connectors available.
 Use agent skills for complex multi-step work requiring a dedicated workflow.
 `;
 }

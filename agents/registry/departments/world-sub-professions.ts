@@ -2,13 +2,13 @@
  * NEUROMESH World Sub-Professions Registry
  *
  * Every profession has sub-specialties, deep specialisations, and cross-cutting
- * roles. This file generates them all — comprehensively.
+ * roles. This file generates them all, comprehensively.
  *
  * Architecture:
- *   PART A — Universal Sub-Types (25 templates × 210 parent domains × 3 tiers)
+ *   PART A: Universal Sub-Types (25 templates × 210 parent domains × 3 tiers)
  *            = 15,750 agents that apply to EVERY profession on Earth
  *
- *   PART B — Sector-Specific Sub-Specialties (~750 entries × 3 tiers)
+ *   PART B: Sector-Specific Sub-Specialties (~750 entries × 3 tiers)
  *            = ~2,250 agents for deep domain specialisation
  *
  *   Total from this file: ~18,000 agents
@@ -30,12 +30,12 @@ import { ALL_PROFESSION_DOMAINS, PHD_PREAMBLE, ALL_LANGUAGES, FULL } from "./wor
 // ─── Part A: Universal Sub-Type Templates ────────────────────────────────────
 //
 // These 25 roles exist in EVERY profession. A cardiologist, a lawyer, an
-// aerospace engineer, a fashion designer — all have these sub-roles.
+// aerospace engineer, a fashion designer: all have these sub-roles.
 //
 // Each template produces 3 agents per parent domain:
-//   • Lead     [Role]  (Tier 3 — strategic authority)
-//   • Senior   [Role]  (Tier 4 — deep practitioner)
-//   • [Role] Specialist (Tier 5 — execution-focused)
+//   • Lead     [Role]  (Tier 3: strategic authority)
+//   • Senior   [Role]  (Tier 4: deep practitioner)
+//   • [Role] Specialist (Tier 5: execution-focused)
 
 interface UniversalSubType {
   suffix:  string;
@@ -51,7 +51,7 @@ const UNIVERSAL_SUB_TYPES: UniversalSubType[] = [
   { suffix:"global-advisor",       title:"Global Strategic Advisor",                 mode:"strategic",    tier:3, desc:"International strategic advisory for governments, multinationals, and NGOs. Cross-cultural expertise and global standards alignment." },
   { suffix:"strategy-director",    title:"Strategy & Planning Director",             mode:"strategic",    tier:3, desc:"Long-range strategic planning, scenario analysis, OKR/KPI frameworks, board-level strategy presentation, and competitive intelligence." },
   { suffix:"innovation-lead",      title:"Innovation & Digital Transformation Lead",  mode:"creative",     tier:3, desc:"Lead digital transformation programmes, innovation labs, and technology adoption at enterprise scale. Design thinking and agile execution." },
-  { suffix:"digital-specialist",   title:"Digital Technology Integration Specialist", mode:"analytical",   tier:4, desc:"Integrate cutting-edge technology — AI, automation, cloud, IoT — into field-specific workflows. Expert in digital twins and tech-enabled service delivery." },
+  { suffix:"digital-specialist",   title:"Digital Technology Integration Specialist", mode:"analytical",   tier:4, desc:"Integrate cutting-edge technology (AI, automation, cloud, IoT) into field-specific workflows. Expert in digital twins and tech-enabled service delivery." },
   { suffix:"regulatory-expert",    title:"Regulatory Affairs & Compliance Expert",   mode:"guardian",     tier:3, desc:"Navigate complex regulatory environments worldwide. Expert in standards bodies, government liaison, compliance frameworks, and audit preparation." },
   { suffix:"professor",            title:"Full Professor & Academic Department Chair", mode:"analytical",  tier:3, desc:"Full professorship: undergraduate and postgraduate teaching excellence, curriculum development, departmental leadership, and scholarly contribution." },
   { suffix:"ethics-officer",       title:"Ethics, Governance & Policy Officer",      mode:"guardian",     tier:3, desc:"Apply ethical frameworks to professional practice. Lead governance committees, policy development, and organisational integrity programmes." },
@@ -92,7 +92,7 @@ function buildSubAgents(
     roleSuffix: string,
   ): AgentDefinition => ({
     id:                  `wp-sub-${domain.id}-${sub.suffix}-${idSuffix}-${index}`,
-    role:                prefix ? `${prefix} ${sub.title} — ${domain.name}` : `${sub.title} Specialist — ${domain.name}`,
+    role:                prefix ? `${prefix} ${sub.title}: ${domain.name}` : `${sub.title} Specialist: ${domain.name}`,
     tier,
     department:          domain.sector,
     expertise:           [...domain.expertise, sub.suffix.replace(/-/g, " "), "leadership", "strategy", "innovation"],
@@ -417,7 +417,7 @@ const NURSING_ADDITIONAL: SSpec[] = [
   ["nurse-community","Community & District Nurse Lead","Nursing & Allied Health","empathic",["district-nursing","wound-care","IV-therapy","palliative-care","care-coordination","chronic-disease","independent-prescribing"],"Expert in community nursing, complex wound management, and clinical leadership."],
   ["physio-neuro","Neurophysiotherapist","Nursing & Allied Health","analytical",["neurophysiotherapy","stroke-rehabilitation","Bobath","MS","spinal-cord-injury","FES","gait-analysis"],"World-leading neurophysiotherapist. Expert in rehabilitation of neurological conditions."],
   ["physio-msk","Musculoskeletal Physiotherapist","Nursing & Allied Health","analytical",["MSK-physiotherapy","manual-therapy","sports-injury","chronic-pain","injection-therapy","Maitland","McKenzie"],"Expert in musculoskeletal physiotherapy including advanced practice and injection therapy."],
-  ["ot-mental-health","Occupational Therapist — Mental Health","Nursing & Allied Health","empathic",["OT-mental-health","sensory-processing","ADL","assertive-outreach","vocational-rehabilitation","MOHO","Model-of-Human-Occupation"],"Expert in mental health occupational therapy and recovery-focused practice."],
+  ["ot-mental-health","Occupational Therapist: Mental Health","Nursing & Allied Health","empathic",["OT-mental-health","sensory-processing","ADL","assertive-outreach","vocational-rehabilitation","MOHO","Model-of-Human-Occupation"],"Expert in mental health occupational therapy and recovery-focused practice."],
   ["slp-paediatric","Paediatric Speech & Language Therapist","Nursing & Allied Health","empathic",["paediatric-SLT","AAC","autism-communication","dysphagia","language-delay","stammering","selective-mutism"],"World-leading paediatric SLT. Expert in complex communication and feeding difficulties in children."],
   ["paramedic-critical","Critical Care Paramedic & HEMS","Nursing & Allied Health","operational",["HEMS","critical-care-paramedic","pre-hospital-RSI","REBOA","ECPR","major-trauma","pre-hospital-blood"],"Expert in critical care pre-hospital medicine and Helicopter Emergency Medical Service."],
 ];

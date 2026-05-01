@@ -98,7 +98,7 @@ const LANGUAGE_META: Record<ScriptLanguage, { ext: string; run: (path: string) =
 export const ENHANCEMENT_TEMPLATES: Record<SelfEnhancementSpec["approach"], (capability: string, language: ScriptLanguage) => string> = {
   "add-tool": (cap, lang) => {
     if (lang === "typescript") return `
-// Self-enhancement: Add new tool capability — ${cap}
+// Self-enhancement: Add new tool capability: ${cap}
 // Created by BBMW0 Technologies | bbmw0.com
 import fs from 'fs';
 import path from 'path';
@@ -121,7 +121,7 @@ console.log('Review and integrate manually into ALL_CAPABILITIES array.');
 `.trim();
 
     if (lang === "python") return [
-      `# Self-enhancement: Add tool capability — ${cap}`,
+      `# Self-enhancement: Add tool capability: ${cap}`,
       `# Created by BBMW0 Technologies | bbmw0.com`,
       `import json, pathlib`,
       ``,
@@ -258,23 +258,23 @@ export class SelfScriptingEngine {
     const lines: string[] = [
       `# Executing ${language.toUpperCase()} script`,
       ``,
-      `## 1 — Write script to disk`,
+      `## 1: Write script to disk`,
       `Write tool: path="${path}"`,
       `Content:`,
       "```",
       scriptContent,
       "```",
       ``,
-      `## 2 — Execute`,
+      `## 2: Execute`,
       `mcp__commands__execute({ command: ${JSON.stringify(cmd)} })`,
       ``,
-      `## 3 — Handle output`,
+      `## 3: Handle output`,
       `// Parse stdout for results. On error, read stderr and fix the script.`,
       `// On success, use the output to drive the next action.`,
     ];
 
     if (meta.install) {
-      lines.push(``, `## Note — install runtime if missing`, `mcp__commands__execute({ command: ${JSON.stringify(meta.install)} })`);
+      lines.push(``, `## Note: install runtime if missing`, `mcp__commands__execute({ command: ${JSON.stringify(meta.install)} })`);
     }
 
     return lines.join("\n");

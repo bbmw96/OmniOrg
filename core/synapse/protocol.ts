@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * SYNAPSE PROTOCOL — OmniOrg Proprietary Inter-Agent Communication
+ * SYNAPSE PROTOCOL: OmniOrg Proprietary Inter-Agent Communication
  *
  * Unlike LangGraph (fixed edges) or CrewAI (sequential pipelines),
  * SYNAPSE uses typed semantic contracts. Every message has:
@@ -10,7 +10,7 @@
  *  - A provenance chain (full audit of who said what)
  *  - An urgency/priority score
  *
- * Agents don't "call" each other — they EMIT signals into the mesh.
+ * Agents don't "call" each other: they EMIT signals into the mesh.
  * The mesh decides who receives them based on semantic matching.
  */
 

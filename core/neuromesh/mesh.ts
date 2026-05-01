@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * NEUROMESH™ — OmniOrg Adaptive Cognitive Mesh
+ * NEUROMESH™: OmniOrg Adaptive Cognitive Mesh
  *
  * The core innovation. This is NOT a graph, NOT a pipeline, NOT a tree.
  *
@@ -14,7 +14,7 @@
  *  - The mesh learns which combinations produce the best outputs
  *
  * EMERGENT BEHAVIOUR: The mesh can discover agent combinations that
- * no human designed — and these emerge from use, not configuration.
+ * no human designed: and these emerge from use, not configuration.
  */
 
 import { SynapseSignal, SynapseSignalFactory, type SignalType } from "../synapse/protocol";

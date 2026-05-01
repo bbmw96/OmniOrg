@@ -23,7 +23,7 @@ interface CharacterFix {
 
 export const CHARACTER_FIXES: CharacterFix[] = [
   // Em dash variants: replace with comma or colon based on context
-  { description: "em dash (Unicode 2014)", pattern: /—/g, replacement: ", " },
+  { description: "em dash (Unicode 2014)", pattern: /: /g, replacement: ", " },
   { description: "en dash (Unicode 2013)", pattern: /–/g, replacement: "-" },
   { description: "double hyphen used as dash", pattern: /\s--\s/g, replacement: ", " },
   { description: "double hyphen at word boundary", pattern: /--/g, replacement: "-" },

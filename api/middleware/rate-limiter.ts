@@ -1,5 +1,5 @@
 /**
- * AXIOM Rate Limiter — sliding window per tenant
+ * AXIOM Rate Limiter: sliding window per tenant
  */
 const windows = new Map<string, { count: number; resetAt: number }>();
 

@@ -1,4 +1,4 @@
-# OmniOrg — NEUROMESH™ Enterprise AI Platform
+# OmniOrg: NEUROMESH™ Enterprise AI Platform
 
 > **Created by BBMW0 Technologies | [bbmw0.com](https://bbmw0.com)**
 
@@ -6,7 +6,7 @@
 
 ## What is OmniOrg?
 
-OmniOrg is a production-ready, open-source AI agent platform powering **20,000+ specialist AI agents** across every profession, sector, and discipline on Earth. Built on the **NEUROMESH™** engine, it is designed for companies of any size — from startups to global enterprises — and can be deployed on any infrastructure.
+OmniOrg is a production-ready, open-source AI agent platform powering **20,000+ specialist AI agents** across every profession, sector, and discipline on Earth. Built on the **NEUROMESH™** engine, it is designed for companies of any size: from startups to global enterprises: and can be deployed on any infrastructure.
 
 Every agent is:
 - PhD + Super-Senior Executive level in their domain
@@ -36,7 +36,7 @@ Every agent is:
 OmniOrg/
 ├── agents/
 │   ├── registry/
-│   │   ├── agent-registry.ts          # Central registry — 20,000+ agents
+│   │   ├── agent-registry.ts          # Central registry: 20,000+ agents
 │   │   └── departments/
 │   │       ├── world-professions.ts   # 212 profession domains
 │   │       ├── world-sub-professions.ts # 28 universal templates + 252 specific
@@ -155,7 +155,7 @@ OmniOrg is infrastructure-agnostic. Deploy on:
 
 ## License
 
-MIT — free for commercial and non-commercial use worldwide.
+MIT, free for commercial and non-commercial use worldwide.
 
 ---
 

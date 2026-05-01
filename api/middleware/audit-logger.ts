@@ -1,5 +1,5 @@
 /**
- * AXIOM Audit Logger — GDPR/SOC2 compliant audit trail
+ * AXIOM Audit Logger: GDPR/SOC2 compliant audit trail
  */
 import { appendFileSync, mkdirSync } from "fs";
 import { join } from "path";
