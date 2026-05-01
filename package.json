@@ -1,0 +1,29 @@
+{
+  "name": "omniorg",
+  "version": "2.0.0",
+  "description": "OmniOrg — NEUROMESH™ Enterprise AI. 20,000+ Specialist Agents. Proprietary Engine. Multi-tenant. Ready for any company worldwide.",
+  "author": "BBMW0 Technologies <hello@bbmw0.com> (https://bbmw0.com)",
+  "homepage": "https://bbmw0.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BBMW0/OmniOrg.git"
+  },
+  "keywords": ["ai", "agents", "enterprise", "neuromesh", "omniorg", "bbmw0"],
+  "license": "MIT",
+  "scripts": {
+    "server":       "npx ts-node api/server.ts",
+    "dashboard":    "cd dashboard && npm run dev",
+    "mesh:status":  "npx ts-node -e \"const {mesh}=require('./core/neuromesh/mesh'); console.log(JSON.stringify(mesh.getHealthReport(),null,2))\"",
+    "install:all":  "npm install && cd dashboard && npm install",
+    "typecheck":    "npx tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk":              "^0.92.0",
+    "@anthropic-ai/claude-agent-sdk": "^0.2.123"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "ts-node":    "^10.9.0",
+    "@types/node":"^20.0.0"
+  }
+}
