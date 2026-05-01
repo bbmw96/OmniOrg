@@ -1,0 +1,122 @@
+{
+  "contextId": "audit-1777679195366-q950e1",
+  "agentId": "content-engine-main",
+  "tenantId": "bbmw0-main",
+  "operation": "content-engine-full-run",
+  "timestamp": "2026-05-01T23:46:35.378Z",
+  "totalLayers": 999,
+  "passed": 998,
+  "failed": 1,
+  "blocked": false,
+  "overallRiskScore": 0.6506506506506506,
+  "clearanceGranted": true,
+  "criticalFailures": [],
+  "highFailures": [
+    {
+      "layerId": 601,
+      "name": "anomaly-check-601",
+      "tier": "behavioral-analysis",
+      "passed": false,
+      "severity": "high",
+      "riskScore": 65,
+      "message": "Check 601 failed",
+      "remediation": "Anomaly detected at check 601 — investigate unusual agent behaviour"
+    }
+  ],
+  "tierBreakdown": [
+    {
+      "tier": "identity-auth",
+      "layerRange": "001-099",
+      "total": 99,
+      "passed": 99,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "authorization-rbac",
+      "layerRange": "100-199",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "input-validation",
+      "layerRange": "200-299",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "content-policy",
+      "layerRange": "300-399",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "rate-limiting",
+      "layerRange": "400-499",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "output-validation",
+      "layerRange": "500-599",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "behavioral-analysis",
+      "layerRange": "600-699",
+      "total": 100,
+      "passed": 99,
+      "failed": 1,
+      "blocked": false,
+      "riskScore": 6.5
+    },
+    {
+      "tier": "cryptographic",
+      "layerRange": "700-799",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "audit-compliance",
+      "layerRange": "800-899",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    },
+    {
+      "tier": "resilience-recovery",
+      "layerRange": "900-999",
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "blocked": false,
+      "riskScore": 0
+    }
+  ],
+  "recommendations": [
+    "[HIGH 601] Anomaly detected at check 601 — investigate unusual agent behaviour"
+  ],
+  "executionTimeMs": 13
+}
