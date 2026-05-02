@@ -22,6 +22,7 @@
     "dashboard": "cd dashboard && npm run dev",
     "mesh:status": "node --max-old-space-size=4096 -r ts-node/register scripts/run-mesh-status.ts",
     "content:run": "node --max-old-space-size=4096 -r ts-node/register scripts/run-content-engine.ts",
+    "publish:dry-run": "node --max-old-space-size=4096 -r ts-node/register scripts/run-publish-dry-run.ts",
     "bbm0902:weekly": "node --max-old-space-size=4096 -r ts-node/register scripts/run-bbm0902-weekly.ts",
     "bbm0902:influencer": "node --max-old-space-size=4096 -r ts-node/register scripts/run-influencer.ts",
     "daemon:start": "node --max-old-space-size=4096 -r ts-node/register scripts/start-agent-daemon.ts",

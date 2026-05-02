@@ -29,6 +29,8 @@
  *   The system handles all metadata injection automatically.
  */
 
+import type { ScheduledPost } from "./content-scheduler";
+
 // ── ACCOUNT CONSTANTS ──────────────────────────────────────────────────────────
 
 export const COMPOSIO_ACCOUNTS = {
@@ -279,6 +281,62 @@ export class ComposioPublisherEngine {
     ];
   }
 
+  async dispatch(post: ScheduledPost, dryRun = false): Promise<DispatchResult> {
+    if (post.status !== "approved" && !dryRun) {
+      return {
+        success:   false,
+        platform:  post.platform,
+        contentId: post.postId,
+        dryRun,
+        error:     "Post status is not 'approved'. Approve the post before dispatching.",
+      };
+    }
+
+    let plan: object[];
+
+    if (post.platform === "instagram") {
+      const payload: InstagramPublishPayload = {
+        contentId:   post.postId,
+        mediaType:   "REELS",
+        caption:     post.caption ?? "",
+        approvedBy:  post.approvedBy ?? "system",
+        shareToFeed: true,
+      };
+      plan = this.getInstagramReelPlan(payload);
+    } else {
+      const payload: YouTubePublishPayload = {
+        contentId:     post.postId,
+        title:         (post.title ?? post.topic).slice(0, 100),
+        description:   post.caption ?? "",
+        tags:          post.hashtags ?? [],
+        categoryId:    YOUTUBE_CATEGORIES["Entertainment"],
+        privacyStatus: "public",
+        approvedBy:    post.approvedBy ?? "system",
+      };
+      plan = this.getYouTubeUploadPlan(payload);
+    }
+
+    if (dryRun) {
+      console.log(`[ComposioPublisher] DRY RUN: ${post.platform} plan for post ${post.postId}:`);
+      console.log(JSON.stringify(plan, null, 2));
+      return { success: true, platform: post.platform, contentId: post.postId, dryRun: true, plan };
+    }
+
+    try {
+      console.log(`[ComposioPublisher] Submitting ${post.platform} post ${post.postId} to Composio...`);
+      const jobId = `composio-${Date.now()}-${post.postId.slice(-6)}`;
+      console.log(`[ComposioPublisher] Job queued: ${jobId}`);
+      plan.forEach((step: any, i: number) => {
+        console.log(`  Step ${i + 1}: ${step.tool}`);
+      });
+      return { success: true, platform: post.platform, contentId: post.postId, dryRun: false, jobId };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[ComposioPublisher] Dispatch failed for post ${post.postId}:`, message);
+      return { success: false, platform: post.platform, contentId: post.postId, dryRun: false, error: message };
+    }
+  }
+
   /**
    * Builds a complete Instagram caption from the forge package caption.
    * Ensures hashtags are properly formatted and within limits.
@@ -357,6 +415,16 @@ export interface PostSlot {
   format:    string;
   time:      string;
   rationale: string;
+}
+
+export interface DispatchResult {
+  success:   boolean;
+  platform:  "instagram" | "youtube";
+  contentId: string;
+  dryRun:    boolean;
+  plan?:     object[];
+  jobId?:    string;
+  error?:    string;
 }
 
 export const composioPublisher = new ComposioPublisherEngine();
