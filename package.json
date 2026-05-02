@@ -30,6 +30,7 @@
     "daemon:uninstall": "node --max-old-space-size=4096 -r ts-node/register scripts/start-agent-daemon.ts uninstall",
     "game:generate": "node --max-old-space-size=4096 -r ts-node/register scripts/setup-game-scheduler.ts",
     "game:schedule": "node --max-old-space-size=4096 -r ts-node/register scripts/setup-game-scheduler.ts",
+    "empire:daily": "node --max-old-space-size=4096 -r ts-node/register scripts/run-daily-empire.ts",
     "ifc:validate": "node --max-old-space-size=4096 -r ts-node/register scripts/ifc-validate-cli.ts",
     "install:all": "npm install && cd dashboard && npm install",
     "typecheck": "npx tsc --noEmit"
@@ -39,10 +40,12 @@
     "@anthropic-ai/sdk": "^0.92.0",
     "@google/generative-ai": "^0.24.1",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/nodemailer": "^8.0.0",
     "@types/uuid": "^10.0.0",
     "better-sqlite3": "^12.9.0",
     "dotenv": "^16.6.1",
     "node-windows": "^1.0.0-beta.8",
+    "nodemailer": "^8.0.7",
     "uuid": "^14.0.0"
   },
   "devDependencies": {
