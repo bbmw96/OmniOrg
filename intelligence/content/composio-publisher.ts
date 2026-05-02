@@ -282,7 +282,7 @@ export class ComposioPublisherEngine {
   }
 
   async dispatch(post: ScheduledPost, dryRun = false): Promise<DispatchResult> {
-    if (post.status !== "approved" && !dryRun) {
+    if (post.status !== "approved") {
       return {
         success:   false,
         platform:  post.platform,
