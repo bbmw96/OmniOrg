@@ -4,20 +4,12 @@
  * Built with React + framer-motion (installed globally)
  */
 
-import { useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { fetchHealth, fetchAgents, postTask } from "../api";
+import type { AxiomHealth, AxiomAgent } from "../api";
 
 // ── TYPES ─────────────────────────────────────────────────────────────────────
-interface Agent {
-  id: string;
-  name: string;
-  role: string;
-  tier: 1 | 2 | 3 | 4 | 5;
-  department: string;
-  status: "active" | "busy" | "standby";
-  languages: number;
-}
-
 interface OrderResult {
   output: string;
   agentsUsed: string[];
@@ -45,36 +37,8 @@ const DEPT_ICONS: Record<string, string> = {
   Research: "📚", Sales: "🎯", Data: "🧠", Security: "🔐",
 };
 
-// ── SAMPLE AGENTS (real list loads from registry) ─────────────────────────────
-const SAMPLE_AGENTS: Agent[] = [
-  { id:"ceo-001",      role:"CEO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Executive Officer",   languages:40 },
-  { id:"coo-001",      role:"COO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Operating Officer",   languages:40 },
-  { id:"cfo-001",      role:"CFO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Financial Officer",   languages:40 },
-  { id:"cto-001",      role:"CTO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Technology Officer",  languages:40 },
-  { id:"cmo-001",      role:"CMO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Marketing Officer",   languages:40 },
-  { id:"clo-001",      role:"CLO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Legal Officer",       languages:40 },
-  { id:"chro-001",     role:"CHRO",                  tier:1, department:"Executive",   status:"active",  name:"Chief HR Officer",          languages:40 },
-  { id:"cdo-001",      role:"CDO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Data Officer",        languages:40 },
-  { id:"cso-001",      role:"CSO",                   tier:1, department:"Executive",   status:"busy",    name:"Chief Security Officer",    languages:40 },
-  { id:"cro-001",      role:"CRO",                   tier:1, department:"Executive",   status:"active",  name:"Chief Revenue Officer",     languages:40 },
-  { id:"eng-fe-001",   role:"Sr. Frontend Engineer", tier:3, department:"Engineering", status:"active",  name:"Frontend Expert",           languages:40 },
-  { id:"eng-be-001",   role:"Sr. Backend Engineer",  tier:3, department:"Engineering", status:"active",  name:"Backend Expert",            languages:40 },
-  { id:"eng-ai-001",   role:"Sr. AI/ML Engineer",    tier:3, department:"Engineering", status:"busy",    name:"AI/ML Expert",              languages:40 },
-  { id:"eng-sec-001",  role:"Sr. Security Engineer", tier:3, department:"Security",    status:"active",  name:"Security Expert",           languages:40 },
-  { id:"med-gp-001",   role:"General Physician",     tier:3, department:"Medicine",    status:"standby", name:"Medical Expert",            languages:40 },
-  { id:"med-onc-001",  role:"Oncologist",            tier:3, department:"Medicine",    status:"standby", name:"Oncology Expert",           languages:40 },
-  { id:"law-corp-001", role:"Corporate Lawyer",      tier:3, department:"Legal",       status:"active",  name:"Corporate Law Expert",      languages:40 },
-  { id:"law-priv-001", role:"Privacy Lawyer",        tier:3, department:"Legal",       status:"standby", name:"Privacy Law Expert",        languages:40 },
-  { id:"fin-ib-001",   role:"Investment Banker",     tier:3, department:"Finance",     status:"active",  name:"Investment Banking Expert", languages:40 },
-  { id:"fin-qa-001",   role:"Quant Analyst",         tier:3, department:"Finance",     status:"active",  name:"Quant Finance Expert",      languages:40 },
-  { id:"sci-phy-001",  role:"Physicist",             tier:3, department:"Science",     status:"standby", name:"Physics Expert",            languages:40 },
-  { id:"sci-neu-001",  role:"Neuroscientist",        tier:3, department:"Science",     status:"standby", name:"Neuroscience Expert",       languages:40 },
-  { id:"cre-ux-001",   role:"Sr. UX Designer",       tier:3, department:"Creative",    status:"active",  name:"UX Design Expert",          languages:40 },
-  { id:"cre-cpy-001",  role:"Sr. Copywriter",        tier:3, department:"Creative",    status:"active",  name:"Content & Copy Expert",     languages:40 },
-];
-
 // ── AGENT CARD ────────────────────────────────────────────────────────────────
-function AgentCard({ agent, onClick }: { agent: Agent; onClick: () => void }) {
+function AgentCard({ agent, onClick }: { agent: AxiomAgent; onClick: () => void }) {
   return (
     <motion.div
       layout
@@ -191,33 +155,60 @@ function CommandPanel({ onSubmit }: { onSubmit: (order: string) => void }) {
 // ── MAIN DASHBOARD ────────────────────────────────────────────────────────────
 export default function OmniOrgDashboard() {
   const [filter, setFilter] = useState<string>("All");
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<AxiomAgent | null>(null);
   const [result, setResult] = useState<OrderResult | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const departments = ["All", ...Array.from(new Set(SAMPLE_AGENTS.map(a => a.department)))];
+  const [meshHealth, setMeshHealth] = useState<AxiomHealth | null>(null);
+  const [healthError, setHealthError] = useState(false);
+  const [agents, setAgents] = useState<AxiomAgent[]>([]);
+  const [agentsLoading, setAgentsLoading] = useState(true);
+  const [agentsError, setAgentsError] = useState("");
 
-  const filtered = filter === "All"
-    ? SAMPLE_AGENTS
-    : SAMPLE_AGENTS.filter(a => a.department === filter);
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const h = await fetchHealth();
+        setMeshHealth(h);
+        setHealthError(false);
+      } catch {
+        setHealthError(true);
+      }
+    };
+    poll();
+    const id = setInterval(poll, 15_000);
+    return () => clearInterval(id);
+  }, []);
 
+  useEffect(() => {
+    fetchAgents()
+      .then(list => { setAgents(list); setAgentsLoading(false); })
+      .catch(err => { setAgentsError(`Could not load agents: ${(err as Error).message}`); setAgentsLoading(false); });
+  }, []);
+
+  const departments = ["All", ...Array.from(new Set(agents.map(a => a.department)))];
+  const filtered = filter === "All" ? agents : agents.filter(a => a.department === filter);
   const stats = {
-    active: SAMPLE_AGENTS.filter(a => a.status === "active").length,
-    busy:   SAMPLE_AGENTS.filter(a => a.status === "busy").length,
-    depts:  new Set(SAMPLE_AGENTS.map(a => a.department)).size,
+    active: agents.filter(a => a.status === "active").length,
+    busy:   agents.filter(a => a.status === "busy").length,
+    depts:  new Set(agents.map(a => a.department)).size,
   };
 
   const handleOrder = async (order: string) => {
     setLoading(true);
-    // In production: calls orchestrator.ts via API endpoint
-    // Here: simulated response
-    await new Promise(r => setTimeout(r, 1800));
-    setResult({
-      output: `✅ OmniOrg has received your order.\n\nTask: "${order}"\n\nThe Master Orchestrator has analysed your request and activated the optimal agent team. To run the full orchestrator with real Claude API calls:\n\n  cd C:/Users/BBMW0/Projects/OmniOrg\n  npm install\n  npx ts-node agents/orchestrator/orchestrator.ts "${order}"`,
-      agentsUsed: ["orch-master-001", "ceo-001", "cto-001"],
-      processingTimeMs: 1800,
-    });
-    setLoading(false);
+    setResult(null);
+    try {
+      const data = await postTask(order);
+      setResult(data);
+    } catch (err) {
+      setResult({
+        output: `Error: ${err instanceof Error ? err.message : String(err)}\n\nMake sure the AXIOM server is running: npm run server`,
+        agentsUsed: [],
+        processingTimeMs: 0,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -236,13 +227,26 @@ export default function OmniOrgDashboard() {
               OmniOrg
             </h1>
             <div style={{ fontSize: 13, color: "#64748b" }}>900 Agents · All Professions · All Languages · All Countries</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+              <motion.div
+                animate={{ opacity: healthError ? 1 : [1, 0.5, 1] }}
+                transition={{ duration: 2, repeat: healthError ? 0 : Infinity }}
+                style={{
+                  width: 8, height: 8, borderRadius: "50%",
+                  background: healthError ? "#ef4444" : meshHealth ? "#10b981" : "#f59e0b",
+                }}
+              />
+              <span style={{ fontSize: 11, color: "#475569" }}>
+                {healthError ? "AXIOM offline" : meshHealth ? `AXIOM online · ${meshHealth.mesh.hasApiKey ? "AI active" : "No API key"}` : "Connecting..."}
+              </span>
+            </div>
           </div>
           <div style={{ marginLeft: "auto", display: "flex", gap: 24 }}>
             {[
               { label: "Active",  value: stats.active,  color: "#10b981" },
               { label: "Busy",    value: stats.busy,    color: "#f59e0b" },
               { label: "Depts",   value: stats.depts,   color: "#6366f1" },
-              { label: "Total",   value: 900,           color: "#94a3b8" },
+              { label: "Total",   value: meshHealth?.mesh.agentCount ?? 900, color: "#94a3b8" },
             ].map(s => (
               <div key={s.label} style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 22, fontWeight: 800, color: s.color }}>{s.value}</div>
@@ -299,13 +303,30 @@ export default function OmniOrgDashboard() {
       </div>
 
       {/* Agent Grid */}
-      <motion.div layout style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:14 }}>
-        <AnimatePresence>
-          {filtered.map(agent => (
-            <AgentCard key={agent.id} agent={agent} onClick={() => setSelectedAgent(agent)} />
-          ))}
-        </AnimatePresence>
-      </motion.div>
+      {agentsLoading ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          style={{ textAlign: "center", padding: 48, color: "#6366f1", fontSize: 14 }}>
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            style={{ display: "inline-block", fontSize: 28, marginBottom: 12 }}>⚙️</motion.div>
+          <div>Loading agents from AXIOM...</div>
+        </motion.div>
+      ) : agentsError ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: 20, color: "#fca5a5", fontSize: 13 }}>
+          {agentsError}
+          <div style={{ marginTop: 8, fontSize: 11, color: "#94a3b8" }}>
+            Make sure the AXIOM server is running: <code>npm run server</code>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div layout style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+          <AnimatePresence>
+            {filtered.map(agent => (
+              <AgentCard key={agent.id} agent={agent} onClick={() => setSelectedAgent(agent)} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      )}
 
       {/* Agent Detail Modal */}
       <AnimatePresence>
