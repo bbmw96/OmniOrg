@@ -15,13 +15,10 @@
  * Run: npm run content:run
  */
 
+import "../api/env"; // ← MUST be first: loads .env before any singleton reads process.env
+
 import * as fs   from "fs";
 import * as path from "path";
-import * as dotenv from "dotenv";
-
-// Load environment variables (ANTHROPIC_API_KEY + AdSense config)
-// override: true — forces .env to win even if ANTHROPIC_API_KEY is already set as empty string in system env
-dotenv.config({ path: path.join(__dirname, "..", ".env"), override: true });
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 // mesh import triggers preload of all 20,000+ agents automatically
