@@ -18,11 +18,11 @@ interface OrderResult {
 
 // ── COLOUR MAP ────────────────────────────────────────────────────────────────
 const TIER_COLOURS: Record<number, string> = {
-  1: "#f59e0b",   // Gold — C-Suite
-  2: "#3b82f6",   // Blue — Division Heads
-  3: "#8b5cf6",   // Purple — Domain Experts
-  4: "#10b981",   // Green — Specialists
-  5: "#6b7280",   // Grey — Task Agents
+  1: "#f59e0b",   // Gold: C-Suite
+  2: "#3b82f6",   // Blue: Division Heads
+  3: "#8b5cf6",   // Purple: Domain Experts
+  4: "#10b981",   // Green: Specialists
+  5: "#6b7280",   // Grey: Task Agents
 };
 
 const STATUS_COLOURS = {
@@ -116,7 +116,7 @@ function CommandPanel({ onSubmit }: { onSubmit: (order: string) => void }) {
       <textarea
         value={order}
         onChange={e => setOrder(e.target.value)}
-        placeholder="Type any task in any language — the right agent(s) will be activated automatically..."
+        placeholder="Type any task in any language, and the right agent(s) will be activated automatically..."
         style={{
           width: "100%", minHeight: 80, background: "rgba(0,0,0,0.3)",
           border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10,
@@ -278,7 +278,7 @@ export default function OmniOrgDashboard() {
           <motion.div initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}
             style={{ background:"rgba(99,102,241,0.08)", border:"1px solid rgba(99,102,241,0.3)", borderRadius:16, padding:20, marginBottom:32 }}>
             <div style={{ fontSize:12, color:"#6366f1", fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:"uppercase" }}>
-              ✅ Agent Response — {result.processingTimeMs}ms
+              ✅ Agent Response: {result.processingTimeMs}ms
             </div>
             <pre style={{ margin:0, whiteSpace:"pre-wrap", fontSize:13, color:"#cbd5e1", lineHeight:1.7 }}>
               {result.output}
