@@ -1,0 +1,253 @@
+{
+  "generatedAt": "2026-05-01T22:55:55.796Z",
+  "niche": "video-editing",
+  "opportunities": [
+    {
+      "topic": "AI tools for video-editing in 2025",
+      "trendScore": 88,
+      "competitionLevel": "medium",
+      "platform": "both",
+      "contentFormat": "Reels (Instagram) + Long-form (YouTube)",
+      "whyNow": "AI tool adoption is accelerating. Audiences want practical, opinionated guides not generic lists.",
+      "contentAngle": "Show your ACTUAL workflow with specific AI tools, including what does not work",
+      "estimatedReach": "10,000-100,000 views on YouTube; 5,000-50,000 on Instagram",
+      "monetisationFit": "excellent",
+      "urgency": "post-this-week",
+      "exampleContent": "The AI Tools That Changed My video-editing Workflow Forever (Honest Review)",
+      "hashtags": [
+        "#aitools",
+        "#ai2025",
+        "#artificialintelligence",
+        "#workflow",
+        "#productivity"
+      ],
+      "keywords": [
+        "AI video-editing",
+        "best AI tools video-editing",
+        "video-editing automation AI"
+      ],
+      "competitorGap": "Most existing videos are feature demos. Show REAL results and time saved.",
+      "id": "trend-1777676155796-0"
+    },
+    {
+      "topic": "video-editing beginner mistakes",
+      "trendScore": 82,
+      "competitionLevel": "medium",
+      "platform": "both",
+      "contentFormat": "Carousel (Instagram) + Explainer (YouTube)",
+      "whyNow": "Evergreen format. Beginners always searching. High search volume, decent CPM.",
+      "contentAngle": "Frame as 'what I wish I knew': personal story builds trust and watch time",
+      "estimatedReach": "5,000-50,000 views consistent performers",
+      "monetisationFit": "good",
+      "urgency": "post-this-week",
+      "exampleContent": "5 video-editing Mistakes That Cost Me 2 Years (Do Not Make These)",
+      "hashtags": [
+        "#video-editingtips",
+        "#beginners",
+        "#mistakes",
+        "#learnfromme"
+      ],
+      "keywords": [
+        "video-editing mistakes",
+        "video-editing beginner guide",
+        "how to start video-editing"
+      ],
+      "competitorGap": "Most beginner videos skip the emotional reality. Include the frustration and how to push through.",
+      "id": "trend-1777676155796-1"
+    },
+    {
+      "topic": "video-editing income report / results",
+      "trendScore": 91,
+      "competitionLevel": "low",
+      "platform": "youtube",
+      "contentFormat": "Case study / documentary",
+      "whyNow": "Transparency content is viral. Audiences are tired of unverified income claims and want real numbers.",
+      "contentAngle": "Show real numbers, real timeline, real failures alongside the wins",
+      "estimatedReach": "20,000-200,000 views on YouTube (case studies outperform tutorials)",
+      "monetisationFit": "excellent",
+      "urgency": "post-this-month",
+      "exampleContent": "My video-editing Income: Honest 30-Day Report (Real Numbers)",
+      "keywords": [
+        "video-editing income",
+        "make money video-editing",
+        "video-editing earnings"
+      ],
+      "competitorGap": "Most income videos hide the struggles. Show the full picture including what did not work.",
+      "id": "trend-1777676155796-2"
+    },
+    {
+      "topic": "video-editing tools for beginners 2025",
+      "trendScore": 76,
+      "competitionLevel": "medium",
+      "platform": "both",
+      "contentFormat": "Carousel or Review video",
+      "whyNow": "Annual 'best of' lists get renewed search traffic every year. 2025 searches starting now.",
+      "contentAngle": "Include lesser-known free alternatives to paid tools. This angle gets shared widely.",
+      "estimatedReach": "Steady 2,000-20,000 views over 12 months",
+      "monetisationFit": "excellent",
+      "urgency": "post-this-month",
+      "exampleContent": "Best Free video-editing Tools in 2025 (I Tested All of Them)",
+      "hashtags": [
+        "#freetools",
+        "#video-editing",
+        "#tools2025",
+        "#besttools"
+      ],
+      "keywords": [
+        "best video-editing tools",
+        "free video-editing tools 2025",
+        "video-editing software"
+      ],
+      "competitorGap": "Most tool lists are paid/affiliate-heavy. Include genuinely free options first.",
+      "id": "trend-1777676155796-3"
+    },
+    {
+      "topic": "Day in the life: video-editing creator",
+      "trendScore": 79,
+      "competitionLevel": "low",
+      "platform": "instagram",
+      "contentFormat": "Reels or Story series",
+      "whyNow": "Behind-the-scenes content builds parasocial trust. Algorithm rewards authentic, unpolished content.",
+      "contentAngle": "Show the unglamorous reality alongside the wins. Authenticity drives follows.",
+      "estimatedReach": "3,000-30,000 views with strong follow conversion",
+      "monetisationFit": "good",
+      "urgency": "post-this-week",
+      "exampleContent": "A Real Day in My Life as a video-editing Creator (Nothing Is Glamorous)",
+      "hashtags": [
+        "#dayinmylife",
+        "#behindthescenes",
+        "#creatorlife",
+        "#video-editing"
+      ],
+      "competitorGap": "Most 'day in life' videos are curated highlights. Real struggles + real victories drive engagement.",
+      "id": "trend-1777676155796-4"
+    }
+  ],
+  "seasonalAlerts": [],
+  "platformInsights": [
+    {
+      "platform": "instagram",
+      "insight": "Instagram Reels shown to non-followers is the primary growth vector in 2025. The algorithm rewards original audio, 7-15 second hooks, and content with high save rates.",
+      "actionableAdvice": "Post 4-5 Reels per week at peak times. Use original audio when possible. Always end with a save-worthy tip."
+    },
+    {
+      "platform": "youtube",
+      "insight": "YouTube's 2025 algorithm prioritises satisfied viewers (long sessions, high retention) over pure view counts. Videos under 8 minutes get lower monetisation rates.",
+      "actionableAdvice": "Aim for 10-20 minute long-form videos. Structure for 70%+ retention. Post Shorts alongside long-form for subscriber growth."
+    }
+  ],
+  "contentCalendarSuggestion": [
+    {
+      "dayOffset": 0,
+      "platform": "instagram",
+      "format": "Reels",
+      "topic": "Quick tip: video-editing hack that saves 30 minutes",
+      "trendId": "trend-0",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 1,
+      "platform": "youtube",
+      "format": "Long-form",
+      "topic": "Complete video-editing guide for beginners 2025",
+      "trendId": "trend-1",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 2,
+      "platform": "instagram",
+      "format": "Carousel",
+      "topic": "5 video-editing mistakes and how to fix them",
+      "trendId": "trend-1",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 3,
+      "platform": "instagram",
+      "format": "Story series",
+      "topic": "Behind the scenes: my video-editing setup",
+      "trendId": "trend-4",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 4,
+      "platform": "instagram",
+      "format": "Reels",
+      "topic": "AI tool that changed my video-editing workflow",
+      "trendId": "trend-0",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 5,
+      "platform": "youtube",
+      "format": "Short",
+      "topic": "One video-editing tip that gets results fast",
+      "trendId": "trend-1",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 6,
+      "platform": "instagram",
+      "format": "Carousel",
+      "topic": "Best free tools for video-editing in 2025",
+      "trendId": "trend-3",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 7,
+      "platform": "youtube",
+      "format": "Long-form",
+      "topic": "video-editing income report: honest results after 30 days",
+      "trendId": "trend-2",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 8,
+      "platform": "instagram",
+      "format": "Reels",
+      "topic": "Why most people fail at video-editing (and how not to)",
+      "trendId": "trend-1",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 9,
+      "platform": "instagram",
+      "format": "Reels",
+      "topic": "Day in my life as a video-editing creator",
+      "trendId": "trend-4",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 10,
+      "platform": "youtube",
+      "format": "Explainer",
+      "topic": "video-editing: what nobody tells you in the first year",
+      "trendId": "trend-1",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 11,
+      "platform": "instagram",
+      "format": "Carousel",
+      "topic": "Step-by-step: video-editing beginner roadmap",
+      "trendId": "trend-1",
+      "priority": "high"
+    },
+    {
+      "dayOffset": 12,
+      "platform": "instagram",
+      "format": "Reels",
+      "topic": "Testing the most popular video-editing advice online",
+      "trendId": "trend-0",
+      "priority": "medium"
+    },
+    {
+      "dayOffset": 13,
+      "platform": "youtube",
+      "format": "Review",
+      "topic": "Best video-editing tools I actually use (honest review)",
+      "trendId": "trend-3",
+      "priority": "high"
+    }
+  ]
+}

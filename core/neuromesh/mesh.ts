@@ -81,11 +81,13 @@ export class NeuralMesh {
 
   // ── NODE MANAGEMENT ────────────────────────────────────────────────────────
 
-  registerAgent(agent: AgentDefinition): void {
+  registerAgent(agent: AgentDefinition, skipConnections = false): void {
     if (this.nodes.has(agent.id)) return;
 
-    // Initialise CORTEX persona for this agent
-    cortex.initPersona(agent.id, agent.role, agent.department, agent.expertise ?? []);
+    // Initialise CORTEX persona for this agent (skip during bulk preload for performance)
+    if (!skipConnections) {
+      cortex.initPersona(agent.id, agent.role, agent.department, agent.expertise ?? []);
+    }
 
     this.nodes.set(agent.id, {
       agent,
@@ -98,11 +100,15 @@ export class NeuralMesh {
       signalsFailed: 0,
     });
 
-    // Auto-connect to agents in same department (initial mesh)
-    for (const [otherId, otherNode] of this.nodes.entries()) {
-      if (otherId === agent.id) continue;
-      const sameDepWeight = otherNode.agent.department === agent.department ? 0.6 : 0.2;
-      this.setConnection(agent.id, otherId, sameDepWeight);
+    // Auto-connect to nearby agents in same department.
+    // Skipped during bulk preload (O(n^2) with 20k agents = OOM).
+    // Connections are built lazily on first task execution instead.
+    if (!skipConnections) {
+      for (const [otherId, otherNode] of this.nodes.entries()) {
+        if (otherId === agent.id) continue;
+        const sameDepWeight = otherNode.agent.department === agent.department ? 0.6 : 0.2;
+        this.setConnection(agent.id, otherId, sameDepWeight);
+      }
     }
   }
 
@@ -423,6 +429,19 @@ export class NeuralMesh {
       };
     }
 
+    // Local-mode synthesis: combine all expert outputs without LLM when no API key
+    if (!process.env.ANTHROPIC_API_KEY) {
+      const combinedOutput = outputs.map(o => `**${o.role}:**\n${o.output}`).join("\n\n---\n\n");
+      const avgConf = outputs.reduce((s, o) => s + o.confidence, 0) / outputs.length;
+      return {
+        output:        combinedOutput,
+        summary:       `${outputs.length} specialist agents contributed to this analysis. Set ANTHROPIC_API_KEY for full AI synthesis.`,
+        nextActions:   ["Review agent outputs", "Prioritise key recommendations", "Execute step by step"],
+        executionPlan: ["Step 1: Review", "Step 2: Plan", "Step 3: Execute", "Step 4: Measure", "Step 5: Iterate"],
+        confidence:    avgConf,
+      };
+    }
+
     const synthPrompt = `You are OmniOrg's CORTEX Synthesis Engine.
 
 Synthesise these expert outputs into ONE unified, world-class response.
@@ -477,6 +496,16 @@ Return valid JSON:
 
   // ── MESH HEALTH STATS ─────────────────────────────────────────────────────
 
+  // Pre-load all agents so health reports are accurate from boot.
+  // Uses skipConnections=true to avoid O(n^2) connection explosion with 20k+ agents.
+  // Connections are built lazily during actual task execution.
+  preload(agents: AgentDefinition[]): void {
+    for (const agent of agents) {
+      if (!this.nodes.has(agent.id)) this.registerAgent(agent, true);
+    }
+    console.log(`[NEUROMESH] Pre-loaded ${this.nodes.size} agents into mesh.`);
+  }
+
   getHealthReport() {
     const nodes = Array.from(this.nodes.values());
     return {
@@ -484,7 +513,7 @@ Return valid JSON:
       healthyAgents: nodes.filter(n => n.healthScore > 0.7).length,
       busyAgents: nodes.filter(n => n.loadScore > 0.5).length,
       activeTeams: Array.from(this.teams.values()).filter(t => t.status === "active").length,
-      avgHealthScore: nodes.reduce((s, n) => s + n.healthScore, 0) / nodes.length,
+      avgHealthScore: nodes.length > 0 ? nodes.reduce((s, n) => s + n.healthScore, 0) / nodes.length : 0,
       totalSignalsProcessed: nodes.reduce((s, n) => s + n.signalsProcessed, 0),
       memoryStats: globalMemory.getStats(),
     };
@@ -492,4 +521,9 @@ Return valid JSON:
 }
 
 export const mesh = new NeuralMesh();
+
+// Pre-load all registered agents at module init so the mesh is live immediately
+import { AGENT_REGISTRY } from "../../agents/registry/agent-registry";
+mesh.preload(AGENT_REGISTRY.getAllAgents());
+
 export default NeuralMesh;
