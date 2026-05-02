@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * AGENT SECURITY ENGINE — 999 LAYERS
+ * AGENT SECURITY ENGINE: 999 LAYERS
  *
  * 10 security tiers. Each tier catches a class of attack the previous cannot.
  * A bypass of Tier 1 (auth) still faces Tier 3 (injection), Tier 6 (leakage), etc.
@@ -218,7 +218,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 1 — Identity & Auth (001-099)
+  // TIER 1: Identity & Auth (001-099)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier1_IdentityAuth(ctx: SecurityContext): SecurityCheckResult[] {
@@ -247,7 +247,7 @@ export class AgentSecurityEngine {
         13: { id: 13, name: "jwt-segment-count",           sev: "medium", risk: 35, test: c => { const p = c.payload as Record<string, unknown> | undefined; const j = typeof p?.jwt === "string" ? p.jwt : ""; return j === "" || j.split(".").length === 3; }, remedy: "JWT must contain exactly three segments" },
         14: { id: 14, name: "jwt-header-decodable",        sev: "low",    risk: 20, test: () => true, remedy: "JWT header must be valid base64url JSON" },
         15: { id: 15, name: "jwt-payload-decodable",       sev: "low",    risk: 20, test: () => true, remedy: "JWT payload must be valid base64url JSON" },
-        16: { id: 16, name: "jwt-no-none-algorithm",       sev: "critical", risk: 100, test: c => { const p = c.payload as Record<string, unknown> | undefined; const j = typeof p?.jwt === "string" ? p.jwt : ""; if (!j) return true; try { const hdr = JSON.parse(Buffer.from(j.split(".")[0], "base64url").toString()); return hdr?.alg?.toLowerCase() !== "none"; } catch { return true; } }, remedy: "JWT 'alg: none' is forbidden — use RS256 or HS256" },
+        16: { id: 16, name: "jwt-no-none-algorithm",       sev: "critical", risk: 100, test: c => { const p = c.payload as Record<string, unknown> | undefined; const j = typeof p?.jwt === "string" ? p.jwt : ""; if (!j) return true; try { const hdr = JSON.parse(Buffer.from(j.split(".")[0], "base64url").toString()); return hdr?.alg?.toLowerCase() !== "none"; } catch { return true; } }, remedy: "JWT 'alg: none' is forbidden, use RS256 or HS256" },
         17: { id: 17, name: "jwt-expiry-present",          sev: "medium", risk: 40, test: () => true, remedy: "JWT must include exp claim" },
         18: { id: 18, name: "jwt-not-expired",             sev: "high",   risk: 80, test: () => true, remedy: "JWT token has expired" },
         19: { id: 19, name: "jwt-issued-at-present",       sev: "low",    risk: 15, test: () => true, remedy: "JWT should include iat claim" },
@@ -286,7 +286,7 @@ export class AgentSecurityEngine {
           if (i === 40) return !c.sessionId || new Set(c.sessionId).size > 5;
           return true;
         },
-        remedy: `Session integrity check ${i} failed — verify session token`,
+        remedy: `Session integrity check ${i} failed, verify session token`,
       });
     }
 
@@ -305,7 +305,7 @@ export class AgentSecurityEngine {
       { id: 61, name: "identity-timestamp-present",         sev: "high",     risk: 60,  test: c => !!c.timestamp && c.timestamp.length > 0,                              remedy: "timestamp is required" },
       { id: 62, name: "identity-timestamp-iso8601",         sev: "high",     risk: 60,  test: c => !isNaN(Date.parse(c.timestamp)),                                      remedy: "timestamp must be a valid ISO-8601 date string" },
       { id: 63, name: "identity-timestamp-not-future",      sev: "medium",   risk: 40,  test: c => Date.parse(c.timestamp) <= Date.now() + 60000,                        remedy: "timestamp must not be more than 60s in the future" },
-      { id: 64, name: "identity-timestamp-not-stale",       sev: "high",     risk: 70,  test: c => Date.parse(c.timestamp) >= Date.now() - 86400000,                     remedy: "timestamp is stale — must be within 24 hours" },
+      { id: 64, name: "identity-timestamp-not-stale",       sev: "high",     risk: 70,  test: c => Date.parse(c.timestamp) >= Date.now() - 86400000,                     remedy: "timestamp is stale, must be within 24 hours" },
       { id: 65, name: "identity-agentid-min-length",        sev: "medium",   risk: 35,  test: c => c.agentId.length >= 3,                                                remedy: "agentId must be at least 3 characters" },
       { id: 66, name: "identity-no-null-bytes",             sev: "high",     risk: 80,  test: c => !c.agentId.includes("\0") && !c.tenantId.includes("\0"),               remedy: "agentId/tenantId must not contain null bytes" },
       { id: 67, name: "identity-platform-valid",            sev: "low",      risk: 20,  test: c => !c.platform || ["instagram","youtube"].includes(c.platform),           remedy: "platform must be 'instagram' or 'youtube' if provided" },
@@ -339,7 +339,7 @@ export class AgentSecurityEngine {
           if (i === 85) return !c.userId || c.userId !== "-1";
           return true;
         },
-        remedy: `Token integrity check ${i} failed — inspect token for invalid characters`,
+        remedy: `Token integrity check ${i} failed, inspect token for invalid characters`,
       });
     }
 
@@ -358,7 +358,7 @@ export class AgentSecurityEngine {
           if (i === 90) return !c.operation.toLowerCase().includes("export-all");
           return true;
         },
-        remedy: `MFA check ${i} — high-privilege operations require MFA verification`,
+        remedy: `MFA check ${i}, high-privilege operations require MFA verification`,
       });
     }
 
@@ -369,7 +369,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 2 — Authorization & RBAC (100-199)
+  // TIER 2: Authorization & RBAC (100-199)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier2_Authorization(ctx: SecurityContext): SecurityCheckResult[] {
@@ -410,7 +410,7 @@ export class AgentSecurityEngine {
           if (i === 124) return !c.agentId.toLowerCase().includes("exploit");
           return true;
         },
-        remedy: `RBAC role check ${i} failed — insufficient role for this operation`,
+        remedy: `RBAC role check ${i} failed, insufficient role for this operation`,
       });
     }
 
@@ -432,7 +432,7 @@ export class AgentSecurityEngine {
           if (i === 140) return !c.operation.includes("rotate-master-key");
           return true;
         },
-        remedy: `Permissions check ${i} failed — verify required permissions`,
+        remedy: `Permissions check ${i} failed, verify required permissions`,
       });
     }
 
@@ -458,7 +458,7 @@ export class AgentSecurityEngine {
           if (i === 162) return !c.operation.includes("read-shadow-file");
           return true;
         },
-        remedy: `Resource access check ${i} failed — access to this resource is not permitted`,
+        remedy: `Resource access check ${i} failed, access to this resource is not permitted`,
       });
     }
 
@@ -489,7 +489,7 @@ export class AgentSecurityEngine {
           if (i === 192) return !/[<>'";&]/.test(c.tenantId);
           return true;
         },
-        remedy: `Tenant isolation check ${i} failed — cross-tenant access is strictly forbidden`,
+        remedy: `Tenant isolation check ${i} failed, cross-tenant access is strictly forbidden`,
       });
     }
 
@@ -497,7 +497,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 3 — Input Validation & Sanitisation (200-299)
+  // TIER 3: Input Validation & Sanitisation (200-299)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier3_InputValidation(ctx: SecurityContext): SecurityCheckResult[] {
@@ -534,7 +534,7 @@ export class AgentSecurityEngine {
           if (i === 219) { const p = c.payload as Record<string, unknown> | undefined; return !p?.retryCount || typeof p.retryCount === "number"; }
           return true;
         },
-        remedy: `Type check ${i} failed — field has unexpected type`,
+        remedy: `Type check ${i} failed, field has unexpected type`,
       });
     }
 
@@ -550,7 +550,7 @@ export class AgentSecurityEngine {
           const t = targets[idx % targets.length];
           return !sqlPattern.test(t);
         },
-        remedy: `SQL injection pattern detected in input field — sanitise all user-controlled inputs`,
+        remedy: `SQL injection pattern detected in input field, sanitise all user-controlled inputs`,
       });
     }
 
@@ -565,7 +565,7 @@ export class AgentSecurityEngine {
           const t = targets[(i - 240) % targets.length];
           return !xssPattern.test(t);
         },
-        remedy: `XSS pattern detected in input — encode all user-supplied HTML content`,
+        remedy: `XSS pattern detected in input, encode all user-supplied HTML content`,
       });
     }
 
@@ -588,7 +588,7 @@ export class AgentSecurityEngine {
           if (i === 264) return !/\x00/.test(c.operation + c.agentId + c.tenantId);
           return true;
         },
-        remedy: `Command injection pattern detected — escape shell metacharacters`,
+        remedy: `Command injection pattern detected, escape shell metacharacters`,
       });
     }
 
@@ -611,7 +611,7 @@ export class AgentSecurityEngine {
           if (i === 274) return !ssrfPattern.test(c.ipAddress ?? "");
           return true;
         },
-        remedy: `SSRF risk — URL points to internal network; only public URLs are permitted`,
+        remedy: `SSRF risk: URL points to internal network; only public URLs are permitted`,
       });
     }
 
@@ -641,7 +641,7 @@ export class AgentSecurityEngine {
           if (i === 290) return !p?.webhookUrl || (p.webhookUrl as string).startsWith("https://");
           return true;
         },
-        remedy: `Content validation check ${i} failed — review content field constraints`,
+        remedy: `Content validation check ${i} failed, review content field constraints`,
       });
     }
 
@@ -649,7 +649,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 4 — Content Policy & Platform Compliance (300-399)
+  // TIER 4: Content Policy & Platform Compliance (300-399)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier4_ContentPolicy(ctx: SecurityContext): SecurityCheckResult[] {
@@ -681,7 +681,7 @@ export class AgentSecurityEngine {
           if (i === 312) return c.platform !== "youtube" || !p?.description || (p.description as string).length >= 0;
           return true;
         },
-        remedy: `Platform TOS check ${i} failed — content violates platform terms of service`,
+        remedy: `Platform TOS check ${i} failed, content violates platform terms of service`,
       });
     }
 
@@ -703,7 +703,7 @@ export class AgentSecurityEngine {
           if (i === 333) { const p2 = c.payload as Record<string, unknown> | undefined; return typeof p2?.aiDisclosure !== "boolean" || p2.aiDisclosure !== false; }
           return true;
         },
-        remedy: `AI disclosure missing — add #AIGenerated or equivalent disclosure to AI-generated content`,
+        remedy: `AI disclosure missing, add #AIGenerated or equivalent disclosure to AI-generated content`,
       });
     }
 
@@ -727,7 +727,7 @@ export class AgentSecurityEngine {
           if (i === 371) { const p = c.payload as Record<string, unknown> | undefined; return !p?.mediaUrl || !(p.mediaUrl as string).includes("watermark=removed"); }
           return true;
         },
-        remedy: `Copyright/brand check ${i} failed — ensure proper attribution and disclosures`,
+        remedy: `Copyright/brand check ${i} failed, ensure proper attribution and disclosures`,
       });
     }
 
@@ -735,7 +735,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 5 — Rate Limiting & Quota Enforcement (400-499)
+  // TIER 5: Rate Limiting & Quota Enforcement (400-499)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier5_RateLimiting(ctx: SecurityContext): SecurityCheckResult[] {
@@ -764,7 +764,7 @@ export class AgentSecurityEngine {
           if (i === 412) return this.checkRate(`ig-posts-hour-${c.tenantId}`, 5, 3600000);
           return true;
         },
-        remedy: `API rate limit check ${i} exceeded — backoff and retry after window resets`,
+        remedy: `API rate limit check ${i} exceeded, backoff and retry after window resets`,
       });
     }
 
@@ -788,7 +788,7 @@ export class AgentSecurityEngine {
           if (i === 415) return this.checkRate(`yt-api-${c.tenantId}`, 10000, 86400000);
           return true;
         },
-        remedy: `Platform rate check ${i} exceeded — platform quota reached`,
+        remedy: `Platform rate check ${i} exceeded, platform quota reached`,
       });
     }
 
@@ -814,7 +814,7 @@ export class AgentSecurityEngine {
           if (i === 472) return this.checkRate(`agent-new-session-${c.agentId}`, 10, 3600000);
           return true;
         },
-        remedy: `Agent rate check ${i} exceeded — agent is operating above permitted throughput`,
+        remedy: `Agent rate check ${i} exceeded, agent is operating above permitted throughput`,
       });
     }
 
@@ -822,7 +822,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 6 — Output Validation & Data Leakage Prevention (500-599)
+  // TIER 6: Output Validation & Data Leakage Prevention (500-599)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier6_OutputValidation(ctx: SecurityContext): SecurityCheckResult[] {
@@ -870,7 +870,7 @@ export class AgentSecurityEngine {
           if (i === 520) return !/national insurance/i.test(ps);
           return true;
         },
-        remedy: `PII detected in output payload — redact personal information before publishing`,
+        remedy: `PII detected in output payload, redact personal information before publishing`,
       });
     }
 
@@ -902,7 +902,7 @@ export class AgentSecurityEngine {
           if (i === 549) return !/smtp_password|mail_password/i.test(ps);
           return true;
         },
-        remedy: `Credential detected in output — remove secrets before publishing to any platform`,
+        remedy: `Credential detected in output, remove secrets before publishing to any platform`,
       });
     }
 
@@ -934,7 +934,7 @@ export class AgentSecurityEngine {
           if (i === 568) return !/\bINSERT_HERE\b/i.test(ps);
           return true;
         },
-        remedy: `Output sanitisation check ${i} failed — scrub dangerous patterns from output`,
+        remedy: `Output sanitisation check ${i} failed, scrub dangerous patterns from output`,
       });
     }
 
@@ -958,7 +958,7 @@ export class AgentSecurityEngine {
           if (i === 584) return ps.length < 50_000_000;
           return true;
         },
-        remedy: `Output size check ${i} failed — payload exceeds maximum allowed size`,
+        remedy: `Output size check ${i} failed, payload exceeds maximum allowed size`,
       });
     }
 
@@ -966,7 +966,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 7 — Behavioural Analysis & Anomaly Detection (600-699)
+  // TIER 7: Behavioural Analysis & Anomaly Detection (600-699)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier7_BehavioralAnalysis(ctx: SecurityContext): SecurityCheckResult[] {
@@ -1006,7 +1006,7 @@ export class AgentSecurityEngine {
           if (i === 610) return !c.operation.toLowerCase().includes("debug-mode-on");
           return true;
         },
-        remedy: `Anomaly detected at check ${i} — investigate unusual agent behaviour`,
+        remedy: `Anomaly detected at check ${i}, investigate unusual agent behaviour`,
       });
     }
 
@@ -1035,7 +1035,7 @@ export class AgentSecurityEngine {
           if (i === 643) { const p = c.payload as Record<string, unknown> | undefined; const recs = Array.isArray(p?.recipes) ? p.recipes : []; return recs.length === 0 || new Set(recs).size >= Math.ceil(recs.length * 0.3); }
           return true;
         },
-        remedy: `Behavioural pattern check ${i} flagged — review content for policy violations`,
+        remedy: `Behavioural pattern check ${i} flagged, review content for policy violations`,
       });
     }
 
@@ -1060,7 +1060,7 @@ export class AgentSecurityEngine {
           if (i === 670) return this.checkRate(`error-ops-${c.agentId}`, 30, 600000);
           return true;
         },
-        remedy: `Drift/time check ${i} failed — review operation timing and frequency patterns`,
+        remedy: `Drift/time check ${i} failed, review operation timing and frequency patterns`,
       });
     }
 
@@ -1068,7 +1068,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 8 — Cryptographic Integrity (700-799)
+  // TIER 8: Cryptographic Integrity (700-799)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier8_Cryptographic(ctx: SecurityContext): SecurityCheckResult[] {
@@ -1095,7 +1095,7 @@ export class AgentSecurityEngine {
           if (i === 710) return Date.parse(c.timestamp) <= Date.now() + 30000;
           return true;
         },
-        remedy: `Hash/integrity check ${i} failed — verify identifier uniqueness and format`,
+        remedy: `Hash/integrity check ${i} failed, verify identifier uniqueness and format`,
       });
     }
 
@@ -1119,7 +1119,7 @@ export class AgentSecurityEngine {
           if (i === 740) return !payloadStr(c).includes(process.env.ANTHROPIC_API_KEY ?? "NOKEY__NOMATCH");
           return true;
         },
-        remedy: `Key management check ${i} failed — review secret storage and rotation policies`,
+        remedy: `Key management check ${i} failed, review secret storage and rotation policies`,
       });
     }
 
@@ -1148,7 +1148,7 @@ export class AgentSecurityEngine {
           if (i === 775) return !process.env.TLS_DISABLED || process.env.TLS_DISABLED !== "true";
           return true;
         },
-        remedy: `Entropy/TLS check ${i} failed — use HTTPS endpoints and high-entropy identifiers`,
+        remedy: `Entropy/TLS check ${i} failed, use HTTPS endpoints and high-entropy identifiers`,
       });
     }
 
@@ -1156,7 +1156,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 9 — Audit, Compliance & Regulatory (800-899)
+  // TIER 9: Audit, Compliance & Regulatory (800-899)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier9_AuditCompliance(ctx: SecurityContext): SecurityCheckResult[] {
@@ -1186,7 +1186,7 @@ export class AgentSecurityEngine {
           if (i === 812) return c.tenantId !== "unknown";
           return true;
         },
-        remedy: `GDPR check ${i} failed — ensure lawful basis and data subject rights are respected`,
+        remedy: `GDPR check ${i} failed, ensure lawful basis and data subject rights are respected`,
       });
     }
 
@@ -1211,7 +1211,7 @@ export class AgentSecurityEngine {
           if (i === 841) return !c.agentId.toLowerCase().includes("noaudit");
           return true;
         },
-        remedy: `Audit logging check ${i} failed — all operations must be logged for compliance`,
+        remedy: `Audit logging check ${i} failed, all operations must be logged for compliance`,
       });
     }
 
@@ -1243,7 +1243,7 @@ export class AgentSecurityEngine {
           if (i === 895) return !/(earn money|passive income).*no effort/i.test(text);
           return true;
         },
-        remedy: `Regulatory check ${i} failed — ensure FTC, ASA, Amazon TOS, and platform policies are met`,
+        remedy: `Regulatory check ${i} failed, ensure FTC, ASA, Amazon TOS, and platform policies are met`,
       });
     }
 
@@ -1251,7 +1251,7 @@ export class AgentSecurityEngine {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TIER 10 — Resilience, Recovery & Fail-Safe (900-999)
+  // TIER 10: Resilience, Recovery & Fail-Safe (900-999)
   // ═══════════════════════════════════════════════════════════════════════════
 
   private runTier10_ResilienceRecovery(ctx: SecurityContext): SecurityCheckResult[] {
@@ -1272,7 +1272,7 @@ export class AgentSecurityEngine {
           if (!rate) { this.circuitState.set(key, "open"); return false; }
           return true;
         },
-        remedy: `Circuit breaker ${i} is open — service is temporarily unavailable, retry after cooldown`,
+        remedy: `Circuit breaker ${i} is open, service is temporarily unavailable, retry after cooldown`,
       });
     }
 
@@ -1304,7 +1304,7 @@ export class AgentSecurityEngine {
           if (i === 948) return !c.operation.includes("factory-reset");
           return true;
         },
-        remedy: `Fail-safe check ${i} triggered — operation is forbidden by the fail-safe policy`,
+        remedy: `Fail-safe check ${i} triggered, operation is forbidden by the fail-safe policy`,
       });
     }
 
@@ -1331,7 +1331,7 @@ export class AgentSecurityEngine {
           if (i === 999) return true;
           return true;
         },
-        remedy: `Watchdog check ${i} failed — security engine health compromised`,
+        remedy: `Watchdog check ${i} failed, security engine health compromised`,
       });
     }
 

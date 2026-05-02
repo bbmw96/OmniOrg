@@ -133,7 +133,7 @@ What is your experience with video-editing income report / result...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #videoediting #income #report #results #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -197,7 +197,7 @@ What is your experience with video-editing beginner mistakes? Let me kn...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #videoediting #beginner #mistakes #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -261,7 +261,7 @@ What is your experience with video-editing tools for beginners 2...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #videoediting #tools #beginners #2025 #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -306,7 +306,7 @@ STATUS: AWAITING HUMAN APPROVAL
 ---
 
 ### Post 7: REELS
-**Hook:** How good is your Results after 30 days of video-editing — honestly?
+**Hook:** How good is your Results after 30 days of video-editing, honestly?
 
 **Best posting time:** Tuesday 11:00-13:00 BST
 
@@ -325,7 +325,7 @@ What is your experience with Results after 30 days of video-edit...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #results #after #days #videoediting #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -357,7 +357,7 @@ What is your experience with Advanced video-editing technique 1? Let...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #advanced #videoediting #technique #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -402,7 +402,7 @@ STATUS: AWAITING HUMAN APPROVAL
 ---
 
 ### Post 10: REELS
-**Hook:** My Advanced video-editing technique 3 transformation — unfiltered
+**Hook:** My Advanced video-editing technique 3 transformation, unfiltered
 
 **Best posting time:** Friday 09:00-11:00 BST
 
@@ -421,7 +421,7 @@ What is your experience with Advanced video-editing technique 3? Let...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #advanced #videoediting #technique #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -485,7 +485,7 @@ What is your experience with Advanced video-editing technique 5? Let...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #advanced #videoediting #technique #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -549,7 +549,7 @@ What is your experience with Advanced video-editing technique 7? Let...
 #videoediting #videoeditor #editingtips #contentcreator #reelstips #advanced #videoediting #technique #reels #reelsinstagram #explorepage #viral #content #contentmarketing #socialmedia #instagram #instagramreels #grow
 
 **Visual concept:**
-[VIRAL REEL MACHINE] Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
+[VIRAL REEL MACHINE] Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.
 
 **Audio direction:** High-energy trending audio from Instagram Reels library this week. Drop directly into beat.
 
@@ -578,7 +578,7 @@ STATUS: AWAITING HUMAN APPROVAL
 Results number prominently displayed. Creator in professional setting. Warm, aspirational colour grade.
 
 **Opening hook:**
-I've helped 1,000 people get results with video-editing income report / results — here's how
+I've helped 1,000 people get results with video-editing income report / results, here's how
 
 **Chapter structure:**
 - 0:00 Introduction
@@ -610,7 +610,7 @@ I've helped 1,000 people get results with video-editing income report / results 
 Before/after split screen. Step numbers overlaid. Tool name if applicable.
 
 **Opening hook:**
-Here's the AI tools for video-editing in 2025 method I use — watch until the end
+Here's the AI tools for video-editing in 2025 method I use, watch until the end
 
 **Chapter structure:**
 - 0:00 Main tip
@@ -795,7 +795,7 @@ Everything I thought I knew about Best video editing software 2026: honest compa
 
 ## Daily Posting Schedule (3 posts/day · 1 YouTube + 2 Instagram)
 
-### YouTube — 7 videos/week
+### YouTube: 7 videos/week
 
 | Day | Format | Optimal Time | Why |
 |-----|--------|-------------|-----|
@@ -807,13 +807,13 @@ Everything I thought I knew about Best video editing software 2026: honest compa
 | Saturday | case-study | 10:00 BST | Weekend = leisure viewing. Case studies + docs perform well. |
 | Sunday | documentary | 11:00 BST | Highest watch-time day. Long-form builds weekly habit. |
 
-### Instagram — 14 posts/week
+### Instagram: 14 posts/week
 
 | Day | Format | Optimal Time | Why |
 |-----|--------|-------------|-----|
 | Monday | reels | 11:00 BST | Week-start motivation. Reels show to non-followers. |
 | Monday | carousel | 18:00 BST | Evening save rate peak. Educational carousels perform. |
-| Tuesday | reels | 11:00 BST | Best Instagram engagement day — algorithm favours early posts. |
+| Tuesday | reels | 11:00 BST | Best Instagram engagement day, algorithm favours early posts. |
 | Tuesday | story-series | 19:00 BST | Story series for community building. Drives DMs. |
 | Wednesday | reels | 10:00 BST | Mid-week reach. Consistent cadence signals active creator. |
 | Wednesday | carousel | 15:00 BST | Lunch break browsing. Save rate highest on carousels 15:00-17:00. |
@@ -832,8 +832,8 @@ Everything I thought I knew about Best video editing software 2026: honest compa
 |-----------|-----------|---------------|----------------|
 | month1 | 5,000 | GBP 15 | First 100 followers/subscribers |
 | month3 | 25,000 | GBP 75 | 500 subscribers, Shorts momentum |
-| month6 | 150,000 | GBP 450 | 1,000 subs — YPP eligible |
-| month12 | 800,000 | GBP 2400 | 10k subs — brand deals start |
+| month6 | 150,000 | GBP 450 | 1,000 subs: YPP eligible |
+| month12 | 800,000 | GBP 2400 | 10k subs, brand deals start |
 
 ---
 

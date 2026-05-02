@@ -6,19 +6,19 @@
  * Instagram and YouTube via the Composio MCP connection.
  *
  * ACCOUNT DETAILS (from active Composio connections):
- *   Instagram:       @ai_game_odyssey   — ig_user_id: 26759002047072119
- *   YouTube (main):  @bbmw.0 (Mohammed) — channel: UCSRkqZ0PckW8ae-cnZcN1hw
- *   YouTube (bbm0902): @bbm0902         — email: bbmw96@gmail.com
+ *   Instagram:       @ai_game_odyssey  , ig_user_id: 26759002047072119
+ *   YouTube (main):  @bbmw.0 (Mohammed), channel: UCSRkqZ0PckW8ae-cnZcN1hw
+ *   YouTube (bbm0902): @bbm0902        , email: bbmw96@gmail.com
  *                    ⚠️  CONNECT ACTION REQUIRED:
  *                    Go to composio.dev → Apps → YouTube → Add Account
  *                    Sign in with bbmw96@gmail.com to connect @bbm0902.
- *                    Shorts only — no long-form on this channel.
+ *                    Shorts only, no long-form on this channel.
  *
  * POLICY:
  *   - Only posts with approvedForPosting = true are ever delivered
  *   - All posts include mandatory AI disclosure per platform policy
  *   - Rate limits respected: Instagram 25 posts/24h, YouTube quota managed
- *   - Human approval is the final gate — this module never bypasses it
+ *   - Human approval is the final gate, this module never bypasses it
  *   - Security engine (999 layers) validates every publish operation
  *
  * VIDEO FILES:
@@ -115,8 +115,8 @@ export class ComposioPublisherEngine {
    * Returns the exact Composio tool calls needed to post a Reel to Instagram.
    * The NEUROMESH agents call these steps via the Composio MCP server.
    *
-   * STEP 1: INSTAGRAM_POST_IG_USER_MEDIA  — create container
-   * STEP 2: INSTAGRAM_POST_IG_USER_MEDIA_PUBLISH — publish
+   * STEP 1: INSTAGRAM_POST_IG_USER_MEDIA , create container
+   * STEP 2: INSTAGRAM_POST_IG_USER_MEDIA_PUBLISH, publish
    */
   getInstagramReelPlan(payload: InstagramPublishPayload): object[] {
     return [
@@ -317,7 +317,7 @@ export class ComposioPublisherEngine {
           formats: [
             { day: "Monday",    format: "reels",    time: "11:00 BST", rationale: "Week-start motivation. Reels show to non-followers." },
             { day: "Monday",    format: "carousel", time: "18:00 BST", rationale: "Evening save rate peak. Educational carousels perform." },
-            { day: "Tuesday",   format: "reels",    time: "11:00 BST", rationale: "Best Instagram engagement day — algorithm favours early posts." },
+            { day: "Tuesday",   format: "reels",    time: "11:00 BST", rationale: "Best Instagram engagement day, algorithm favours early posts." },
             { day: "Tuesday",   format: "story-series", time: "19:00 BST", rationale: "Story series for community building. Drives DMs." },
             { day: "Wednesday", format: "reels",    time: "10:00 BST", rationale: "Mid-week reach. Consistent cadence signals active creator." },
             { day: "Wednesday", format: "carousel", time: "15:00 BST", rationale: "Lunch break browsing. Save rate highest on carousels 15:00-17:00." },
@@ -335,8 +335,8 @@ export class ComposioPublisherEngine {
       revenueProjection: {
         month1:  { views: 5_000,    estimatedGBP: 15,    milestone: "First 100 followers/subscribers" },
         month3:  { views: 25_000,   estimatedGBP: 75,    milestone: "500 subscribers, Shorts momentum" },
-        month6:  { views: 150_000,  estimatedGBP: 450,   milestone: "1,000 subs — YPP eligible" },
-        month12: { views: 800_000,  estimatedGBP: 2_400, milestone: "10k subs — brand deals start" },
+        month6:  { views: 150_000,  estimatedGBP: 450,   milestone: "1,000 subs: YPP eligible" },
+        month12: { views: 800_000,  estimatedGBP: 2_400, milestone: "10k subs, brand deals start" },
       },
     };
   }

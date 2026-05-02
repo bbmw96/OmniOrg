@@ -67,7 +67,7 @@ export class AutoPublisher {
       blockers.push(...(securityReport.criticalFailures ?? []).map(f => f.message ?? f.name));
       approvalReason = "Security clearance denied";
     } else if (pkg.approvedForPosting !== true) {
-      blockers.push("pkg.approvedForPosting is not true — awaiting human approval");
+      blockers.push("pkg.approvedForPosting is not true, awaiting human approval");
       approvalReason = "Pending human approval";
     } else {
       autoApproved = true;
@@ -101,8 +101,8 @@ export class AutoPublisher {
     if (!hasMedia) {
       blockers.push(
         isReel
-          ? "Missing video file — provide videoUrl or videoS3Key"
-          : "Missing images — provide at least 2 imageUrls for carousel",
+          ? "Missing video file, provide videoUrl or videoS3Key"
+          : "Missing images, provide at least 2 imageUrls for carousel",
       );
     }
 
@@ -147,7 +147,7 @@ export class AutoPublisher {
       blockers.push(...(securityReport.criticalFailures ?? []).map(f => f.message ?? f.name));
       approvalReason = "Security clearance denied";
     } else if (pkg.approvedForPosting !== true) {
-      blockers.push("pkg.approvedForPosting is not true — awaiting human approval");
+      blockers.push("pkg.approvedForPosting is not true, awaiting human approval");
       approvalReason = "Pending human approval";
     } else {
       autoApproved = true;
@@ -176,7 +176,7 @@ export class AutoPublisher {
 
     const hasVideo = !!(pkg.videoS3Key || pkg.videoFilePath);
     if (!hasVideo) {
-      blockers.push("Missing video file — provide videoS3Key or videoFilePath");
+      blockers.push("Missing video file, provide videoS3Key or videoFilePath");
     }
 
     const readyToExecute = autoApproved && hasVideo && blockers.length === 0;
@@ -272,7 +272,7 @@ export class AutoPublisher {
   /**
    * Logs the execution plan for all ready posts so Claude can execute the
    * Composio MCP calls. Actual MCP execution is performed by Claude Code
-   * using the Composio MCP server — this method makes the plan explicit.
+   * using the Composio MCP server, this method makes the plan explicit.
    */
   async executeReadyPosts(manifest: ComposioExecutionManifest): Promise<void> {
     const allDecisions = [
@@ -345,7 +345,7 @@ export class AutoPublisher {
 
   private _buildInstructions(manifest: ComposioExecutionManifest): string {
     const lines: string[] = [
-      "# OmniOrg — Composio Execution Instructions",
+      "# OmniOrg: Composio Execution Instructions",
       `Generated: ${manifest.generatedAt}`,
       "",
       "## Summary",
