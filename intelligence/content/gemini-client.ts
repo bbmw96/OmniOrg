@@ -102,7 +102,7 @@ export class GeminiClient {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.warn(
-        "[GeminiClient] GEMINI_API_KEY not set — falling back to mock data for all Gemini calls."
+        "[GeminiClient] GEMINI_API_KEY not set, falling back to mock data for all Gemini calls."
       );
       return;
     }
@@ -114,7 +114,7 @@ export class GeminiClient {
     opts: GenerateOptions = {}
   ): Promise<string> {
     if (!this.client) {
-      console.warn("[GeminiClient] No API key — returning mock string.");
+      console.warn("[GeminiClient] No API key, returning mock string.");
       return "Mock Gemini response for: " + prompt.slice(0, 60);
     }
 
@@ -153,7 +153,7 @@ export class GeminiClient {
   async researchInfluencer(name: string): Promise<InfluencerResearch> {
     if (!this.client) {
       console.warn(
-        "[GeminiClient] No API key — returning mock InfluencerResearch for: " +
+        "[GeminiClient] No API key, returning mock InfluencerResearch for: " +
           name
       );
       return { ...MOCK_INFLUENCER_RESEARCH, name };
@@ -207,7 +207,7 @@ export class GeminiClient {
   ): Promise<ShortsScript> {
     if (!this.client) {
       console.warn(
-        "[GeminiClient] No API key — returning mock ShortsScript for: " +
+        "[GeminiClient] No API key, returning mock ShortsScript for: " +
           influencer.name
       );
       return {
@@ -215,7 +215,7 @@ export class GeminiClient {
         captionText:
           "Amazing creator spotlight: " +
           influencer.name +
-          " — drop a comment!",
+          ", drop a comment!",
         hashtags: [
           "#Shorts",
           "#" + influencer.name.replace(/\s+/g, ""),
@@ -239,13 +239,13 @@ export class GeminiClient {
       "\n\n" +
       "Return a JSON object ONLY (no markdown, no explanation) with exactly these fields:\n" +
       "{\n" +
-      '  "hook": string (0-5s — one powerful sentence that grabs attention),\n' +
+      '  "hook": string (0-5s, one powerful sentence that grabs attention),\n' +
       '  "mainContent": {\n' +
       '    "point1": string (5-20s bullet),\n' +
       '    "point2": string (20-35s bullet),\n' +
       '    "point3": string (35-50s bullet)\n' +
       "  },\n" +
-      '  "cta": string (50-60s — call to action),\n' +
+      '  "cta": string (50-60s, call to action),\n' +
       '  "captionText": string (caption for the Short, max 200 chars),\n' +
       '  "hashtags": string[] (8-12 relevant hashtags including #Shorts)\n' +
       "}\n\n" +
@@ -278,7 +278,7 @@ export class GeminiClient {
         captionText:
           "Amazing creator spotlight: " +
           influencer.name +
-          " — drop a comment!",
+          ", drop a comment!",
         hashtags: [
           "#Shorts",
           "#" + influencer.name.replace(/\s+/g, ""),

@@ -22,13 +22,13 @@ export class CloudSyncBridge {
 
   async pushPendingTasksToCloud(queue: OfflineAgentQueue): Promise<number> {
     if (!this.isAvailable()) {
-      console.warn("[CloudSyncBridge] AWS credentials not configured — skipping cloud push.");
+      console.warn("[CloudSyncBridge] AWS credentials not configured, skipping cloud push.");
       return 0;
     }
 
     const queueUrl = process.env.OMNIORG_SQS_QUEUE_URL;
     if (!queueUrl) {
-      console.warn("[CloudSyncBridge] OMNIORG_SQS_QUEUE_URL not set — skipping cloud push.");
+      console.warn("[CloudSyncBridge] OMNIORG_SQS_QUEUE_URL not set, skipping cloud push.");
       return 0;
     }
 
@@ -40,7 +40,7 @@ export class CloudSyncBridge {
       SQSClient = sqsMod["SQSClient"];
       SendMessageCommand = sqsMod["SendMessageCommand"];
     } catch {
-      console.warn("[CloudSyncBridge] @aws-sdk/client-sqs not installed — skipping cloud push.");
+      console.warn("[CloudSyncBridge] @aws-sdk/client-sqs not installed, skipping cloud push.");
       return 0;
     }
 
@@ -80,13 +80,13 @@ export class CloudSyncBridge {
 
   async pullResultsFromCloud(queue: OfflineAgentQueue): Promise<number> {
     if (!this.isAvailable()) {
-      console.warn("[CloudSyncBridge] AWS credentials not configured — skipping results pull.");
+      console.warn("[CloudSyncBridge] AWS credentials not configured, skipping results pull.");
       return 0;
     }
 
     const resultsUrl = process.env.OMNIORG_SQS_RESULTS_URL;
     if (!resultsUrl) {
-      console.warn("[CloudSyncBridge] OMNIORG_SQS_RESULTS_URL not set — skipping results pull.");
+      console.warn("[CloudSyncBridge] OMNIORG_SQS_RESULTS_URL not set, skipping results pull.");
       return 0;
     }
 
@@ -100,7 +100,7 @@ export class CloudSyncBridge {
       ReceiveMessageCommand = sqsMod["ReceiveMessageCommand"];
       DeleteMessageCommand = sqsMod["DeleteMessageCommand"];
     } catch {
-      console.warn("[CloudSyncBridge] @aws-sdk/client-sqs not installed — skipping results pull.");
+      console.warn("[CloudSyncBridge] @aws-sdk/client-sqs not installed, skipping results pull.");
       return 0;
     }
 
@@ -155,7 +155,7 @@ export class CloudSyncBridge {
       this.pushPendingTasksToCloud(queue),
       this.pullResultsFromCloud(queue),
     ]);
-    console.log(`[CloudSyncBridge] Sync complete — pushed: ${pushed}, pulled: ${pulled}`);
+    console.log(`[CloudSyncBridge] Sync complete, pushed: ${pushed}, pulled: ${pulled}`);
     return { pushed, pulled };
   }
 }

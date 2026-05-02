@@ -1,5 +1,5 @@
 // Created by BBMW0 Technologies | bbmw0.com
-// IFC-CORENET-X Compliance System — Singapore BCA Automated Code Compliance Validator
+// IFC-CORENET-X Compliance System: Singapore BCA Automated Code Compliance Validator
 // Covers: BCA Building Control Act, SCDF Fire Safety, BFA Accessibility, Structural, SS 530 Energy, Zoning
 
 import * as fs from "fs";
@@ -136,13 +136,13 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 1 — CORENET-X Format Requirements
+  // Rule Set 1: CORENET-X Format Requirements
   // ─────────────────────────────────────────────────────────
 
   private _checkCorenetxFormat(model: ParsedIfcModel): ComplianceCheckResult[] {
     const results: ComplianceCheckResult[] = [];
 
-    // CX-001 — IfcProject must be present with valid GlobalId
+    // CX-001: IfcProject must be present with valid GlobalId
     const hasProject = model.projectName && model.projectName !== "Unnamed Project";
     results.push({
       ruleId: "CX-001",
@@ -158,7 +158,7 @@ export class IfcCorenetXValidator {
       regulationReference: "CORENET-X Submission Guide v3.1 §2.1",
     });
 
-    // CX-002 — Singapore address / coordinates
+    // CX-002: Singapore address / coordinates
     const hasSiteAddr = !!model.siteAddress;
     results.push({
       ruleId: "CX-002",
@@ -174,7 +174,7 @@ export class IfcCorenetXValidator {
       regulationReference: "CORENET-X Submission Guide v3.1 §2.2",
     });
 
-    // CX-003 — All storeys must have defined elevations
+    // CX-003: All storeys must have defined elevations
     const storeysWithoutElevation = model.storeys.filter(
       (s) => s.elevation === 0 && s.name.toLowerCase() !== "ground" &&
              s.name !== "L1" && s.name !== "01"
@@ -194,7 +194,7 @@ export class IfcCorenetXValidator {
       regulationReference: "CORENET-X Submission Guide v3.1 §2.3",
     });
 
-    // CX-004 — Building height declared
+    // CX-004: Building height declared
     const hasBuildingHeight = model.buildingHeight > 0;
     results.push({
       ruleId: "CX-004",
@@ -210,7 +210,7 @@ export class IfcCorenetXValidator {
       regulationReference: "CORENET-X Submission Guide v3.1 §2.4",
     });
 
-    // CX-005 — GFA consistency check (±5% tolerance)
+    // CX-005: GFA consistency check (±5% tolerance)
     const spaceAreaSum = model.spaces.reduce((sum, s) => sum + s.area, 0);
     if (model.grossFloorArea > 0 && spaceAreaSum > 0) {
       const diff = Math.abs(model.grossFloorArea - spaceAreaSum);
@@ -245,14 +245,14 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 2 — Fire Safety (SCDF / BCA Building Control Act)
+  // Rule Set 2: Fire Safety (SCDF / BCA Building Control Act)
   // ─────────────────────────────────────────────────────────
 
   private _checkFireSafety(model: ParsedIfcModel): ComplianceCheckResult[] {
     const results: ComplianceCheckResult[] = [];
     const isHighRise = model.buildingHeight > 24;
 
-    // FS-001 — Staircase width >= 1050mm for buildings > 24m
+    // FS-001: Staircase width >= 1050mm for buildings > 24m
     const stairs = model.elements.filter((e) =>
       e.type.toLowerCase().includes("stair")
     );
@@ -311,7 +311,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // FS-002 — Travel distance to exit
+    // FS-002: Travel distance to exit
     // Infer travel distance from space areas (heuristic: sqrt(area) * 1.5 ≈ diagonal travel)
     const largeSpaces = model.spaces.filter((s) => {
       const estimatedTravel = Math.sqrt(s.area) * 1.5;
@@ -354,14 +354,14 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // FS-003 — Fire compartment area ≤ 7000m²
+    // FS-003: Fire compartment area ≤ 7000m²
     for (const storey of model.storeys) {
       const storeySpaces = model.spaces.filter((s) => s.level === storey.name);
       const totalStoreyArea = storeySpaces.reduce((sum, s) => sum + s.area, 0);
       if (totalStoreyArea > 0) {
         results.push({
           ruleId: "FS-003",
-          ruleName: `Fire Compartment Area — ${storey.name}`,
+          ruleName: `Fire Compartment Area: ${storey.name}`,
           category: "Fire Safety",
           status: totalStoreyArea > 7000 ? "FAIL" : "PASS",
           severity: "CRITICAL",
@@ -393,7 +393,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // FS-004 — Minimum 2 escape routes for > 50 persons per floor
+    // FS-004: Minimum 2 escape routes for > 50 persons per floor
     const hasMinTwoExits = stairs.length >= 2 || model.stats.doorCount >= 2;
     const needsCheck = model.totalFloors > 1 || model.grossFloorArea > 200;
     if (needsCheck) {
@@ -422,7 +422,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // FS-005 — Fire door width >= 850mm
+    // FS-005: Fire door width >= 850mm
     const doors = model.elements.filter((e) => e.type.toLowerCase() === "ifcdoor");
     const narrowDoors: string[] = [];
     const checkedDoors: string[] = [];
@@ -473,7 +473,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // FS-006 — Corridor width >= 1200mm
+    // FS-006: Corridor width >= 1200mm
     const corridors = model.spaces.filter(
       (s) =>
         s.name.toLowerCase().includes("corridor") ||
@@ -525,13 +525,13 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 3 — Barrier-Free Accessibility (BFA)
+  // Rule Set 3: Barrier-Free Accessibility (BFA)
   // ─────────────────────────────────────────────────────────
 
   private _checkAccessibility(model: ParsedIfcModel): ComplianceCheckResult[] {
     const results: ComplianceCheckResult[] = [];
 
-    // BFA-001 — At least one accessible entrance (ramp or level access)
+    // BFA-001: At least one accessible entrance (ramp or level access)
     const ramps = model.elements.filter((e) =>
       e.type.toLowerCase().includes("ramp")
     );
@@ -558,7 +558,7 @@ export class IfcCorenetXValidator {
       regulationReference: "BCA Code on Accessibility §3.1, BCA 2019 BFA",
     });
 
-    // BFA-002 — Ramp gradient <= 1:12 (8.33%)
+    // BFA-002: Ramp gradient <= 1:12 (8.33%)
     const steepRamps: string[] = [];
     for (const ramp of ramps) {
       const rise = (ramp.quantities["Rise"] ?? ramp.properties["Rise"]) as
@@ -610,7 +610,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // BFA-003 — Accessible toilet on every floor with disabled facilities
+    // BFA-003: Accessible toilet on every floor with disabled facilities
     const toilets = model.spaces.filter(
       (s) =>
         s.name.toLowerCase().includes("toilet") ||
@@ -667,7 +667,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // BFA-004 — Lift dimensions >= 1100mm × 1400mm for buildings > 4 storeys
+    // BFA-004: Lift dimensions >= 1100mm × 1400mm for buildings > 4 storeys
     if (model.totalFloors > 4) {
       const lifts = model.elements.filter(
         (e) =>
@@ -725,7 +725,7 @@ export class IfcCorenetXValidator {
       });
     }
 
-    // BFA-005 — Tactile guidance strips (informational — check property on relevant elements)
+    // BFA-005: Tactile guidance strips (informational, check property on relevant elements)
     const tactileElements = model.elements.filter(
       (e) =>
         String(e.properties["HasTactileStrip"] ?? "").toLowerCase() === "true" ||
@@ -763,13 +763,13 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 4 — Structural
+  // Rule Set 4: Structural
   // ─────────────────────────────────────────────────────────
 
   private _checkStructural(model: ParsedIfcModel): ComplianceCheckResult[] {
     const results: ComplianceCheckResult[] = [];
 
-    // STR-001 — Column grid spacing <= 9000mm
+    // STR-001: Column grid spacing <= 9000mm
     const columns = model.elements.filter((e) =>
       e.type.toLowerCase() === "ifccolumn"
     );
@@ -838,7 +838,7 @@ export class IfcCorenetXValidator {
       }
     }
 
-    // STR-002 — Slab thickness >= 150mm for RC
+    // STR-002: Slab thickness >= 150mm for RC
     const slabs = model.elements.filter((e) =>
       e.type.toLowerCase() === "ifcslab"
     );
@@ -913,7 +913,7 @@ export class IfcCorenetXValidator {
       }
     }
 
-    // STR-003 — Foundation elements present for buildings > 5 storeys
+    // STR-003: Foundation elements present for buildings > 5 storeys
     if (model.totalFloors > 5) {
       const foundations = model.elements.filter(
         (e) =>
@@ -953,13 +953,13 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 5 — Green Mark / Energy (SS 530)
+  // Rule Set 5: Green Mark / Energy (SS 530)
   // ─────────────────────────────────────────────────────────
 
   private _checkGreenMark(model: ParsedIfcModel): ComplianceCheckResult[] {
     const results: ComplianceCheckResult[] = [];
 
-    // GM-001 — Window-to-wall ratio (WWR) <= 50% per facade
+    // GM-001: Window-to-wall ratio (WWR) <= 50% per facade
     const walls = model.elements.filter((e) =>
       e.type.toLowerCase().includes("ifcwall")
     );
@@ -1030,7 +1030,7 @@ export class IfcCorenetXValidator {
       }
     }
 
-    // GM-002 — Roof insulation (check IfcCovering with IsExternal=true)
+    // GM-002: Roof insulation (check IfcCovering with IsExternal=true)
     const coverings = model.elements.filter(
       (e) => e.type.toLowerCase() === "ifccovering"
     );
@@ -1083,7 +1083,7 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Rule Set 6 — Singapore Zoning
+  // Rule Set 6: Singapore Zoning
   // ─────────────────────────────────────────────────────────
 
   private _checkZoning(model: ParsedIfcModel): ComplianceCheckResult[] {
@@ -1114,7 +1114,7 @@ export class IfcCorenetXValidator {
     const normalisedUsage = normaliseUsage(dominantUsage);
     const isAllowed = (ALLOWED_BUILDING_USES as readonly string[]).includes(normalisedUsage);
 
-    // ZN-001 — Building use classification
+    // ZN-001: Building use classification
     results.push({
       ruleId: "ZN-001",
       ruleName: "Building Use Classification",
@@ -1130,14 +1130,14 @@ export class IfcCorenetXValidator {
         normalisedUsage === "UNCLASSIFIED"
           ? "Building use not determinable from IfcSpace usage data. Classification required for URA zoning compliance."
           : isAllowed
-            ? `Building use classified as ${normalisedUsage} — valid for Singapore URA zoning.`
+            ? `Building use classified as ${normalisedUsage}, valid for Singapore URA zoning.`
             : `Building use '${normalisedUsage}' is not a recognised Singapore zoning category.`,
       requiredValue: `One of: ${ALLOWED_BUILDING_USES.join(", ")}`,
       actualValue: normalisedUsage,
       regulationReference: "URA Master Plan 2019, BCA Building Control Regulations §4",
     });
 
-    // ZN-002 — Parking ratio for commercial buildings
+    // ZN-002: Parking ratio for commercial buildings
     if (normalisedUsage === "COMMERCIAL" || normalisedUsage === "MIXED-USE") {
       const parkingSpaces = model.spaces.filter(
         (s) =>
@@ -1185,7 +1185,7 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Private — Report assembly
+  // Private: Report assembly
   // ─────────────────────────────────────────────────────────
 
   private _assembleReport(
@@ -1267,7 +1267,7 @@ export class IfcCorenetXValidator {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Private — AI Recommendations via Claude
+  // Private: AI Recommendations via Claude
   // ─────────────────────────────────────────────────────────
 
   private async _generateAIRecommendations(
@@ -1299,7 +1299,7 @@ export class IfcCorenetXValidator {
       const response = await this.anthropic.messages.create({
         model: "claude-opus-4-5",
         max_tokens: 1500,
-        system: `You are a Singapore-registered Professional Engineer (PE) and BIM compliance specialist with expertise in CORENET-X, BCA Building Control Act, SCDF Fire Safety Regulations, BFA Accessibility Code, and SS 530 energy standards. Analyze these compliance failures and provide specific, actionable remediation guidance. Each recommendation must:
+        system: `You are a Singapore-registered Professional Engineer (PE) and BIM compliance specialist with expertise in CORENET-X, BCA Building Control Act, SCDF Fire Safety Regulations, BFA Accessibility Code, and SS 530 energy standards. analyse these compliance failures and provide specific, actionable remediation guidance. Each recommendation must:
 1. Reference the exact Singapore code clause
 2. Provide a concrete BIM modelling action (what to fix in the IFC model)
 3. State the design consequence if not resolved
@@ -1385,7 +1385,7 @@ Format as a JSON array of strings. Be precise and technical.`,
           recs.push(`[${f.ruleId}] Set OccupancyType property on all IfcSpace elements to one of: RESIDENTIAL, COMMERCIAL, INDUSTRIAL, INSTITUTIONAL, MIXED-USE per URA Master Plan. Ref: URA Development Control`);
           break;
         default:
-          recs.push(`[${f.ruleId}] Review failure: ${f.message} — Regulation: ${f.regulationReference ?? "See CORENET-X Submission Guide"}`);
+          recs.push(`[${f.ruleId}] Review failure: ${f.message}: Regulation: ${f.regulationReference ?? "See CORENET-X Submission Guide"}`);
       }
     }
 
@@ -1456,9 +1456,9 @@ Format as a JSON array of strings. Be precise and technical.`,
             <td style="padding:8px;border-bottom:1px solid #dee2e6;text-align:center">${renderStatusBadge(r.status)}</td>
             <td style="padding:8px;border-bottom:1px solid #dee2e6;text-align:center">${renderSeverityBadge(r.severity)}</td>
             <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:12px;color:#555">${r.message}</td>
-            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#777">${r.requiredValue ?? "—"}</td>
-            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#555">${r.actualValue ?? "—"}</td>
-            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#0070C0">${r.regulationReference ?? "—"}</td>
+            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#777">${r.requiredValue ?? "-"}</td>
+            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#555">${r.actualValue ?? "-"}</td>
+            <td style="padding:8px;border-bottom:1px solid #dee2e6;font-size:11px;color:#0070C0">${r.regulationReference ?? "-"}</td>
           </tr>`
           )
           .join("");
@@ -1504,7 +1504,7 @@ Format as a JSON array of strings. Be precise and technical.`,
               (r) => `
         <div style="background:#F8D7DA;border:1px solid #F5C6CB;border-radius:4px;padding:12px 16px;margin-bottom:8px">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <span style="font-family:monospace;font-size:13px;font-weight:700;color:#721C24">${r.ruleId} — ${r.ruleName}</span>
+            <span style="font-family:monospace;font-size:13px;font-weight:700;color:#721C24">${r.ruleId}: ${r.ruleName}</span>
             <span style="font-size:11px;color:#555;margin-left:16px">${r.regulationReference ?? ""}</span>
           </div>
           <p style="margin:6px 0 0;font-size:13px;color:#721C24">${r.message}</p>
@@ -1543,7 +1543,7 @@ Format as a JSON array of strings. Be precise and technical.`,
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CORENET-X Compliance Report — ${report.modelSummary.projectName}</title>
+<title>CORENET-X Compliance Report: ${report.modelSummary.projectName}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #212529; }

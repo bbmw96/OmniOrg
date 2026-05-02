@@ -53,10 +53,10 @@ const CATEGORY_ROTATION: GameConcept["category"][] = [
 ];
 
 const CATEGORY_DESCRIPTIONS: Record<GameConcept["category"], string> = {
-  "hyper-casual": "a hyper-casual mobile game (endless runner, tap game, or reflex challenge) — dead-simple mechanics, satisfying feedback loops, addictive one-more-try feel",
-  "educational-ai": "an educational AI quiz app covering AI facts, tech history, or 'Would an AI do this?' challenges — makes learning about AI viral and fun",
-  "viral-social": "a viral social game such as an AI prediction game or AI vs Human challenge — designed for screenshots, sharing, and social bragging",
-  "utility-gamified": "a utility app with game elements such as an AI learning tracker or productivity game — delivers real value while making daily habits addictive",
+  "hyper-casual": "a hyper-casual mobile game (endless runner, tap game, or reflex challenge), dead-simple mechanics, satisfying feedback loops, addictive one-more-try feel",
+  "educational-ai": "an educational AI quiz app covering AI facts, tech history, or 'Would an AI do this?' challenges, makes learning about AI viral and fun",
+  "viral-social": "a viral social game such as an AI prediction game or AI vs Human challenge, designed for screenshots, sharing, and social bragging",
+  "utility-gamified": "a utility app with game elements such as an AI learning tracker or productivity game, delivers real value while making daily habits addictive",
 };
 
 export class ViralGameGenerator {
@@ -92,7 +92,7 @@ export class ViralGameGenerator {
         "You are a viral mobile game designer who has shipped 50+ top-10 App Store games. " +
         "You understand what makes games addictive, shareable, and monetizable. " +
         "Generate concepts that ANYONE can pick up in 3 seconds. " +
-        "Always respond with ONLY valid JSON — no markdown fences, no prose.",
+        "Always respond with ONLY valid JSON, no markdown fences, no prose.",
       messages: [
         {
           role: "user",
@@ -135,7 +135,7 @@ export class ViralGameGenerator {
       system:
         "You are an expert HTML5 game developer. Generate COMPLETE, WORKING single-file HTML5 games. " +
         "The code must be production-ready, mobile-optimized, and run without any external dependencies " +
-        "except CDN-hosted libraries. Always respond with ONLY the raw HTML — no markdown fences, no prose.",
+        "except CDN-hosted libraries. Always respond with ONLY the raw HTML, no markdown fences, no prose.",
       messages: [
         {
           role: "user",
@@ -173,9 +173,9 @@ export class ViralGameGenerator {
       model: "claude-opus-4-5",
       max_tokens: 1500,
       system:
-        "You are an App Store Optimization (ASO) expert. Write Google Play Store listings " +
+        "You are an App Store optimisation (ASO) expert. Write Google Play Store listings " +
         "that maximise discoverability and conversions. " +
-        "Always respond with ONLY valid JSON — no markdown fences, no prose.",
+        "Always respond with ONLY valid JSON, no markdown fences, no prose.",
       messages: [
         {
           role: "user",
@@ -213,15 +213,15 @@ export class ViralGameGenerator {
         `App icon for "${concept.title}": ${concept.tagline}. ` +
         `Key visual element from: ${concept.genre}. ${style}. 1024x1024px.`,
       screenshotPrompts: [
-        `Screenshot 1 — Gameplay: Show the main game screen of "${concept.title}" in action. ` +
+        `Screenshot 1: Gameplay: Show the main game screen of "${concept.title}" in action. ` +
           `Display score counter, core mechanic (${concept.coreLoopDescription}). Portrait 1080x1920px.`,
-        `Screenshot 2 — Hook moment: Show the most exciting/tense moment in "${concept.title}". ` +
+        `Screenshot 2: Hook moment: Show the most exciting/tense moment in "${concept.title}". ` +
           `Vivid colors, clear UI. Portrait 1080x1920px.`,
-        `Screenshot 3 — High score / Achievement: Show a high-score celebration screen for "${concept.title}". ` +
+        `Screenshot 3: High score / Achievement: Show a high-score celebration screen for "${concept.title}". ` +
           `Confetti, big number, share button visible. Portrait 1080x1920px.`,
-        `Screenshot 4 — Viral mechanic: Illustrate the viral feature of "${concept.title}": ` +
+        `Screenshot 4: Viral mechanic: Illustrate the viral feature of "${concept.title}": ` +
           `${concept.viralMechanic}. Social share UI elements visible. Portrait 1080x1920px.`,
-        `Screenshot 5 — Onboarding: Show the first-run welcome screen of "${concept.title}" ` +
+        `Screenshot 5: Onboarding: Show the first-run welcome screen of "${concept.title}" ` +
           `with simple one-tap instruction. Clean and inviting. Portrait 1080x1920px.`,
       ],
       featureGraphicPrompt:
@@ -267,7 +267,7 @@ export class ViralGameGenerator {
 
   private buildPublishingChecklist(concept: GameConcept, quarter: string): string[] {
     return [
-      `[ ] Game tested on Android (Chrome mobile) and iOS (Safari) — tap events work correctly`,
+      `[ ] Game tested on Android (Chrome mobile) and iOS (Safari), tap events work correctly`,
       `[ ] Verify localStorage high-score persists across sessions`,
       `[ ] Test share button: copies score message to clipboard`,
       `[ ] Run game.html through HTML validator (validator.w3.org)`,
