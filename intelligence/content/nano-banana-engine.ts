@@ -25,7 +25,7 @@
  *
  *  4. VARIATION INJECTION
  *     Rewrites hooks, thumbnails, CTAs, and edit styles to
- *     maximise variety across a content calendar — even when
+ *     maximise variety across a content calendar, even when
  *     topics overlap.
  *
  *  5. CROSS-PLATFORM DIFFERENTIATION
@@ -141,11 +141,11 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     narrativeArc:    "revelation",
     tone:            "entertaining-fast",
     energy:          "explosive",
-    productionNotes: "Hook in first frame — no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.",
+    productionNotes: "Hook in first frame, no intro, no title card. Cut every 0.8-1.2 seconds. Zoom punch on key words. Captions always on. End with a cliff-hanger that makes them follow for part 2.",
     thumbnailFormula:"Bold text on high-contrast background. Creator face showing shock/surprise. Arrow pointing to key element. No more than 4 words.",
     ctaFormula:      "Drop a 🍌 in the comments if this helped you",
     editingDirectives: [
-      "No music intro — beat drop into content",
+      "No music intro, beat drop into content",
       "Use viral audio trending this week from Instagram Reels library",
       "Text pop-in on every key point",
       "Zoom in 120% on the most surprising moment",
@@ -162,14 +162,14 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     narrativeArc:    "step-by-step",
     tone:            "authoritative",
     energy:          "medium",
-    productionNotes: "Clean setup, professional lighting. Data and specifics drive trust. On-screen stats and sources. No fluff — respect viewer's time above all.",
+    productionNotes: "Clean setup, professional lighting. Data and specifics drive trust. On-screen stats and sources. No fluff, respect viewer's time above all.",
     thumbnailFormula:"Creator in authoritative pose. Key insight as headline. Dark background with accent colour. No emojis.",
-    ctaFormula:      "Subscribe for one practical tip every week — no filler",
+    ctaFormula:      "Subscribe for one practical tip every week, no filler",
     editingDirectives: [
       "Jump cuts to remove all pauses",
       "Lower-third text for key stats",
       "Chapter cards on-screen at each section transition",
-      "Background music at -22dB max — barely audible",
+      "Background music at -22dB max, barely audible",
       "End screen: playlist of related authority content",
     ],
     platformFit: ["youtube"],
@@ -187,7 +187,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     thumbnailFormula:"Creator in candid, unposed moment. Honest expression. Text captures the emotional truth. No stock imagery.",
     ctaFormula:      "If you've been through something similar, I'd love to hear your story in the comments",
     editingDirectives: [
-      "Keep stumbles and self-corrections — they build authenticity",
+      "Keep stumbles and self-corrections, they build authenticity",
       "Natural background audio under VO",
       "Split into chapters: 'The Problem' → 'What I Tried' → 'What Actually Worked'",
       "Include at least one 'I got this wrong' moment",
@@ -206,7 +206,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     energy:          "high",
     productionNotes: "Screen fills frame. Steps numbered clearly. No wasted seconds. Every 3 steps = one save moment. End with the complete result.",
     thumbnailFormula:"Before/after split screen. Step numbers overlaid. Tool name if applicable.",
-    ctaFormula:      "Save this — you'll need it later",
+    ctaFormula:      "Save this, you'll need it later",
     editingDirectives: [
       "Screen recording at 60fps for smooth cursor movement",
       "Step numbers pop-in as each step begins",
@@ -229,7 +229,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     thumbnailFormula:"Creator with strong expression. Quote from the contrarian take. Question mark or exclamation. Split opinion implied.",
     ctaFormula:      "Do you agree or disagree? Tell me exactly why in the comments",
     editingDirectives: [
-      "Open with the controversial claim — no softening",
+      "Open with the controversial claim, no softening",
       "Present the mainstream view first, then dismantle it with evidence",
       "Use on-screen text to quote the 'wrong' advice being debunked",
       "End with your position restated with confidence",
@@ -246,9 +246,9 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     narrativeArc:    "case-study",
     tone:            "vulnerable-personal",
     energy:          "calm",
-    productionNotes: "Real numbers required. Don't sanitise — show the full picture including bad months. This format is viral because transparency is rare.",
+    productionNotes: "Real numbers required. Don't sanitise, show the full picture including bad months. This format is viral because transparency is rare.",
     thumbnailFormula:"Exact figure on screen (e.g. 'Made £847 last month'). Creator face showing real emotion about it. Dark/serious tone.",
-    ctaFormula:      "What's your honest monthly revenue right now? Comment below — no judgment",
+    ctaFormula:      "What's your honest monthly revenue right now? Comment below, no judgment",
     editingDirectives: [
       "Show actual screenshots of dashboards (blur only personal data)",
       "Month-by-month breakdown in a visual chart",
@@ -269,7 +269,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     energy:          "medium",
     productionNotes: "Results first. Let the outcomes speak. Stack testimonials, metrics, and before/afters. Cinematic feel adds production credibility.",
     thumbnailFormula:"Results number prominently displayed. Creator in professional setting. Warm, aspirational colour grade.",
-    ctaFormula:      "Subscribe to join the community — I reply to every comment this week",
+    ctaFormula:      "Subscribe to join the community: I reply to every comment this week",
     editingDirectives: [
       "Open with the best result / most impressive testimonial",
       "Use slow-motion on the 'wow' moments",
@@ -294,9 +294,9 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     editingDirectives: [
       "Animated bar charts, pie charts, or counters for all statistics",
       "Upbeat background track at -15dB",
-      "Text animates in as VO reads it — perfect timing is critical",
+      "Text animates in as VO reads it, perfect timing is critical",
       "Source citations appear briefly on screen for credibility",
-      "Kinetic text for the opening hook stat — must fill the screen",
+      "Kinetic text for the opening hook stat, must fill the screen",
     ],
     platformFit: ["youtube", "instagram"],
   },
@@ -313,7 +313,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     thumbnailFormula:"Cover slide: bold claim + swipe arrow. Numbered slides. Final slide: summary of all value delivered.",
     ctaFormula:      "Save this and share with someone who needs to see it",
     editingDirectives: [
-      "Slide 1: The hook — bold, big, can't-miss-it",
+      "Slide 1: The hook, bold, big, can't-miss-it",
       "Slides 2-9: One point per slide, clear and scannable",
       "Final slide: All points summarised + follow CTA",
       "Consistent brand colours across all slides",
@@ -332,7 +332,7 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     energy:          "explosive",
     productionNotes: "Lay out a specific, achievable challenge. Do it yourself on screen first. Invite the audience to post their attempt. Duet/collab angle maximises reach.",
     thumbnailFormula:"Creator mid-action. Challenge name prominent. 'Try This' or 'Can You...' framing.",
-    ctaFormula:      "Try this and tag me — I repost every attempt I see",
+    ctaFormula:      "Try this and tag me: I repost every attempt I see",
     editingDirectives: [
       "Fast montage of the challenge being completed",
       "Clear rules displayed as on-screen text: 3 rules max",
@@ -353,13 +353,13 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     energy:          "calm",
     productionNotes: "Long form. Slow build. Let the story breathe. This format earns subscribers who stay. Average view duration > 50% is the target metric.",
     thumbnailFormula:"Atmospheric, cinematic shot. Minimal text. Intrigue over information. Dark, textured feel.",
-    ctaFormula:      "If you made it to the end, subscribe — this is the kind of content I make",
+    ctaFormula:      "If you made it to the end, subscribe, this is the kind of content I make",
     editingDirectives: [
-      "Cold open: in medias res — start at the most interesting moment",
+      "Cold open: in medias res, start at the most interesting moment",
       "First-person narration over B-roll for the first 90 seconds",
       "Chapter markers every 5-7 minutes",
       "Ambient sound design under the whole video",
-      "Let silences breathe — don't fill every moment with audio",
+      "Let silences breathe, don't fill every moment with audio",
     ],
     platformFit: ["youtube"],
   },
@@ -377,9 +377,9 @@ const ENHANCEMENT_RECIPES: EnhancementRecipe[] = [
     ctaFormula:      "What's your question? Drop it below and I'll answer it in the next video",
     editingDirectives: [
       "Show the original comment/question on screen",
-      "Answer in one continuous take if possible — authenticity over polish",
+      "Answer in one continuous take if possible, authenticity over polish",
       "Side-by-side: question slide + creator responding",
-      "Keep it under 8 minutes — questions deserve direct answers",
+      "Keep it under 8 minutes, questions deserve direct answers",
       "End with the next question teased from the comments",
     ],
     platformFit: ["youtube", "instagram"],
@@ -441,7 +441,7 @@ export class NanaBananaEngine {
 
   enhanceEditingNotes(recipe: EnhancementRecipe): string {
     return [
-      `[NANO BANANA — ${recipe.name.toUpperCase()}]`,
+      `[NANO BANANA: ${recipe.name.toUpperCase()}]`,
       `Goal: ${recipe.goal}`,
       `Visual style: ${recipe.visualStyle}`,
       `Energy: ${recipe.energy}`,
@@ -527,13 +527,13 @@ export class NanaBananaEngine {
       ],
       "story-start": [
         `6 months ago I knew nothing about ${topic}. Here's what changed.`,
-        `I almost gave up on ${topic} — until this happened`,
+        `I almost gave up on ${topic}, until this happened`,
         `The day I finally cracked ${topic}`,
         `This is the story of how ${topic} changed everything for me`,
       ],
       "direct-question": [
         `Are you making this ${topic} mistake right now?`,
-        `How good is your ${topic} — honestly?`,
+        `How good is your ${topic}, honestly?`,
         `What's the one thing stopping you with ${topic}?`,
         `Do you actually understand ${topic}?`,
       ],
@@ -547,7 +547,7 @@ export class NanaBananaEngine {
         `I went from 0 to [result] with ${topic} in 90 days`,
         `Before and after: what ${topic} actually does`,
         `This is what ${topic} looks like when you do it right`,
-        `My ${topic} transformation — unfiltered`,
+        `My ${topic} transformation, unfiltered`,
       ],
       "challenge": [
         `Try this ${topic} method for 7 days and tell me what happens`,
@@ -563,8 +563,8 @@ export class NanaBananaEngine {
       ],
       "tutorial-preview": [
         `In the next 60 seconds I'll show you exactly how to do ${topic}`,
-        `Let me show you my exact ${topic} process — step by step`,
-        `Here's the ${topic} method I use — watch until the end`,
+        `Let me show you my exact ${topic} process, step by step`,
+        `Here's the ${topic} method I use, watch until the end`,
         `This is the only ${topic} tutorial you'll ever need`,
       ],
       "controversial-take": [
@@ -574,7 +574,7 @@ export class NanaBananaEngine {
         `The ${topic} strategy everyone recommends is holding you back`,
       ],
       "social-proof": [
-        `I've helped 1,000 people get results with ${topic} — here's how`,
+        `I've helped 1,000 people get results with ${topic}, here's how`,
         `What the top 1% do differently with ${topic}`,
         `This is the ${topic} method that's working for everyone right now`,
         `After testing ${topic} with 500 people, here's what we found`,
@@ -582,7 +582,7 @@ export class NanaBananaEngine {
       "fomo": [
         `Before you post another video, you need to know this about ${topic}`,
         `If you're not doing ${topic} like this, you're already behind`,
-        `The ${topic} window is closing — here's what to do now`,
+        `The ${topic} window is closing, here's what to do now`,
         `Everyone who understood ${topic} first is winning right now`,
       ],
     };

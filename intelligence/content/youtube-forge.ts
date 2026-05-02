@@ -96,7 +96,7 @@ export interface YouTubeForgePackage {
   approvedForUpload: boolean;      // Requires human sign-off
 
   // Nano Banana uniqueness layer
-  nanoBananaDNA: ContentDNA;       // Unique content fingerprint — guarantees no two videos are alike
+  nanoBananaDNA: ContentDNA;       // Unique content fingerprint, guarantees no two videos are alike
 }
 
 export interface ChapterMarker {
@@ -235,7 +235,7 @@ Output a complete, detailed, production-ready package.
     const keyword = options.targetKeyword ?? options.topic;
     const cleanBody = this.cleanSynthesis(synthesis);
 
-    // Assign Nano Banana DNA — each video gets a unique fingerprint
+    // Assign Nano Banana DNA, each video gets a unique fingerprint
     const recipeHint = options.format === "documentary" ? "documentary-deep-dive"
       : options.format === "case-study" ? "income-transparency"
       : options.format === "review" ? "authority-builder"
@@ -270,11 +270,11 @@ Output a complete, detailed, production-ready package.
       // NanaBanana-enhanced thumbnail and emotional hook
       thumbnailConcept: nanaBanana.enhanceThumbnail(options.topic, recipe),
       thumbnailText:  keyword.split(" ").slice(0, 3).join(" ").toUpperCase(),
-      emotionalHook:  `${recipe.goal} — ${dna.tone} energy, ${dna.energy} pacing`,
+      emotionalHook:  `${recipe.goal}: ${dna.tone} energy, ${dna.energy} pacing`,
 
       // videoScript uses cleaned synthesis; falls back to structured scaffold
       videoScript:        cleanBody || this.buildScriptScaffold(options.topic, options.format),
-      // Opening hook is always Nano Banana archetype-driven — never echoes agent text
+      // Opening hook is always Nano Banana archetype-driven, never echoes agent text
       openingHook:        nanaBanana.craftHook(options.topic, dna.hookArchetype),
       chapterMarkers:     this.buildChapters(options.format),
       patternInterrupts:  [
@@ -349,12 +349,12 @@ Output a complete, detailed, production-ready package.
     return grades[visualStyle] ?? "Warm, saturated grade. Boost highlights. Clean whites. Skin tones natural. Consistent look.";
   }
 
-  /** Structured script scaffold for local-mode (no LLM) — clean, publishable content. */
+  /** Structured script scaffold for local-mode (no LLM), clean, publishable content. */
   private buildScriptScaffold(topic: string, format: YouTubeFormat): string {
-    return `# ${topic} — Complete Guide
+    return `# ${topic}: Complete Guide
 
 ## HOOK (0:00-0:30)
-Hey — before you skip, let me show you one thing about ${topic} that most people get completely wrong.
+Hey, before you skip, let me show you one thing about ${topic} that most people get completely wrong.
 I spent [X] months figuring this out so you do not have to. Stick with me.
 
 ## CONTEXT (0:30-1:30)
@@ -382,20 +382,20 @@ Let me show you this in action. [Screen recording segment]
 You can see the difference immediately.
 
 ## SUMMARY
-So to recap — when it comes to ${topic}:
+So to recap, when it comes to ${topic}:
 1. Start with the fundamentals
 2. Follow the proven method
 3. Avoid the common mistake
 
 ## CTA (last 20 seconds)
-If this helped you, subscribe — I post practical ${topic} content every week.
+If this helped you, subscribe: I post practical ${topic} content every week.
 Drop your biggest ${topic} question in the comments and I will reply.
-And watch this video next [gesture to card] — it goes deeper on this topic.`;
+And watch this video next [gesture to card], it goes deeper on this topic.`;
   }
 
   private buildDescription(topic: string, keyword: string, synthesis: string): string {
     const bodyText = synthesis.slice(0, 300).trim() ||
-      `I cover everything you need to know about ${topic} — from the fundamentals to advanced techniques. ` +
+      `I cover everything you need to know about ${topic}, from the fundamentals to advanced techniques. ` +
       `Whether you are just starting out or looking to level up, this video has you covered. ` +
       `Watch until the end for the tip that changes everything.`;
 

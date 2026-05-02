@@ -26,7 +26,7 @@
  * Instagram payouts: instagram.com/creator/monetisation
  * Both support UK bank accounts (sort code + account number).
  *
- * ADSENSE ACCOUNT (created — awaiting YPP approval):
+ * ADSENSE ACCOUNT (created, awaiting YPP approval):
  *   Organisation: bbmw0
  *   Email:        up866106@gmail.com
  *   Status:       Account created. Link in YouTube Studio once YPP threshold hit.
@@ -170,7 +170,7 @@ export class MonetisationEngineClass {
         subscribersNeeded: Math.max(0, 1000 - yt.subs),
         shortsViewsNeeded: Math.max(0, 10_000_000 - yt.shortsViews),
       },
-      // AdSense account exists (org: bbmw0, up866106@gmail.com) — link in Studio once YPP eligible
+      // AdSense account exists (org: bbmw0, up866106@gmail.com), link in Studio once YPP eligible
       adSenseLinked:                   true,
       communityGuidelinesStrike:       false,
       estimatedMonthlyRange:           basicEligible

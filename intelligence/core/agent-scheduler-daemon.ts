@@ -67,7 +67,7 @@ export class AgentSchedulerDaemon {
       // Log stats
       const stats = agentQueue.getStats();
       console.log(
-        `[OmniOrg Daemon] Stats — pending: ${stats.pending} | running: ${stats.running} | ` +
+        `[OmniOrg Daemon] Stats, pending: ${stats.pending} | running: ${stats.running} | ` +
         `completed: ${stats.completed} | failed: ${stats.failed} | cloud: ${stats.pushed_to_cloud}` +
         (stats.oldestPendingAgeMs !== null
           ? ` | oldest pending: ${Math.round(stats.oldestPendingAgeMs / 1000)}s`
@@ -163,7 +163,7 @@ export class AgentSchedulerDaemon {
 
     const svc = new Service({
       name: "OmniOrg-AgentDaemon",
-      description: "NEUROMESH Agent Scheduler — runs content agents on schedule",
+      description: "NEUROMESH Agent Scheduler, runs content agents on schedule",
       script: scriptPath,
       nodeOptions: ["--require", "ts-node/register"],
       env: [
@@ -220,7 +220,7 @@ export class AgentSchedulerDaemon {
   }
 
   private shutdown(signal: string): void {
-    console.log(`\n[OmniOrg Daemon] Received ${signal} — shutting down gracefully...`);
+    console.log(`\n[OmniOrg Daemon] Received ${signal}, shutting down gracefully...`);
     this.running = false;
     if (this.tickInterval) clearInterval(this.tickInterval);
     if (this.syncInterval) clearInterval(this.syncInterval);

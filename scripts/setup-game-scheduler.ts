@@ -1,4 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
+import "../api/env"; // ← MUST be first: loads .env before any singleton reads process.env
+
 import * as path from "path";
 import * as fs from "fs";
 import { agentQueue } from "../intelligence/core/offline-agent-queue";

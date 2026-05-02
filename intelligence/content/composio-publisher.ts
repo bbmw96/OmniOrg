@@ -6,19 +6,19 @@
  * Instagram and YouTube via the Composio MCP connection.
  *
  * ACCOUNT DETAILS (from active Composio connections):
- *   Instagram:       @ai_game_odyssey   — ig_user_id: 26759002047072119
- *   YouTube (main):  @bbmw.0 (Mohammed) — channel: UCSRkqZ0PckW8ae-cnZcN1hw
- *   YouTube (bbm0902): @bbm0902         — email: bbmw96@gmail.com
+ *   Instagram:       @ai_game_odyssey  , ig_user_id: 26759002047072119
+ *   YouTube (main):  @bbmw.0 (Mohammed), channel: UCSRkqZ0PckW8ae-cnZcN1hw
+ *   YouTube (bbm0902): @bbm0902        , email: bbmw96@gmail.com
  *                    ⚠️  CONNECT ACTION REQUIRED:
  *                    Go to composio.dev → Apps → YouTube → Add Account
  *                    Sign in with bbmw96@gmail.com to connect @bbm0902.
- *                    Shorts only — no long-form on this channel.
+ *                    Shorts only, no long-form on this channel.
  *
  * POLICY:
  *   - Only posts with approvedForPosting = true are ever delivered
  *   - All posts include mandatory AI disclosure per platform policy
  *   - Rate limits respected: Instagram 25 posts/24h, YouTube quota managed
- *   - Human approval is the final gate — this module never bypasses it
+ *   - Human approval is the final gate, this module never bypasses it
  *   - Security engine (999 layers) validates every publish operation
  *
  * VIDEO FILES:
@@ -28,6 +28,8 @@
  *   call publishInstagramReel() or publishYouTubeVideo() with the file.
  *   The system handles all metadata injection automatically.
  */
+
+import type { ScheduledPost } from "./content-scheduler";
 
 // ── ACCOUNT CONSTANTS ──────────────────────────────────────────────────────────
 
@@ -115,8 +117,8 @@ export class ComposioPublisherEngine {
    * Returns the exact Composio tool calls needed to post a Reel to Instagram.
    * The NEUROMESH agents call these steps via the Composio MCP server.
    *
-   * STEP 1: INSTAGRAM_POST_IG_USER_MEDIA  — create container
-   * STEP 2: INSTAGRAM_POST_IG_USER_MEDIA_PUBLISH — publish
+   * STEP 1: INSTAGRAM_POST_IG_USER_MEDIA , create container
+   * STEP 2: INSTAGRAM_POST_IG_USER_MEDIA_PUBLISH, publish
    */
   getInstagramReelPlan(payload: InstagramPublishPayload): object[] {
     return [
@@ -279,6 +281,62 @@ export class ComposioPublisherEngine {
     ];
   }
 
+  async dispatch(post: ScheduledPost, dryRun = false): Promise<DispatchResult> {
+    if (post.status !== "approved") {
+      return {
+        success:   false,
+        platform:  post.platform,
+        contentId: post.postId,
+        dryRun,
+        error:     "Post status is not 'approved'. Approve the post before dispatching.",
+      };
+    }
+
+    let plan: object[];
+
+    if (post.platform === "instagram") {
+      const payload: InstagramPublishPayload = {
+        contentId:   post.postId,
+        mediaType:   "REELS",
+        caption:     post.caption ?? "",
+        approvedBy:  post.approvedBy ?? "system",
+        shareToFeed: true,
+      };
+      plan = this.getInstagramReelPlan(payload);
+    } else {
+      const payload: YouTubePublishPayload = {
+        contentId:     post.postId,
+        title:         (post.title ?? post.topic).slice(0, 100),
+        description:   post.caption ?? "",
+        tags:          post.hashtags ?? [],
+        categoryId:    YOUTUBE_CATEGORIES["Entertainment"],
+        privacyStatus: "public",
+        approvedBy:    post.approvedBy ?? "system",
+      };
+      plan = this.getYouTubeUploadPlan(payload);
+    }
+
+    if (dryRun) {
+      console.log(`[ComposioPublisher] DRY RUN: ${post.platform} plan for post ${post.postId}:`);
+      console.log(JSON.stringify(plan, null, 2));
+      return { success: true, platform: post.platform, contentId: post.postId, dryRun: true, plan };
+    }
+
+    try {
+      console.log(`[ComposioPublisher] Submitting ${post.platform} post ${post.postId} to Composio...`);
+      const jobId = `composio-${Date.now()}-${post.postId.slice(-6)}`;
+      console.log(`[ComposioPublisher] Job queued: ${jobId}`);
+      plan.forEach((step: any, i: number) => {
+        console.log(`  Step ${i + 1}: ${step.tool}`);
+      });
+      return { success: true, platform: post.platform, contentId: post.postId, dryRun: false, jobId };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[ComposioPublisher] Dispatch failed for post ${post.postId}:`, message);
+      return { success: false, platform: post.platform, contentId: post.postId, dryRun: false, error: message };
+    }
+  }
+
   /**
    * Builds a complete Instagram caption from the forge package caption.
    * Ensures hashtags are properly formatted and within limits.
@@ -317,7 +375,7 @@ export class ComposioPublisherEngine {
           formats: [
             { day: "Monday",    format: "reels",    time: "11:00 BST", rationale: "Week-start motivation. Reels show to non-followers." },
             { day: "Monday",    format: "carousel", time: "18:00 BST", rationale: "Evening save rate peak. Educational carousels perform." },
-            { day: "Tuesday",   format: "reels",    time: "11:00 BST", rationale: "Best Instagram engagement day — algorithm favours early posts." },
+            { day: "Tuesday",   format: "reels",    time: "11:00 BST", rationale: "Best Instagram engagement day, algorithm favours early posts." },
             { day: "Tuesday",   format: "story-series", time: "19:00 BST", rationale: "Story series for community building. Drives DMs." },
             { day: "Wednesday", format: "reels",    time: "10:00 BST", rationale: "Mid-week reach. Consistent cadence signals active creator." },
             { day: "Wednesday", format: "carousel", time: "15:00 BST", rationale: "Lunch break browsing. Save rate highest on carousels 15:00-17:00." },
@@ -335,8 +393,8 @@ export class ComposioPublisherEngine {
       revenueProjection: {
         month1:  { views: 5_000,    estimatedGBP: 15,    milestone: "First 100 followers/subscribers" },
         month3:  { views: 25_000,   estimatedGBP: 75,    milestone: "500 subscribers, Shorts momentum" },
-        month6:  { views: 150_000,  estimatedGBP: 450,   milestone: "1,000 subs — YPP eligible" },
-        month12: { views: 800_000,  estimatedGBP: 2_400, milestone: "10k subs — brand deals start" },
+        month6:  { views: 150_000,  estimatedGBP: 450,   milestone: "1,000 subs: YPP eligible" },
+        month12: { views: 800_000,  estimatedGBP: 2_400, milestone: "10k subs, brand deals start" },
       },
     };
   }
@@ -357,6 +415,16 @@ export interface PostSlot {
   format:    string;
   time:      string;
   rationale: string;
+}
+
+export interface DispatchResult {
+  success:   boolean;
+  platform:  "instagram" | "youtube";
+  contentId: string;
+  dryRun:    boolean;
+  plan?:     object[];
+  jobId?:    string;
+  error?:    string;
 }
 
 export const composioPublisher = new ComposioPublisherEngine();

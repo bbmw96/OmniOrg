@@ -313,7 +313,7 @@ export class Bbm0902InfluencerEngine {
     };
     const securityReport = await agentSecurity.runFullSecurityAudit(securityCtx);
 
-    // Step 2: Gemini Pro — research the influencer
+    // Step 2: Gemini Pro, research the influencer
     let geminiResearch: InfluencerResearch;
     try {
       geminiResearch = await geminiClient.researchInfluencer(profile.name);
@@ -340,7 +340,7 @@ export class Bbm0902InfluencerEngine {
       };
     }
 
-    // Step 3: Claude — enhance the research
+    // Step 3: Claude, enhance the research
     let claudeEnhancement: string;
     try {
       const claudeResponse = await this.anthropic.messages.create({
@@ -368,7 +368,7 @@ export class Bbm0902InfluencerEngine {
         claudeErr
       );
       claudeEnhancement =
-        "Enhancement unavailable — proceeding with Gemini research only.";
+        "Enhancement unavailable, proceeding with Gemini research only.";
     }
 
     // Build enhanced research object by merging Claude insight
@@ -395,7 +395,7 @@ export class Bbm0902InfluencerEngine {
       );
       script = {
         hook:
-          "This creator is changing the world — you need to know about " +
+          "This creator is changing the world, you need to know about " +
           profile.name +
           "!",
         mainContent: {
@@ -409,7 +409,7 @@ export class Bbm0902InfluencerEngine {
         captionText:
           "Celebrating " +
           profile.name +
-          " — one of the greatest creators of our time! #Shorts",
+          ", one of the greatest creators of our time! #Shorts",
         hashtags: [
           "#Shorts",
           "#" + profile.name.replace(/\s+/g, ""),
@@ -507,21 +507,21 @@ export class Bbm0902InfluencerEngine {
         timeUtc: "07:00 UTC",
         timeBst: "8:00 AM BST",
         reason:
-          "Commuters checking phones before work — highest early engagement window for UK and European audience",
+          "Commuters checking phones before work, highest early engagement window for UK and European audience",
       },
       {
         label: "Afternoon Surge",
         timeUtc: "13:00 UTC",
         timeBst: "2:00 PM BST",
         reason:
-          "Lunch break browsing peaks — strong engagement from UK, EU, and overlap with US East Coast morning",
+          "Lunch break browsing peaks, strong engagement from UK, EU, and overlap with US East Coast morning",
       },
       {
         label: "Evening Prime",
         timeUtc: "19:00 UTC",
         timeBst: "8:00 PM BST",
         reason:
-          "Post-dinner relaxation window — maximum cross-timezone reach including full US audience; YouTube Shorts algorithm amplification highest",
+          "Post-dinner relaxation window, maximum cross-timezone reach including full US audience; YouTube Shorts algorithm amplification highest",
       },
     ];
   }
