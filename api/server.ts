@@ -16,6 +16,8 @@
  *  - Webhook delivery for async results
  */
 
+import "./env"; // ← MUST be first: loads .env before any singleton reads process.env
+
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import { URL } from "url";
 import { mesh } from "../core/neuromesh/mesh";

@@ -1,5 +1,6 @@
 #!/usr/bin/env ts-node
 // Created by BBMW0 Technologies | bbmw0.com
+import "../api/env"; // ← MUST be first: loads .env before any singleton reads process.env
 
 import { agentDaemon } from "../intelligence/core/agent-scheduler-daemon";
 

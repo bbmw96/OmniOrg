@@ -91,7 +91,7 @@ export interface InsForgePackage {
   approvedForPosting: boolean;     // Requires human review to set true
 
   // Nano Banana uniqueness layer
-  nanoBananaDNA: ContentDNA;       // Unique content fingerprint — guarantees no two posts are alike
+  nanoBananaDNA: ContentDNA;       // Unique content fingerprint, guarantees no two posts are alike
 }
 
 export interface MonetisationLayer {
@@ -242,7 +242,7 @@ Output a complete structured content package.
    *  2. "As [Role] ([Dept] department), here is my analysis:" header
    *
    * When local mode is detected, we return "" so every caller's forge-generated
-   * fallback string activates automatically — keeping all content clean and
+   * fallback string activates automatically, keeping all content clean and
    * publishable even without a live LLM.
    *
    * With a real API key, strips any residual agent headers and returns the body.
@@ -268,7 +268,7 @@ Output a complete structured content package.
   ): InsForgePackage {
     const cleanBody = this.cleanSynthesis(synthesis);
 
-    // Assign a unique Nano Banana DNA fingerprint — guarantees no two posts are structurally alike
+    // Assign a unique Nano Banana DNA fingerprint, guarantees no two posts are structurally alike
     const recipeHint = options.format === "reels" ? "viral-reel"
       : options.format === "carousel" ? "fomo-carousel"
       : options.format === "story" || options.format === "story-series" ? "story-trust"
@@ -285,7 +285,7 @@ Output a complete structured content package.
       contentId,
       format: options.format,
       niche: options.niche,
-      // Hook is always Nano Banana engine generated — guarantees unique archetype per post
+      // Hook is always Nano Banana engine generated, guarantees unique archetype per post
       hook:              nanaBanana.craftHook(options.topic, dna.hookArchetype),
       visualConcept:     cleanBody.slice(0, 500) || `[${recipe.name.toUpperCase()}] ${recipe.productionNotes.slice(0, 300)}`,
       b_rollSuggestions: [

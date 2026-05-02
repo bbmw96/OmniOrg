@@ -20,10 +20,11 @@
   "scripts": {
     "server": "npx ts-node api/server.ts",
     "dashboard": "cd dashboard && npm run dev",
-    "mesh:status": "npx ts-node -e \"const {mesh}=require('./core/neuromesh/mesh'); console.log(JSON.stringify(mesh.getHealthReport(),null,2))\"",
+    "mesh:status": "node --max-old-space-size=4096 -r ts-node/register scripts/run-mesh-status.ts",
     "content:run": "node --max-old-space-size=4096 -r ts-node/register scripts/run-content-engine.ts",
+    "publish:dry-run": "node --max-old-space-size=4096 -r ts-node/register scripts/run-publish-dry-run.ts",
     "bbm0902:weekly": "node --max-old-space-size=4096 -r ts-node/register scripts/run-bbm0902-weekly.ts",
-    "bbm0902:influencer": "node --max-old-space-size=4096 -r ts-node/register -e \"require('./intelligence/content/bbm0902-influencer-engine').bbm0902Engine.generateInfluencerShort().then(r=>console.log(JSON.stringify(r,null,2)))\"",
+    "bbm0902:influencer": "node --max-old-space-size=4096 -r ts-node/register scripts/run-influencer.ts",
     "daemon:start": "node --max-old-space-size=4096 -r ts-node/register scripts/start-agent-daemon.ts",
     "daemon:install": "node --max-old-space-size=4096 -r ts-node/register scripts/start-agent-daemon.ts install",
     "daemon:uninstall": "node --max-old-space-size=4096 -r ts-node/register scripts/start-agent-daemon.ts uninstall",

@@ -1,5 +1,5 @@
 // Created by BBMW0 Technologies | bbmw0.com
-// IFC-CORENET-X Compliance System — IFC Parser
+// IFC-CORENET-X Compliance System: IFC Parser
 // Parses IFC STEP (.ifc) and JSON-IFC formats into a normalized BuildingModel graph
 
 import * as fs from "fs";
@@ -78,7 +78,7 @@ export class IfcParser {
     const lines = ifcContent.split(/\r?\n/);
     const entities = new Map<string, RawEntity>();
 
-    // Pass 1 — collect all entity lines, handle line continuations
+    // Pass 1, collect all entity lines, handle line continuations
     let accumulated = "";
     for (const rawLine of lines) {
       const line = rawLine.trim();
@@ -189,7 +189,7 @@ export class IfcParser {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Private — core model builder
+  // Private, core model builder
   // ─────────────────────────────────────────────────────────
 
   private _buildModel(entities: Map<string, RawEntity>): ParsedIfcModel {
@@ -474,7 +474,7 @@ export class IfcParser {
   }
 
   // ─────────────────────────────────────────────────────────
-  // Private — STEP attribute helpers
+  // Private: STEP attribute helpers
   // ─────────────────────────────────────────────────────────
 
   private _splitAttributes(raw: string): string[] {

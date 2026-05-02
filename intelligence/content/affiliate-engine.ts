@@ -18,11 +18,11 @@ export interface AffiliateInjectionResult {
   disclosureAdded: boolean;
 }
 
-// ── PRODUCT CATALOG ────────────────────────────────────────────────────────────
+// ── PRODUCT catalogue ────────────────────────────────────────────────────────────
 
 const PRODUCT_CATALOG: AffiliateProduct[] = [
   {
-    name: "DaVinci Resolve — The Complete Guide (Book)",
+    name: "DaVinci Resolve: The Complete Guide (Book)",
     category: "books",
     asin: "B0C1XAMPLE1",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0C1XAMPLE1?tag=bbmw0-21",
@@ -31,7 +31,7 @@ const PRODUCT_CATALOG: AffiliateProduct[] = [
     commissionRate: "4-6%",
   },
   {
-    name: "Adobe Premiere Pro — The Complete Course (Book)",
+    name: "Adobe Premiere Pro: The Complete Course (Book)",
     category: "books",
     asin: "B0C2XAMPLE2",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0C2XAMPLE2?tag=bbmw0-21",
@@ -58,7 +58,7 @@ const PRODUCT_CATALOG: AffiliateProduct[] = [
     commissionRate: "3-5%",
   },
   {
-    name: "Elgato Key Light — Professional LED Panel",
+    name: "Elgato Key Light: Professional LED Panel",
     category: "lighting",
     asin: "B07L755X9G",
     affiliateUrl: "https://www.amazon.co.uk/dp/B07L755X9G?tag=bbmw0-21",
@@ -67,7 +67,7 @@ const PRODUCT_CATALOG: AffiliateProduct[] = [
     commissionRate: "3-5%",
   },
   {
-    name: "Ring Light Kit with Stand — 18 inch LED",
+    name: "Ring Light Kit with Stand: 18 inch LED",
     category: "lighting",
     asin: "B0C3XAMPLE3",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0C3XAMPLE3?tag=bbmw0-21",
@@ -130,7 +130,7 @@ const PRODUCT_CATALOG: AffiliateProduct[] = [
     commissionRate: "3-5%",
   },
   {
-    name: "Elmo Green Screen Backdrop Kit — 6×9 ft",
+    name: "Elmo Green Screen Backdrop Kit: 6×9 ft",
     category: "green-screen",
     asin: "B0C4XAMPLE4",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0C4XAMPLE4?tag=bbmw0-21",
@@ -166,7 +166,7 @@ const PRODUCT_CATALOG: AffiliateProduct[] = [
     commissionRate: "3-5%",
   },
   {
-    name: "Elgato Stream Deck MK.2 — 15 LCD Key Controller",
+    name: "Elgato Stream Deck MK.2: 15 LCD Key Controller",
     category: "accessories",
     asin: "B09738CV2G",
     affiliateUrl: "https://www.amazon.co.uk/dp/B09738CV2G?tag=bbmw0-21",

@@ -15,13 +15,10 @@
  * Run: npm run content:run
  */
 
+import "../api/env"; // ← MUST be first: loads .env before any singleton reads process.env
+
 import * as fs   from "fs";
 import * as path from "path";
-import * as dotenv from "dotenv";
-
-// Load environment variables (ANTHROPIC_API_KEY + AdSense config)
-// override: true — forces .env to win even if ANTHROPIC_API_KEY is already set as empty string in system env
-dotenv.config({ path: path.join(__dirname, "..", ".env"), override: true });
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 // mesh import triggers preload of all 20,000+ agents automatically
@@ -113,11 +110,11 @@ async function main() {
 
   // Show API key and account status
   const hasApiKey = !!(process.env.ANTHROPIC_API_KEY);
-  console.log(`  API mode:    ${hasApiKey ? "LIVE (Claude claude-opus-4-5 — full synthesis)" : "LOCAL (no API key)"}`);
+  console.log(`  API mode:    ${hasApiKey ? "LIVE (Claude claude-opus-4-5, full synthesis)" : "LOCAL (no API key)"}`);
   console.log(`  Instagram:   @${CHANNEL.accounts.instagram.username} (ID: ${CHANNEL.accounts.instagram.igUserId})`);
-  console.log(`  YouTube 1:   ${CHANNEL.accounts.youtube.handle} — ${CHANNEL.accounts.youtube.name} (main channel, all formats)`);
-  console.log(`  YouTube 2:   @bbm0902 (bbmw96@gmail.com) — Shorts only ⚠️  connect at composio.dev`);
-  console.log(`  AdSense:     bbmw0 (up866106@gmail.com) — account created, awaiting YPP`);
+  console.log(`  YouTube 1:   ${CHANNEL.accounts.youtube.handle}: ${CHANNEL.accounts.youtube.name} (main channel, all formats)`);
+  console.log(`  YouTube 2:   @bbm0902 (bbmw96@gmail.com): Shorts only ⚠️  connect at composio.dev`);
+  console.log(`  AdSense:     bbmw0 (up866106@gmail.com), account created, awaiting YPP`);
   console.log(`  Posts/day:   ${CHANNEL.postsPerDayTarget} (${CHANNEL.instagramPerWeek} Instagram + ${CHANNEL.youtubePerWeek} YouTube per week)`);
   console.log(`  Security:    999-layer engine ACTIVE on all agent operations`);
   console.log("");
@@ -196,7 +193,7 @@ async function main() {
   writeResult("02-trend-report.json", trends);
 
   // ── STEP 3: Instagram Weekly Plan ────────────────────────────────────────
-  separator(`STEP 3: INSTAGRAM CONTENT (${CHANNEL.instagramPerWeek} posts — 2/day)`);
+  separator(`STEP 3: INSTAGRAM CONTENT (${CHANNEL.instagramPerWeek} posts: 2/day)`);
   console.log(`  Generating ${CHANNEL.instagramPerWeek}-post Instagram plan via InsForge + Nano Banana Engine...`);
 
   const topTopics = trends.opportunities
@@ -244,7 +241,7 @@ async function main() {
   writeResult("03-instagram-weekly.json", allIgPackages);
 
   // ── STEP 4: YouTube Content ───────────────────────────────────────────────
-  separator(`STEP 4: YOUTUBE CONTENT (${CHANNEL.youtubePerWeek} videos — 1/day)`);
+  separator(`STEP 4: YOUTUBE CONTENT (${CHANNEL.youtubePerWeek} videos: 1/day)`);
   console.log(`  Generating ${CHANNEL.youtubePerWeek} YouTube packages via YouTubeForge + Nano Banana Engine...`);
 
   // 7 videos/week: 2 long-form, 2 case-study, 2 shorts, 1 explainer
@@ -422,7 +419,7 @@ async function main() {
   writeMarkdown("CONTENT_PLAN.md", summaryMd);
 
   // ── STEP 9: Auto-Publisher Manifest ──────────────────────────────────────
-  separator("STEP 9: AUTO-PUBLISHER — COMPOSIO EXECUTION MANIFEST");
+  separator("STEP 9: AUTO-PUBLISHER: COMPOSIO EXECUTION MANIFEST");
   console.log("  Running 999-layer security + affiliate injection on all 21 posts...");
 
   const manifest = await autoPublisher.generateManifest(allIgPackages, ytPackages);
@@ -434,7 +431,7 @@ async function main() {
   console.log(`    Requires approval:      ${manifest.requiresHumanApproval}`);
   console.log(`    Requires video file:    ${manifest.requiresVideoFile}`);
   console.log(`    Avg security risk:      ${manifest.securitySummary.avgRiskScore.toFixed(1)}/100`);
-  console.log(`    All security passed:    ${manifest.securitySummary.allSecurityPassed ? "✅ YES" : "⚠️  NO — see manifest"}`);
+  console.log(`    All security passed:    ${manifest.securitySummary.allSecurityPassed ? "✅ YES" : "⚠️  NO, see manifest"}`);
 
   if (manifest.securitySummary.criticalBlockers.length > 0) {
     console.warn(`\n  ⚠️  CRITICAL BLOCKERS:`);
@@ -450,8 +447,8 @@ async function main() {
   console.log(`    Est. monthly commission (1k views/video): ${affiliateEngine.estimateMonthlyCommission(7000, 0.03)}`);
 
   // ── STEP 10: @bbm0902 YouTube Short ──────────────────────────────────────
-  separator("STEP 10: @bbm0902 CHANNEL — YOUTUBE SHORT");
-  console.log("  Generating 1 Short for @bbm0902 (bbmw96@gmail.com) — Shorts only channel...");
+  separator("STEP 10: @bbm0902 CHANNEL: YOUTUBE SHORT");
+  console.log("  Generating 1 Short for @bbm0902 (bbmw96@gmail.com): Shorts only channel...");
 
   const bbm0902Topic = topTopics[0] ?? "1 video editing trick that changed everything for me";
   const bbm0902Short = await youtubeForge.generatePackage({
@@ -530,7 +527,7 @@ async function main() {
   console.log(`    → Security engine guards every operation (999 layers, OWASP-compliant)`);
   console.log(`    → Affiliate links auto-injected into all YouTube descriptions`);
   console.log(`    → Posts auto-approved when security clearance granted + policy checks pass`);
-  console.log(`    → Composio execution manifest ready — agents post on your behalf once video files are uploaded`);
+  console.log(`    → Composio execution manifest ready, agents post on your behalf once video files are uploaded`);
   console.log(`\n  ACTION REQUIRED (agents need these to fully automate):`);
   console.log(`    1. Record videos using hooks/scripts in results/03 and results/04`);
   console.log(`    2. Upload MP4 files → agents call Composio automatically`);
@@ -665,7 +662,7 @@ ${trends.contentCalendarSuggestion.map((day: any) =>
 
 ## Daily Posting Schedule (${schedule.totalPerDay} posts/day · ${schedule.breakdown.youtube} YouTube + ${schedule.breakdown.instagram} Instagram)
 
-### YouTube — ${schedule.weeklyBreakdown.youtube.total} videos/week
+### YouTube: ${schedule.weeklyBreakdown.youtube.total} videos/week
 
 | Day | Format | Optimal Time | Why |
 |-----|--------|-------------|-----|
@@ -673,7 +670,7 @@ ${schedule.weeklyBreakdown.youtube.formats.map((s: any) =>
   `| ${s.day} | ${s.format} | ${s.time} | ${s.rationale} |`
 ).join("\n")}
 
-### Instagram — ${schedule.weeklyBreakdown.instagram.total} posts/week
+### Instagram: ${schedule.weeklyBreakdown.instagram.total} posts/week
 
 | Day | Format | Optimal Time | Why |
 |-----|--------|-------------|-----|
