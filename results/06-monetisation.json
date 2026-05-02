@@ -1,0 +1,211 @@
+{
+  "youtubePartnerProgramme": {
+    "eligible": false,
+    "subscribers": 0,
+    "watchHours": 0,
+    "shortsViews": 0,
+    "requirementsForBasicPath": {
+      "subscribersNeeded": 1000,
+      "watchHoursNeeded": 4000
+    },
+    "requirementsForShortsPath": {
+      "subscribersNeeded": 1000,
+      "shortsViewsNeeded": 10000000
+    },
+    "adSenseLinked": true,
+    "communityGuidelinesStrike": false,
+    "estimatedMonthlyRange": "Not yet eligible. See milestones."
+  },
+  "instagramMonetisation": {
+    "reelsBonusInvited": false,
+    "brandDealsEnabled": false,
+    "shoppingEnabled": false,
+    "subscriptionsEnabled": false,
+    "estimatedMonthlyRange": "Build to 10,000 followers to unlock monetisation programmes."
+  },
+  "revenueStreams": [
+    {
+      "id": "yt-adsense",
+      "name": "YouTube AdSense",
+      "platform": "youtube",
+      "type": "ad-revenue",
+      "status": "locked",
+      "unlockRequirements": "1,000 subscribers (0/1,000) + 4,000 watch hours (0/4,000)",
+      "currentMonthEarnings": 0,
+      "projectedMonthlyEarnings": 0,
+      "notes": "Configure payout in YouTube Studio > Monetisation > AdSense. Payments monthly when balance exceeds GBP 70."
+    },
+    {
+      "id": "yt-shorts-bonus",
+      "name": "YouTube Shorts Revenue",
+      "platform": "youtube",
+      "type": "bonus-programme",
+      "status": "locked",
+      "unlockRequirements": "1,000 subscribers + 10 million Shorts views in 90 days",
+      "currentMonthEarnings": 0,
+      "projectedMonthlyEarnings": 0,
+      "notes": "Shorts revenue pool: approximately GBP 0.04-0.10 per 1,000 Shorts views. Volume is the strategy here."
+    },
+    {
+      "id": "ig-reels-bonus",
+      "name": "Instagram Reels Bonus",
+      "platform": "instagram",
+      "type": "bonus-programme",
+      "status": "locked",
+      "unlockRequirements": "Invite-only. Build to 10,000+ followers and maintain consistent Reels posting to get invited.",
+      "currentMonthEarnings": 0,
+      "projectedMonthlyEarnings": 0,
+      "notes": "Instagram pays per play on qualifying Reels. Range: GBP 0-1000/month depending on reach. Not available in all markets."
+    },
+    {
+      "id": "brand-deals",
+      "name": "Brand Partnerships",
+      "platform": "both",
+      "type": "brand-deal",
+      "status": "not-started",
+      "currentMonthEarnings": 0,
+      "projectedMonthlyEarnings": 100,
+      "notes": "At 10k followers/subs expect GBP 100-500 per post. At 100k expect GBP 500-5000. Outreach starts at 5k. Always disclose with #ad."
+    },
+    {
+      "id": "affiliate",
+      "name": "Affiliate Commissions",
+      "platform": "both",
+      "type": "affiliate",
+      "status": "active",
+      "currentMonthEarnings": 0,
+      "projectedMonthlyEarnings": 50,
+      "notes": "Amazon Associates, Impact, PartnerStack. 5-20% commission. Always disclose affiliate links. UK: must comply with ASA rules."
+    },
+    {
+      "id": "yt-memberships",
+      "name": "YouTube Channel Memberships",
+      "platform": "youtube",
+      "type": "membership",
+      "status": "locked",
+      "unlockRequirements": "1,000 subscribers and no Community Guideline strikes",
+      "projectedMonthlyEarnings": 0,
+      "notes": "Approximately 1% of subscribers convert to members at GBP 4.99/month. YouTube takes 30%."
+    }
+  ],
+  "monthlyTotal": 0,
+  "projectedMonthly": 150,
+  "milestones": [
+    {
+      "name": "YouTube Partner Programme (Basic)",
+      "platform": "youtube",
+      "current": 0,
+      "target": 1000,
+      "unit": "subscribers",
+      "revenueUnlock": "AdSense ad revenue + Channel memberships",
+      "percentComplete": 0
+    },
+    {
+      "name": "YouTube Watch Hours Requirement",
+      "platform": "youtube",
+      "current": 0,
+      "target": 4000,
+      "unit": "watch hours",
+      "revenueUnlock": "Required alongside 1,000 subscribers for YPP",
+      "percentComplete": 0
+    },
+    {
+      "name": "Instagram Monetisation Unlock",
+      "platform": "instagram",
+      "current": 0,
+      "target": 10000,
+      "unit": "followers",
+      "revenueUnlock": "Reels Bonus programme + Subscriptions + Shopping",
+      "percentComplete": 0
+    },
+    {
+      "name": "Brand Deal Tier 1",
+      "platform": "both",
+      "current": 0,
+      "target": 10000,
+      "unit": "combined audience",
+      "revenueUnlock": "GBP 100-500 per sponsored post/video",
+      "percentComplete": 0
+    },
+    {
+      "name": "Brand Deal Tier 2 (significant income)",
+      "platform": "both",
+      "current": 0,
+      "target": 100000,
+      "unit": "combined audience",
+      "revenueUnlock": "GBP 500-5,000 per post/video. Full-time income potential.",
+      "percentComplete": 0
+    }
+  ],
+  "nextActions": [
+    "YouTube: 1000 more subscribers needed for YPP. Post 2 long-form videos per week.",
+    "YouTube: 4000 more watch hours needed. Longer videos and playlists build watch time fastest.",
+    "Instagram: 10000 more followers to unlock Reels Bonus. Post 4-5 Reels per week and engage with comments.",
+    "Affiliate: Sign up to Amazon Associates and add product links to YouTube descriptions immediately.",
+    "Brand deals: Create a media kit PDF with your stats. Reach out to 5 relevant brands per week at 5,000+ followers.",
+    "Instagram: Connect Composio INSTAGRAM connector to enable content scheduling via this system.",
+    "YouTube: Connect Composio YOUTUBE connector to enable metadata optimisation via this system."
+  ],
+  "projection": [
+    {
+      "month": 1,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 2,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 3,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 4,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 5,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 6,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 7,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 8,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 9,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 10,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 11,
+      "followers": 0,
+      "estimatedGBP": 0
+    },
+    {
+      "month": 12,
+      "followers": 0,
+      "estimatedGBP": 0
+    }
+  ]
+}

@@ -11,6 +11,18 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["agents/**/*", "tools/**/*", "config/**/*"],
+  "include": [
+    "agents/**/*",
+    "api/**/*",
+    "config/**/*",
+    "core/**/*",
+    "intelligence/**/*",
+    "marketplace/**/*",
+    "observability/**/*",
+    "scripts/**/*",
+    "tenancy/**/*",
+    "tools/**/*",
+    "*.ts"
+  ],
   "exclude": ["node_modules", "dashboard", "dist"]
 }

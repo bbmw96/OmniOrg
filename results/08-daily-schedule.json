@@ -1,0 +1,167 @@
+{
+  "totalPerDay": 3,
+  "breakdown": {
+    "youtube": 1,
+    "instagram": 2
+  },
+  "weeklyBreakdown": {
+    "youtube": {
+      "total": 7,
+      "formats": [
+        {
+          "day": "Monday",
+          "format": "long-form",
+          "time": "14:00 BST",
+          "rationale": "Weekend watch time rolls into Monday. Long-form ranks best."
+        },
+        {
+          "day": "Tuesday",
+          "format": "short",
+          "time": "09:00 BST",
+          "rationale": "Shorts show to non-subscribers. Early post = full-day exposure."
+        },
+        {
+          "day": "Wednesday",
+          "format": "explainer",
+          "time": "13:00 BST",
+          "rationale": "Mid-week peak. Educational content saves well."
+        },
+        {
+          "day": "Thursday",
+          "format": "long-form",
+          "time": "14:00 BST",
+          "rationale": "BEST YouTube slot. Highest CPM. Post highest-quality video here."
+        },
+        {
+          "day": "Friday",
+          "format": "short",
+          "time": "11:00 BST",
+          "rationale": "Shorts for weekend viewers. Low-effort watch context."
+        },
+        {
+          "day": "Saturday",
+          "format": "case-study",
+          "time": "10:00 BST",
+          "rationale": "Weekend = leisure viewing. Case studies + docs perform well."
+        },
+        {
+          "day": "Sunday",
+          "format": "documentary",
+          "time": "11:00 BST",
+          "rationale": "Highest watch-time day. Long-form builds weekly habit."
+        }
+      ]
+    },
+    "instagram": {
+      "total": 14,
+      "formats": [
+        {
+          "day": "Monday",
+          "format": "reels",
+          "time": "11:00 BST",
+          "rationale": "Week-start motivation. Reels show to non-followers."
+        },
+        {
+          "day": "Monday",
+          "format": "carousel",
+          "time": "18:00 BST",
+          "rationale": "Evening save rate peak. Educational carousels perform."
+        },
+        {
+          "day": "Tuesday",
+          "format": "reels",
+          "time": "11:00 BST",
+          "rationale": "Best Instagram engagement day — algorithm favours early posts."
+        },
+        {
+          "day": "Tuesday",
+          "format": "story-series",
+          "time": "19:00 BST",
+          "rationale": "Story series for community building. Drives DMs."
+        },
+        {
+          "day": "Wednesday",
+          "format": "reels",
+          "time": "10:00 BST",
+          "rationale": "Mid-week reach. Consistent cadence signals active creator."
+        },
+        {
+          "day": "Wednesday",
+          "format": "carousel",
+          "time": "15:00 BST",
+          "rationale": "Lunch break browsing. Save rate highest on carousels 15:00-17:00."
+        },
+        {
+          "day": "Thursday",
+          "format": "reels",
+          "time": "13:00 BST",
+          "rationale": "Thursday = second best day. Reel gets 72h exposure window."
+        },
+        {
+          "day": "Thursday",
+          "format": "static-post",
+          "time": "20:00 BST",
+          "rationale": "Evening engagement post. Lower reach but drives comments."
+        },
+        {
+          "day": "Friday",
+          "format": "reels",
+          "time": "09:00 BST",
+          "rationale": "Pre-weekend content. Hook them before the weekend."
+        },
+        {
+          "day": "Friday",
+          "format": "carousel",
+          "time": "17:00 BST",
+          "rationale": "TGIF energy. Save-worthy tip content for the weekend."
+        },
+        {
+          "day": "Saturday",
+          "format": "reels",
+          "time": "10:00 BST",
+          "rationale": "Saturday morning scroll. Highest leisurely viewing time."
+        },
+        {
+          "day": "Saturday",
+          "format": "story-series",
+          "time": "15:00 BST",
+          "rationale": "BTS or personal stories on Saturday afternoon."
+        },
+        {
+          "day": "Sunday",
+          "format": "reels",
+          "time": "11:00 BST",
+          "rationale": "Sunday prep content. 'Get ready for the week' angle."
+        },
+        {
+          "day": "Sunday",
+          "format": "carousel",
+          "time": "17:00 BST",
+          "rationale": "Sunday summary/recap. 'This week I learned' format."
+        }
+      ]
+    }
+  },
+  "revenueProjection": {
+    "month1": {
+      "views": 5000,
+      "estimatedGBP": 15,
+      "milestone": "First 100 followers/subscribers"
+    },
+    "month3": {
+      "views": 25000,
+      "estimatedGBP": 75,
+      "milestone": "500 subscribers, Shorts momentum"
+    },
+    "month6": {
+      "views": 150000,
+      "estimatedGBP": 450,
+      "milestone": "1,000 subs — YPP eligible"
+    },
+    "month12": {
+      "views": 800000,
+      "estimatedGBP": 2400,
+      "milestone": "10k subs — brand deals start"
+    }
+  }
+}

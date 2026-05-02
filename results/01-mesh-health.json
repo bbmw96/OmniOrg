@@ -1,0 +1,14 @@
+{
+  "totalAgents": 20595,
+  "healthyAgents": 20595,
+  "busyAgents": 0,
+  "activeTeams": 0,
+  "avgHealthScore": 1,
+  "totalSignalsProcessed": 0,
+  "memoryStats": {
+    "working": 0,
+    "episodic": 0,
+    "semantic": 0,
+    "globalFacts": 0
+  }
+}
