@@ -19,6 +19,8 @@
  *  - Content is staged here, delivered via Composio tool calls
  */
 
+import { composioPublisher } from "./composio-publisher";
+
 // ── TYPES ─────────────────────────────────────────────────────────────────────
 
 export type ScheduleStatus = "draft" | "pending-approval" | "approved" | "scheduled" | "published" | "failed" | "cancelled";
@@ -195,6 +197,23 @@ export class ContentSchedulerEngine {
     };
 
     this.queue.set(postId, updated);
+
+    composioPublisher.dispatch(updated, false).then(result => {
+      if (result.success) {
+        const withJob: ScheduledPost = {
+          ...updated,
+          composioJobId: result.jobId,
+          updatedAt: new Date().toISOString(),
+        };
+        this.queue.set(postId, withJob);
+        console.log(`[Scheduler] Post ${postId} dispatched to Composio, job: ${result.jobId}`);
+      } else {
+        console.error(`[Scheduler] Composio dispatch failed for post ${postId}: ${result.error}`);
+      }
+    }).catch(err => {
+      console.error(`[Scheduler] Composio dispatch threw for post ${postId}:`, err);
+    });
+
     return updated;
   }
 
