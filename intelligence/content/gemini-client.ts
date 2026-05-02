@@ -99,6 +99,11 @@ export class GeminiClient {
   private readonly fastModel = "gemini-1.5-flash";
 
   constructor() {
+    // Key is read lazily on first call to generateContent()
+  }
+
+  private init(): void {
+    if (this.client) return;
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.warn(
@@ -113,6 +118,7 @@ export class GeminiClient {
     prompt: string,
     opts: GenerateOptions = {}
   ): Promise<string> {
+    this.init();
     if (!this.client) {
       console.warn("[GeminiClient] No API key, returning mock string.");
       return "Mock Gemini response for: " + prompt.slice(0, 60);
@@ -151,6 +157,7 @@ export class GeminiClient {
   }
 
   async researchInfluencer(name: string): Promise<InfluencerResearch> {
+    this.init();
     if (!this.client) {
       console.warn(
         "[GeminiClient] No API key, returning mock InfluencerResearch for: " +
@@ -205,6 +212,7 @@ export class GeminiClient {
     influencer: InfluencerResearch,
     angle: string
   ): Promise<ShortsScript> {
+    this.init();
     if (!this.client) {
       console.warn(
         "[GeminiClient] No API key, returning mock ShortsScript for: " +
