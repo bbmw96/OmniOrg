@@ -83,6 +83,26 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 .pop-val  { font-size:9px; font-weight:bold; color:var(--green); }
 .pop-task { font-size:9px; color:var(--text); margin-top:4px; line-height:1.4; border-top:1px solid var(--border); padding-top:4px; }
 
+/* AI Provider section */
+.prov-row { display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+.prov-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.prov-name { font-size:9px; color:var(--text); flex:1; }
+.prov-caps { display:flex; gap:2px; flex-wrap:wrap; }
+.prov-cap { font-size:7px; padding:1px 3px; border-radius:2px; background:rgba(0,212,255,.12); color:var(--accent); border:1px solid rgba(0,212,255,.25); }
+
+/* Capability routing */
+.route-row { margin-bottom:8px; }
+.route-cap { font-size:8px; color:var(--accent); letter-spacing:1px; margin-bottom:3px; }
+.route-chain { display:flex; align-items:center; flex-wrap:wrap; gap:2px; }
+.route-node { font-size:7px; padding:1px 4px; border-radius:2px; border:1px solid; }
+.route-arrow { font-size:7px; color:var(--dim); }
+
+/* Media / Content engine rows */
+.media-row { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+.media-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.media-name { font-size:9px; color:var(--accent); flex:0 0 70px; }
+.media-desc { font-size:8px; color:var(--dim); flex:1; line-height:1.3; }
+
 ::-webkit-scrollbar { width:3px; }
 ::-webkit-scrollbar-thumb { background:#0f2040; border-radius:2px; }
 
@@ -96,7 +116,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 <header id="hud">
   <div id="hud-title">NEUROMESH LIVE</div>
   <div class="hud-stat"><span class="hud-val" id="sv-agents">209,440</span><span class="hud-lbl">AGENTS</span></div>
-  <div class="hud-stat"><span class="hud-val" style="color:#ff6b35">30</span><span class="hud-lbl">ENGINES</span></div>
+  <div class="hud-stat"><span class="hud-val" style="color:#ff6b35">55</span><span class="hud-lbl">ENGINES</span></div>
   <div class="hud-stat"><span class="hud-val" id="sv-active">—</span><span class="hud-lbl">ACTIVE</span></div>
   <div class="hud-stat"><span class="hud-val" id="sv-tasks">—</span><span class="hud-lbl">TASKS/S</span></div>
   <div class="hud-stat"><span class="hud-val" id="sv-signals">0</span><span class="hud-lbl">SIGNALS</span></div>
@@ -105,7 +125,11 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 </header>
 <div id="layout">
   <aside class="panel" id="left-panel">
-    <div class="psec"><div class="stitle">AI Engines <span style="color:#ff6b35">(30)</span></div><div id="eng-meters"></div></div>
+    <div class="psec"><div class="stitle">Cognitive Engines <span style="color:#ff6b35">(30)</span></div><div id="eng-meters"></div></div>
+    <div class="psec"><div class="stitle">AI Model Providers <span style="color:#00ff88">(7)</span></div><div id="ai-providers"></div></div>
+    <div class="psec"><div class="stitle">Media Generation <span style="color:#cc44ff">(6)</span></div><div id="media-engines"></div></div>
+    <div class="psec"><div class="stitle">Content &amp; Research <span style="color:#ffcc00">(12)</span></div><div id="content-engines"></div></div>
+    <div class="psec"><div class="stitle">Capability Routing</div><div id="cap-routing"></div></div>
     <div class="psec"><div class="stitle">Cognitive Modes</div><div id="cog-modes"></div></div>
     <div class="psec"><div class="stitle">Memory Layers</div><div id="mem-layers"></div></div>
     <div class="psec"><div class="stitle">Topology</div><div id="topo-info"></div></div>
@@ -292,8 +316,124 @@ const TASKS = [
   // PRISM — Analytics
   'PRISM: Generating executive dashboard from PostHog funnel analysis',
   'PRISM: Detecting anomaly in conversion rate using statistical significance',
+  // CLAUDE — Anthropic
+  'CLAUDE: Running claude-opus-4-7 on 200K-token architectural reasoning task',
+  'CLAUDE: Batch-processing 120 compliance documents via claude-haiku-4-5',
+  'CLAUDE: Streaming chain-of-thought for 9-step ULTRATHINK decomposition',
+  // GPT-4o — OpenAI
+  'GPT-4o: Analyzing 40-image brand asset library for style consistency',
+  'GPT-4o: Generating structured JSON schema from unstructured contract text',
+  'GPT-4o: Running gpt-4o-mini batch at 180K tokens/min for bulk labelling',
+  // GEMINI — Google
+  'GEMINI: Processing 847-page technical spec in 2M-token context window',
+  'GEMINI: Running gemini-2.5-flash multimodal on 320 product images',
+  'GEMINI: Extracting structured data from PDF portfolio with gemini-2.5-pro',
+  // DEEPSEEK — DeepSeek AI
+  'DEEPSEEK: Running deepseek-reasoner on complex multi-step coding challenge',
+  'DEEPSEEK: Batch-refactoring 3,200 lines of legacy Python via deepseek-chat',
+  'DEEPSEEK: Code review + security audit — deepseek-coder at 800 tok/sec',
+  // GROQ — Ultra-fast inference
+  'GROQ: Processing 840 agent responses at 1,200 tokens/sec via llama-3.3-70b',
+  'GROQ: Running real-time translation pipeline — 32 language pairs @ <80ms',
+  'GROQ: Batch-classifying 12,000 customer tickets with mixtral-8x7b',
+  // GLM — Zhipu AI / ChatGLM
+  'GLM: Processing Mandarin legal corpus with glm-4-plus — 128K context',
+  'GLM: Running Chinese market sentiment analysis across 50K WeChat posts',
+  // OLLAMA — Local LLMs
+  'OLLAMA: Running phi-3-mini locally — zero-latency private inference',
+  'OLLAMA: Processing sensitive medical data on-device with llama3:8b',
+  // ELEVENLABS — Voice synthesis
+  'ELEVENLABS: Synthesizing 12-language voiceover batch for product launch video',
+  'ELEVENLABS: Cloning brand voice from 60s audio sample — 99.2% similarity',
+  'ELEVENLABS: Streaming real-time TTS for 400-agent customer service layer',
+  // HEYGEN — AI Video Avatars
+  'HEYGEN: Rendering CEO avatar video in 28 languages from single script',
+  'HEYGEN: Generating personalised 1:1 outreach videos for 840 prospects',
+  // KLING — AI Video
+  'KLING: Generating 8-second 1080p product demo from text prompt + image',
+  'KLING: Running motion consistency check across 24 generated video clips',
+  // RUNWAY — AI Video
+  'RUNWAY: Applying motion brush to static hero image — 4-second loop',
+  'RUNWAY: Gen-3 Alpha: cinematic brand ad from storyboard in 3 iterations',
+  // PIKA — AI Video
+  'PIKA: Pika 2.1 rendering 15-second social ad from product photography',
+  // HIGGSFIELD — Physics Video
+  'HIGGSFIELD: Physics-aware liquid pour simulation for beverage brand ad',
+  // NANO-BANANA — Content DNA
+  'NANO-BANANA: DNA-fingerprinting 200 posts — blocking 4 similarity dupes',
+  'NANO-BANANA: Applying viral-reel recipe to 40-post campaign batch',
+  'NANO-BANANA: Cross-platform differentiation: Instagram vs YouTube variants',
+  // INSFORGE — Instagram
+  'INSFORGE: Building 10-slide carousel with hook-first framework + CTA',
+  'INSFORGE: Optimising Reel structure for watch-time: hook@0s, peak@3s',
+  // YTFORGE — YouTube
+  'YTFORGE: Generating 18-minute video script with retention curve mapping',
+  'YTFORGE: A/B thumbnail generation — 6 variants with CTR prediction score',
+  // SCRIPTWRITER — Multi-engine
+  'SCRIPTWRITER: Writing VSL with AIDA structure — GPT-4o + CLAUDE dual-pass',
+  // TRENDRUNNER — Trend detection
+  'TRENDRUNNER: Detecting rising trend — "AI agents" +840% Reddit in 48h',
+  'TRENDRUNNER: Surfacing 12 trending audio tracks for Reel synchronisation',
+  // PERPLEXITY+ — AI search
+  'PERPLEXITY+: sonar-pro deep research on competitor funding rounds — 14 sources',
+  'PERPLEXITY+: Real-time market sizing query with inline citation grounding',
+  // GRABBIT+ — Deep research
+  'GRABBIT+: Parallel-crawling 23 sources for pharmaceutical patent landscape',
+  // NOTEBOOKLM+ — Document AI
+  'NOTEBOOKLM+: Generating podcast episode from 3 uploaded research papers',
+  'NOTEBOOKLM+: Source-grounded Q&A over 400-page compliance manual',
+  // ARCADS+ — Ad creation
+  'ARCADS+: Generating 8 UGC-style video ad scripts with hook variation test',
+  'ARCADS+: Running hook performance prediction on 12 paid ad concepts',
 ];
 const TOPOLOGIES = ['HIERARCHICAL MESH','STAR CLUSTER','RING NETWORK','FULL MESH','HYBRID ADAPTIVE'];
+
+// ── Real AI Model Providers (from intelligence/ai-engines/) ───
+const AI_PROVIDERS = [
+  { id:'CLAUDE',    color:'#cc785c', model:'claude-sonnet-4-6 / opus-4-7',     caps:['chat','code','reasoning','vision'] },
+  { id:'GPT-4o',    color:'#10a37f', model:'gpt-4o / gpt-4o-mini',             caps:['chat','code','vision','batch'] },
+  { id:'GEMINI',    color:'#4285f4', model:'gemini-2.5-pro / 2.5-flash',       caps:['chat','vision','docs','2M-ctx'] },
+  { id:'DEEPSEEK',  color:'#1a6ef7', model:'deepseek-chat / deepseek-reasoner', caps:['code','reasoning','batch','fast'] },
+  { id:'GROQ',      color:'#f55036', model:'llama-3.3-70b / mixtral-8x7b',     caps:['fast','batch','chinese'] },
+  { id:'GLM',       color:'#3b5998', model:'glm-4-plus / glm-4v-flash',        caps:['chinese','fast','vision'] },
+  { id:'OLLAMA',    color:'#888888', model:'llama3 / phi3 / mistral (local)',   caps:['local','fast','batch'] },
+];
+
+// ── Media Generation (from intelligence/ai-engines/) ──────────
+const MEDIA_ENGINES = [
+  { id:'ELEVENLABS', color:'#f97316', desc:'TTS · 29 voice models · 32 languages' },
+  { id:'HEYGEN',     color:'#a855f7', desc:'AI video avatars · 100+ personas' },
+  { id:'KLING',      color:'#06b6d4', desc:'AI video gen · Kuaishou · 1080p/60fps' },
+  { id:'RUNWAY',     color:'#10b981', desc:'Gen-3 Alpha · img2video · motion brush' },
+  { id:'PIKA',       color:'#f59e0b', desc:'Pika 2.1 · cinematic AI video' },
+  { id:'HIGGSFIELD', color:'#ec4899', desc:'Physics-aware video synthesis' },
+];
+
+// ── Content & Research (from intelligence/content/ + core/search/) ──
+const CONTENT_ENGINES = [
+  { id:'NANO-BANANA',  color:'#facc15', desc:'5-axis content DNA · 12 enhancement recipes · uniqueness gate' },
+  { id:'INSFORGE',     color:'#e1306c', desc:'Instagram carousel & Reel pipeline · viral format optimizer' },
+  { id:'YTFORGE',      color:'#ff0000', desc:'YouTube script → thumbnail → SEO → upload automation' },
+  { id:'SCRIPTWRITER', color:'#8b5cf6', desc:'Multi-engine script writer · 6 format templates' },
+  { id:'TRENDRUNNER',  color:'#06b6d4', desc:'Real-time trend detection · TikTok, X, Reddit, Google Trends' },
+  { id:'BRANDVOICE',   color:'#f97316', desc:'Brand voice learning via Firecrawl web crawl' },
+  { id:'MONETISE',     color:'#22c55e', desc:'Revenue pathway optimizer · affiliate + sponsor + product' },
+  { id:'VIRALGAME',    color:'#a855f7', desc:'Viral game mechanics generator for social hooks' },
+  { id:'PERPLEXITY+',  color:'#20b2aa', desc:'AI-native search · sonar-pro · 200K context' },
+  { id:'GRABBIT+',     color:'#ff6b35', desc:'Deep web research · parallel source aggregation' },
+  { id:'NOTEBOOKLM+',  color:'#4285f4', desc:'Document intelligence · podcast gen · source grounding' },
+  { id:'ARCADS+',      color:'#dc2626', desc:'UGC ad creation · hook testing · paid media optimizer' },
+];
+
+// ── Capability routing chains (from core/engine-router.ts) ────
+const CAP_ROUTES = [
+  { cap:'CHAT',      chain:[{id:'CLAUDE',c:'#cc785c'},{id:'GPT-4o',c:'#10a37f'},{id:'GEMINI',c:'#4285f4'},{id:'DEEPSEEK',c:'#1a6ef7'},{id:'GROQ',c:'#f55036'},{id:'GLM',c:'#3b5998'},{id:'OLLAMA',c:'#888'}] },
+  { cap:'CODE',      chain:[{id:'DEEPSEEK',c:'#1a6ef7'},{id:'CLAUDE',c:'#cc785c'},{id:'GPT-4o',c:'#10a37f'},{id:'GEMINI',c:'#4285f4'},{id:'GROQ',c:'#f55036'},{id:'GLM',c:'#3b5998'},{id:'OLLAMA',c:'#888'}] },
+  { cap:'REASONING', chain:[{id:'DEEPSEEK',c:'#1a6ef7'},{id:'CLAUDE',c:'#cc785c'},{id:'GPT-4o',c:'#10a37f'},{id:'GEMINI',c:'#4285f4'},{id:'GLM',c:'#3b5998'}] },
+  { cap:'FAST',      chain:[{id:'GROQ',c:'#f55036'},{id:'DEEPSEEK',c:'#1a6ef7'},{id:'GLM',c:'#3b5998'},{id:'OLLAMA',c:'#888'}] },
+  { cap:'BATCH',     chain:[{id:'GROQ',c:'#f55036'},{id:'DEEPSEEK',c:'#1a6ef7'},{id:'GLM',c:'#3b5998'},{id:'OLLAMA',c:'#888'},{id:'CLAUDE',c:'#cc785c'}] },
+  { cap:'CHINESE',   chain:[{id:'GLM',c:'#3b5998'},{id:'DEEPSEEK',c:'#1a6ef7'},{id:'CLAUDE',c:'#cc785c'},{id:'GPT-4o',c:'#10a37f'}] },
+];
 
 // ─── Mutable state ────────────────────────────────────────────
 const engState  = ENGINES.map(e   => ({ ...e, pct: 60 + Math.random() * 30 }));
@@ -377,6 +517,90 @@ function buildTopoInfo() {
   const badge = el('div', { style:{ fontSize:'11px', color:'#00d4ff', fontWeight:'bold', marginBottom:'5px' }, text: TOPOLOGIES[topoIdx] });
   const desc  = el('div', { style:{ fontSize:'9px', color:'#4a6890', lineHeight:'1.4' }, text: 'Adaptive mesh reconfigures every 30s based on task distribution and connection performance weights.' });
   app(wrap, badge, desc);
+}
+
+// ─── AI Providers builder ─────────────────────────────────────
+function buildAiProviders() {
+  const wrap = document.getElementById('ai-providers');
+  wrap.textContent = '';
+  for (const p of AI_PROVIDERS) {
+    const row  = el('div', { class:'prov-row' });
+    const dot  = el('div', { class:'prov-dot' });
+    dot.style.background = p.color;
+    dot.style.boxShadow  = '0 0 4px ' + p.color;
+    const name = el('span', { class:'prov-name', text: p.id });
+    const caps = el('div', { class:'prov-caps' });
+    for (const c of p.caps) {
+      const badge = el('span', { class:'prov-cap', text: c });
+      badge.style.color       = p.color;
+      badge.style.borderColor = p.color + '55';
+      badge.style.background  = p.color + '18';
+      app(caps, badge);
+    }
+    app(row, dot, name, caps);
+    app(wrap, row);
+    const modelLine = el('div', { style:{ fontSize:'8px', color:'#4a6890', paddingLeft:'12px', marginBottom:'3px', marginTop:'-2px' } });
+    modelLine.textContent = p.model;
+    app(wrap, modelLine);
+  }
+}
+
+// ─── Media engines builder ────────────────────────────────────
+function buildMediaEngines() {
+  const wrap = document.getElementById('media-engines');
+  wrap.textContent = '';
+  for (const m of MEDIA_ENGINES) {
+    const row  = el('div', { class:'media-row' });
+    const dot  = el('div', { class:'media-dot' });
+    dot.style.background = m.color;
+    dot.style.boxShadow  = '0 0 4px ' + m.color;
+    const name = el('span', { class:'media-name', text: m.id });
+    name.style.color = m.color;
+    const desc = el('span', { class:'media-desc', text: m.desc });
+    app(row, dot, name, desc);
+    app(wrap, row);
+  }
+}
+
+// ─── Content/research engines builder ────────────────────────
+function buildContentEngines() {
+  const wrap = document.getElementById('content-engines');
+  wrap.textContent = '';
+  for (const c of CONTENT_ENGINES) {
+    const row  = el('div', { class:'media-row' });
+    const dot  = el('div', { class:'media-dot' });
+    dot.style.background = c.color;
+    dot.style.boxShadow  = '0 0 4px ' + c.color;
+    const name = el('span', { class:'media-name', text: c.id });
+    name.style.color = c.color;
+    const desc = el('span', { class:'media-desc', text: c.desc });
+    app(row, dot, name, desc);
+    app(wrap, row);
+  }
+}
+
+// ─── Capability routing builder ───────────────────────────────
+function buildCapRouting() {
+  const wrap = document.getElementById('cap-routing');
+  wrap.textContent = '';
+  for (const r of CAP_ROUTES) {
+    const block = el('div', { class:'route-row' });
+    const cap   = el('div', { class:'route-cap', text: r.cap });
+    const chain = el('div', { class:'route-chain' });
+    for (let i = 0; i < r.chain.length; i++) {
+      const node = el('span', { class:'route-node', text: r.chain[i].id });
+      node.style.color       = r.chain[i].c;
+      node.style.borderColor = r.chain[i].c + '66';
+      node.style.background  = r.chain[i].c + '14';
+      app(chain, node);
+      if (i < r.chain.length - 1) {
+        const arrow = el('span', { class:'route-arrow', text: '→' });
+        app(chain, arrow);
+      }
+    }
+    app(block, cap, chain);
+    app(wrap, block);
+  }
 }
 
 // ─── Right panel builders ─────────────────────────────────────
@@ -675,6 +899,10 @@ function rotateTopo() {
 
 // ─── Boot ─────────────────────────────────────────────────────
 buildEngineMeters();
+buildAiProviders();
+buildMediaEngines();
+buildContentEngines();
+buildCapRouting();
 buildCogModes();
 buildMemLayers();
 buildTopoInfo();
