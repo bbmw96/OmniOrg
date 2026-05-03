@@ -77,6 +77,7 @@ interface ProducedContent {
   nanaBananaDNA: string;
   scriptEngine: string;
   islamicCheckPassed: boolean;
+  videoPath?: string;     // local path to generated video (or CDN URL from HeyGen)
   status: "produced" | "queued" | "published" | "approval-needed" | "failed";
   error?: string;
 }
@@ -291,6 +292,50 @@ async function generateCaption(
   return caption;
 }
 
+// ─── Video generation ─────────────────────────────────────────────────────────
+
+async function generateVideo(
+  script: string,
+  format: "short" | "long-form" | "reel" | "carousel" | "story",
+  channel: ChannelConfig,
+  dna: string
+): Promise<string | null> {
+  // Long-form and carousels skip automated video generation
+  if (format === "long-form" || format === "carousel") return null;
+
+  try {
+    const hf = await import("../../intelligence/ai-engines/higgsfield-engine");
+
+    // Build a visual prompt from script + DNA — no faces/living beings (tasweer)
+    const visualStyle = dna.split("|")[1] ?? "cinematic";
+    const topic       = script.split("\n")[0]?.replace(/[#*_]/g, "").trim().slice(0, 120) ?? channel.niche;
+
+    // Map niche to cinematic visual language
+    const visualTheme = channel.niche === "architecture-design"
+      ? `dramatic architectural drone footage, geometric Islamic patterns, golden light, futuristic city skyline — ${visualStyle} style — no humans, no faces, abstract beauty`
+      : `futuristic technology visualisation, glowing circuits, data streams, abstract AI network — ${visualStyle} style — no humans, no faces, high-tech aesthetic`;
+
+    const prompt = `${topic}. ${visualTheme}. 4K quality, ${channel.brandColours[0]} and ${channel.brandColours[1]} colour palette.`;
+
+    const localPath = await hf.generateTextVideo({
+      modelId:        "kling-video/v2.1/pro/text-to-video",
+      prompt,
+      negativePrompt: "humans, faces, animals, people, living beings, cartoon, anime",
+      aspectRatio:    "9:16",    // Shorts / Reels format
+      duration:       8,
+      fps:            30,
+    });
+
+    console.log(`[VideoGen] Generated: ${localPath}`);
+    return localPath;
+  } catch (err) {
+    // Video generation is best-effort — log and continue without video
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`[VideoGen] Skipped (will publish script-only): ${msg}`);
+    return null;
+  }
+}
+
 // ─── Daily plan builder ───────────────────────────────────────────────────────
 
 function buildDailyPlan(channel: ChannelConfig, date: Date): DailyProductionPlan {
@@ -417,7 +462,10 @@ async function produceItemForChannel(
     // Step 5: Islamic compliance check (caption check already inside generateCaption)
     islamicMediaCheck(title, caption);
 
-    // Step 6: Mark topics as used
+    // Step 6: Generate video via Higgsfield (Kling model, 9:16 for Shorts/Reels)
+    const videoPath = await generateVideo(script, item.type, channel, item.nanaBananaDNA);
+
+    // Step 7: Mark topics as used
     markTopicUsed(item.topic);
 
     const status: ProducedContent["status"] = item.requiresApproval
@@ -430,6 +478,7 @@ async function produceItemForChannel(
       script,
       caption,
       hashtags,
+      videoPath:    videoPath ?? undefined,
       scriptEngine: "auto-routed",
       islamicCheckPassed: true,
       status,
@@ -532,11 +581,13 @@ export async function runDailyProduction(): Promise<void> {
       // Queue to social publisher
       try {
         addToQueue({
-          platform: channel.platform,
-          caption: content.caption,
-          title: content.title,
-          description: content.caption,
-          tags: content.hashtags,
+          platform:     channel.platform,
+          channelIndex: channel.channelIndex,
+          videoPath:    content.videoPath,
+          caption:      content.caption,
+          title:        content.title,
+          description:  content.caption,
+          tags:         content.hashtags,
         });
         totalQueued++;
         totalProduced++;

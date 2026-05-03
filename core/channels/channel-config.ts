@@ -65,6 +65,8 @@ export interface ChannelConfig {
   adSenseEnabled: boolean;
   affiliateCategoriesAllowed: string[];
 
+  channelIndex: number;          // 1-based index for publisher routing (1 = primary, 2 = secondary)
+
   // Env-driven overrides
   accessTokenEnvKey: string;    // e.g. "YOUTUBE_ACCESS_TOKEN_CH1"
   pageIdEnvKey: string;         // e.g. "INSTAGRAM_PAGE_ID_CH1"
@@ -84,7 +86,7 @@ export const CHANNELS: ChannelConfig[] = [
     platform: "youtube",
     displayName: "BBMW0 AI Empire",
     handle: process.env["YT_HANDLE_CH1"] ?? "@BBMw0AIEmpire",
-    channelId: process.env["YT_CHANNEL_ID_CH1"] ?? "UC_PLACEHOLDER_CH1",
+    channelId: process.env["YT_CHANNEL_ID_CH1"] ?? "UC5O9s1vte7UiLICKP1pHiIQ",
     niche: "ai-technology",
     subNiches: [
       "AI tools tutorials",
@@ -142,6 +144,7 @@ export const CHANNELS: ChannelConfig[] = [
       "tech hardware",
     ],
 
+    channelIndex: 1,
     accessTokenEnvKey: "YOUTUBE_ACCESS_TOKEN",
     pageIdEnvKey: "",
 
@@ -156,7 +159,7 @@ export const CHANNELS: ChannelConfig[] = [
     platform: "youtube",
     displayName: "BBMW0 Architect",
     handle: process.env["YT_HANDLE_CH2"] ?? "@BBMw0Architect",
-    channelId: process.env["YT_CHANNEL_ID_CH2"] ?? "UC_PLACEHOLDER_CH2",
+    channelId: process.env["YT_CHANNEL_ID_CH2"] ?? "UCSRkqZ0PckW8ae-cnZcN1hw",
     niche: "architecture-design",
     subNiches: [
       "Modern Islamic architecture",
@@ -214,6 +217,7 @@ export const CHANNELS: ChannelConfig[] = [
       "courses",
     ],
 
+    channelIndex: 2,
     accessTokenEnvKey: "YOUTUBE_ACCESS_TOKEN_CH2",
     pageIdEnvKey: "",
 
@@ -228,7 +232,7 @@ export const CHANNELS: ChannelConfig[] = [
     platform: "instagram",
     displayName: "bbmw0_ai",
     handle: process.env["IG_HANDLE_CH1"] ?? "@bbmw0_ai",
-    channelId: process.env["INSTAGRAM_PAGE_ID"] ?? "IG_PLACEHOLDER_CH1",
+    channelId: process.env["INSTAGRAM_PAGE_ID"] ?? "26759002047072119",
     niche: "ai-technology",
     subNiches: [
       "AI tool demos",
@@ -291,6 +295,7 @@ export const CHANNELS: ChannelConfig[] = [
     adSenseEnabled: false,
     affiliateCategoriesAllowed: ["software", "AI tools", "online courses"],
 
+    channelIndex: 1,
     accessTokenEnvKey: "INSTAGRAM_ACCESS_TOKEN",
     pageIdEnvKey: "INSTAGRAM_PAGE_ID",
 
@@ -305,7 +310,7 @@ export const CHANNELS: ChannelConfig[] = [
     platform: "instagram",
     displayName: "bbmw0_architect",
     handle: process.env["IG_HANDLE_CH2"] ?? "@bbmw0_architect",
-    channelId: process.env["INSTAGRAM_PAGE_ID_CH2"] ?? "IG_PLACEHOLDER_CH2",
+    channelId: process.env["INSTAGRAM_PAGE_ID_CH2"] ?? "26759002047072119",
     niche: "architecture-design",
     subNiches: [
       "Islamic architecture",
@@ -369,6 +374,7 @@ export const CHANNELS: ChannelConfig[] = [
       "property",
     ],
 
+    channelIndex: 2,
     accessTokenEnvKey: "INSTAGRAM_ACCESS_TOKEN_CH2",
     pageIdEnvKey: "INSTAGRAM_PAGE_ID_CH2",
 
