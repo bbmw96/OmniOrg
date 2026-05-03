@@ -74,11 +74,11 @@ function isAvailable(engine: EngineId): boolean {
 // ── Fallback chains ────────────────────────────────────────────────────────────
 
 const CHAINS: Record<RouteCapability, EngineId[]> = {
-  chat:      ["anthropic", "openai", "deepseek", "groq", "glm", "ollama"],
-  code:      ["deepseek",  "anthropic", "openai", "groq", "glm", "ollama"],
-  reasoning: ["deepseek",  "anthropic", "openai", "glm"],
+  chat:      ["anthropic", "openai", "gemini",  "deepseek", "groq", "glm", "ollama"],
+  code:      ["deepseek",  "anthropic", "openai", "gemini", "groq", "glm", "ollama"],
+  reasoning: ["deepseek",  "anthropic", "openai", "gemini", "glm"],
   batch:     ["groq",      "deepseek",  "glm",    "ollama", "anthropic"],
-  fast:      ["groq",      "deepseek",  "glm",    "ollama"],
+  fast:      ["groq",      "gemini",    "deepseek", "glm",  "ollama"],
   chinese:   ["glm",       "deepseek",  "anthropic", "openai"],
 };
 

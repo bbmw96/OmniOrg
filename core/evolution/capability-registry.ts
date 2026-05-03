@@ -238,3 +238,14 @@ export function describeCapabilities(): string {
     ...rows,
   ].join("\n");
 }
+
+// ─── Mega-Registry Bridge ─────────────────────────────────────────────────────
+// Re-export the 10,210-capability mega-registry so callers can use one import.
+export {
+  getMegaCapabilityCount,
+  getMegaCapabilitiesByDomain,
+  getMegaCapabilitiesByTier,
+  getMegaCapabilityById,
+  searchMegaCapabilities,
+  describeMegaRegistry,
+} from "./mega-capability-registry";
