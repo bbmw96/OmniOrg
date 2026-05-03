@@ -25,6 +25,7 @@ import { JSDOM } from "jsdom";
 import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 import { config as loadEnv } from "dotenv";
+import { proxyFetch } from "../../core/proxy-fetch";
 
 loadEnv({ path: path.resolve(__dirname, "../../.env") });
 
@@ -74,7 +75,7 @@ const FETCH_HEADERS = {
 };
 
 export async function fetchPage(url: string): Promise<GrabbedPage> {
-  const resp = await fetch(url, { headers: FETCH_HEADERS });
+  const resp = await proxyFetch(url, { headers: FETCH_HEADERS });
   if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
 
   const raw  = await resp.text();
@@ -147,7 +148,7 @@ function extractVideoId(urlOrId: string): string {
 export async function grabYouTubeTranscript(urlOrId: string): Promise<YouTubeTranscript> {
   const videoId = extractVideoId(urlOrId);
 
-  const initResp = await fetch("https://www.youtube.com/youtubei/v1/player", {
+  const initResp = await proxyFetch("https://www.youtube.com/youtubei/v1/player", {
     method:  "POST",
     headers: { "Content-Type": "application/json", "User-Agent": FETCH_HEADERS["User-Agent"] },
     body: JSON.stringify({
@@ -170,7 +171,7 @@ export async function grabYouTubeTranscript(urlOrId: string): Promise<YouTubeTra
 
   if (!enTrack) return { videoId, title, chapters: [], fullText: "No transcript available." };
 
-  const xmlResp = await fetch(enTrack.baseUrl);
+  const xmlResp = await proxyFetch(enTrack.baseUrl);
   const xml     = await xmlResp.text();
 
   const entries: Array<{ seconds: number; text: string }> = [];

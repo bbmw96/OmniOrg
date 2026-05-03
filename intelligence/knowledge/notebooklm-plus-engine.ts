@@ -32,6 +32,7 @@ import { JSDOM } from "jsdom";
 import { writeFileSync, mkdirSync } from "fs";
 import path from "path";
 import { config as loadEnv } from "dotenv";
+import { proxyFetch } from "../../core/proxy-fetch";
 
 loadEnv({ path: path.resolve(__dirname, "../../.env") });
 
@@ -70,7 +71,7 @@ const FETCH_HEADERS = {
 };
 
 async function scrapeUrl(url: string): Promise<ScrapedSource> {
-  const resp = await fetch(url, { headers: FETCH_HEADERS });
+  const resp = await proxyFetch(url, { headers: FETCH_HEADERS });
   if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${url}`);
   const raw  = await resp.text();
   const dom  = new JSDOM(raw, { url });
@@ -95,7 +96,7 @@ async function crawlSite(startUrl: string, depth: number): Promise<ScrapedSource
     visited.add(url);
 
     try {
-      const resp = await fetch(url, { headers: FETCH_HEADERS });
+      const resp = await proxyFetch(url, { headers: FETCH_HEADERS });
       if (!resp.ok) continue;
       const raw = await resp.text();
       const dom = new JSDOM(raw, { url });
