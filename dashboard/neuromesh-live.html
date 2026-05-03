@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEUROMESH Live — OmniOrg Command Center</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #030510; --panel: #070d1a; --border: #0f2040;
+  --accent: #00d4ff; --green: #00ff88; --orange: #ff8800;
+  --red: #ff3355; --purple: #9900ff; --text: #c0d8f0; --dim: #4a6890;
+}
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'Consolas','Monaco',monospace; font-size:11px; }
+
+#hud { height:44px; background:linear-gradient(90deg,#000814,#030f28,#000814); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 16px; gap:20px; position:relative; z-index:100; }
+#hud-title { font-size:14px; font-weight:bold; color:var(--accent); letter-spacing:3px; flex-shrink:0; }
+.hud-stat { display:flex; flex-direction:column; align-items:center; min-width:60px; }
+.hud-val { font-size:13px; font-weight:bold; color:var(--green); }
+.hud-lbl { font-size:8px; color:var(--dim); letter-spacing:1px; }
+#hud-time { margin-left:auto; color:var(--accent); font-size:12px; }
+
+#layout { display:grid; grid-template-columns:240px 1fr 280px; height:calc(100vh - 44px); }
+
+.panel { background:var(--panel); overflow-y:auto; overflow-x:hidden; }
+#left-panel { border-right:1px solid var(--border); }
+#right-panel { border-left:1px solid var(--border); }
+
+.psec { padding:10px 12px; border-bottom:1px solid var(--border); }
+.stitle { font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; margin-bottom:8px; }
+
+.eng-row { margin-bottom:7px; }
+.eng-head { display:flex; justify-content:space-between; margin-bottom:3px; }
+.eng-name { font-size:10px; color:var(--accent); }
+.eng-pct  { font-size:10px; color:var(--green); }
+.bar-bg   { height:4px; background:#0a1a30; border-radius:2px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:2px; transition:width .6s ease; }
+
+.cog-row { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.cog-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.cog-name { flex:1; font-size:9px; }
+.cog-bg   { width:55px; height:3px; background:#0a1a30; border-radius:2px; overflow:hidden; }
+.cog-fill { height:100%; border-radius:2px; transition:width .8s ease; }
+.cog-val  { width:26px; text-align:right; font-size:9px; color:var(--dim); }
+
+.mem-row { margin-bottom:6px; }
+.mem-head { display:flex; justify-content:space-between; margin-bottom:2px; }
+.mem-name { font-size:9px; }
+.mem-val  { font-size:9px; color:var(--orange); }
+.mem-bg   { height:5px; background:#0a1a30; border-radius:3px; overflow:hidden; }
+.mem-fill { height:100%; border-radius:3px; transition:width 1s ease; }
+
+.sig-row  { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.sig-dot  { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.sig-name { font-size:9px; }
+
+.act-item { padding:5px 12px; border-bottom:1px solid #0a1520; }
+.act-agent { font-size:9px; color:var(--accent); margin-bottom:1px; }
+.act-task  { font-size:10px; line-height:1.3; }
+.act-time  { font-size:8px; color:var(--dim); margin-top:1px; }
+
+.dept-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+.dept-card { background:rgba(0,20,40,.5); border:1px solid #0f2040; border-radius:3px; padding:4px 6px; }
+.dept-cname { font-size:8px; color:var(--dim); }
+.dept-cnt   { font-size:11px; font-weight:bold; }
+.dept-act   { font-size:8px; color:var(--green); }
+
+#canvas-area { position:relative; overflow:hidden; }
+#mesh-canvas { width:100%; height:100%; display:block; }
+#topo-badge { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(0,0,30,.8); border:1px solid var(--border); padding:4px 14px; font-size:9px; letter-spacing:2px; color:var(--dim); border-radius:20px; pointer-events:none; }
+
+#popup-layer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1000; }
+.popup { position:absolute; width:218px; background:rgba(3,12,28,.96); border:1px solid var(--accent); border-radius:4px; box-shadow:0 0 18px rgba(0,212,255,.25); pointer-events:none; animation:pin .18s ease-out; }
+@keyframes pin { from{opacity:0;transform:scale(.85) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)} }
+@keyframes pout { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(.9) translateY(-4px)} }
+.popup.dying { animation:pout .18s ease-in forwards; }
+.pop-hd { padding:5px 8px; background:rgba(0,212,255,.08); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.pop-id   { font-size:9px; font-weight:bold; color:var(--accent); letter-spacing:1px; }
+.pop-dept { font-size:8px; color:var(--dim); }
+.pop-body { padding:6px 8px; }
+.pop-row  { display:flex; justify-content:space-between; margin-bottom:3px; }
+.pop-key  { font-size:9px; color:var(--dim); }
+.pop-val  { font-size:9px; font-weight:bold; color:var(--green); }
+.pop-task { font-size:9px; color:var(--text); margin-top:4px; line-height:1.4; border-top:1px solid var(--border); padding-top:4px; }
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:#0f2040; border-radius:2px; }
+
+#scanlines { position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px); pointer-events:none; z-index:9999; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+.blink { animation:blink 2s infinite; }
+</style>
+</head>
+<body>
+<div id="scanlines"></div>
+<header id="hud">
+  <div id="hud-title">NEUROMESH LIVE</div>
+  <div class="hud-stat"><span class="hud-val" id="sv-agents">209,440</span><span class="hud-lbl">AGENTS</span></div>
+  <div class="hud-stat"><span class="hud-val" style="color:#ff6b35">30</span><span class="hud-lbl">ENGINES</span></div>
+  <div class="hud-stat"><span class="hud-val" id="sv-active">—</span><span class="hud-lbl">ACTIVE</span></div>
+  <div class="hud-stat"><span class="hud-val" id="sv-tasks">—</span><span class="hud-lbl">TASKS/S</span></div>
+  <div class="hud-stat"><span class="hud-val" id="sv-signals">0</span><span class="hud-lbl">SIGNALS</span></div>
+  <div class="hud-stat"><span class="hud-val" id="sv-uptime">00:00:00</span><span class="hud-lbl">UPTIME</span></div>
+  <div id="hud-time" class="blink"></div>
+</header>
+<div id="layout">
+  <aside class="panel" id="left-panel">
+    <div class="psec"><div class="stitle">AI Engines <span style="color:#ff6b35">(30)</span></div><div id="eng-meters"></div></div>
+    <div class="psec"><div class="stitle">Cognitive Modes</div><div id="cog-modes"></div></div>
+    <div class="psec"><div class="stitle">Memory Layers</div><div id="mem-layers"></div></div>
+    <div class="psec"><div class="stitle">Topology</div><div id="topo-info"></div></div>
+  </aside>
+  <main id="canvas-area">
+    <canvas id="mesh-canvas"></canvas>
+    <div id="topo-badge">HIERARCHICAL MESH</div>
+  </main>
+  <aside class="panel" id="right-panel">
+    <div class="psec"><div class="stitle">SYNAPSE Signals</div><div id="sig-legend"></div></div>
+    <div class="psec"><div class="stitle">Live Activity</div><div id="act-feed"></div></div>
+    <div class="psec"><div class="stitle">Departments</div><div class="dept-grid" id="dept-grid"></div></div>
+  </aside>
+</div>
+<div id="popup-layer"></div>
+
+<script>
+// ─── DOM helpers ──────────────────────────────────────────────
+function el(tag, props) {
+  const e = document.createElement(tag);
+  if (!props) return e;
+  for (const [k, v] of Object.entries(props)) {
+    if (k === 'class')  e.className = v;
+    else if (k === 'id') e.id = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'style' && typeof v === 'object') Object.assign(e.style, v);
+    else e.setAttribute(k, v);
+  }
+  return e;
+}
+function app(parent, ...kids) {
+  for (const k of kids) {
+    if (k == null) continue;
+    if (typeof k === 'string') parent.appendChild(document.createTextNode(k));
+    else parent.appendChild(k);
+  }
+  return parent;
+}
+function txt(content) { return document.createTextNode(content); }
+
+// ─── Data ─────────────────────────────────────────────────────
+const ENGINES = [
+  // ── Competition-beating engines ──────────────────────────────
+  { id:'ARIA+',      color:'#00d4ff', desc:'Web Builder · Beats Wix Aria' },
+  { id:'FRAMER+',    color:'#ff6b35', desc:'Motion Design · Beats Framer.com' },
+  { id:'KLEO+',      color:'#00ff88', desc:'Marketing · Beats Wix Kleo' },
+  { id:'BLAZE+',     color:'#ffcc00', desc:'Content · Beats Blaze AI' },
+  { id:'JUNO+',      color:'#cc44ff', desc:'Engagement · Beats Wix Juno' },
+  { id:'OMNI+',      color:'#ff3366', desc:'Automation · Beats Wix Omni' },
+  // ── Core NEUROMESH cognitive engines ─────────────────────────
+  { id:'NEUROMESH',  color:'#00ffff', desc:'Adaptive Cognitive Mesh · 200K+ agents' },
+  { id:'CORTEX',     color:'#7c3aed', desc:'10-Mode Reasoning Engine' },
+  { id:'SYNAPSE',    color:'#06b6d4', desc:'14-Type Signal Protocol' },
+  { id:'AXIOM',      color:'#10b981', desc:'Custom JWT API Engine' },
+  { id:'GENESIS',    color:'#f59e0b', desc:'Hot-Reload Runtime · Circuit Breakers' },
+  { id:'ULTRATHINK', color:'#ec4899', desc:'9-Step Deep Reasoning Protocol' },
+  // ── Intelligence & knowledge engines ─────────────────────────
+  { id:'ORACLE',     color:'#3b82f6', desc:'Knowledge Graph · Semantic Retrieval' },
+  { id:'PROPHET',    color:'#8b5cf6', desc:'Predictive Analytics · Forecasting' },
+  { id:'VECTOR',     color:'#14b8a6', desc:'Embedding Engine · Pinecone Integration' },
+  { id:'ATLAS',      color:'#f97316', desc:'Multi-Source Research Synthesis' },
+  { id:'NEXUS',      color:'#84cc16', desc:'Multi-Agent Orchestration Layer' },
+  { id:'PRISM',      color:'#a855f7', desc:'Analytics · PostHog · Amplitude' },
+  // ── Security & compliance engines ────────────────────────────
+  { id:'SIGMA',      color:'#ef4444', desc:'Security Audit · OWASP Top-10' },
+  { id:'CIPHER',     color:'#dc2626', desc:'Encryption · Zero-Trust Layer' },
+  { id:'SENTINEL',   color:'#b91c1c', desc:'Real-Time Monitoring · Alerting' },
+  { id:'RED+',       color:'#ff0000', desc:'1000+ Ethical Red Team Agents' },
+  // ── Creation & code engines ───────────────────────────────────
+  { id:'FORGE',      color:'#d97706', desc:'Code Generation · Full-Stack' },
+  { id:'AURORA',     color:'#f0abfc', desc:'Creative & Design Engine' },
+  { id:'NOVA',       color:'#67e8f9', desc:'70+ Language · NLP Pipeline' },
+  { id:'HELIX',      color:'#a3e635', desc:'BIM · IFC · openBIM Processing' },
+  // ── Infrastructure & data engines ────────────────────────────
+  { id:'TITAN',      color:'#60a5fa', desc:'Compute Orchestration · Kubernetes' },
+  { id:'FLUX',       color:'#34d399', desc:'Streaming Data · Event Pipeline' },
+  { id:'APEX',       color:'#fbbf24', desc:'Cost Optimizer · Auto-Scaling' },
+  { id:'MATRIX',     color:'#c084fc', desc:'Simulation · Digital Twin Engine' },
+];
+const COG_MODES = [
+  { id:'ANALYTICAL', color:'#00d4ff' },{ id:'CREATIVE',  color:'#ff6b35' },
+  { id:'STRATEGIC',  color:'#00ff88' },{ id:'TACTICAL',  color:'#ffcc00' },
+  { id:'EMPATHETIC', color:'#cc44ff' },{ id:'CRITICAL',  color:'#ff3366' },
+  { id:'SYNTHETIC',  color:'#44aaff' },{ id:'PREDICTIVE',color:'#ff44aa' },
+  { id:'DIAGNOSTIC', color:'#88ff44' },{ id:'GENERATIVE',color:'#ff8844' },
+];
+const SIGNAL_TYPES = [
+  { id:'TASK_DELEGATE',   color:'#00d4ff' },{ id:'RESULT_RETURN',  color:'#00ff88' },
+  { id:'KNOWLEDGE_SHARE', color:'#ffcc00' },{ id:'ERROR_ESCALATE', color:'#ff3366' },
+  { id:'CONSENSUS_VOTE',  color:'#cc44ff' },{ id:'CONTEXT_SYNC',   color:'#44aaff' },
+  { id:'SELF_EVOLUTION',  color:'#ff8844' },
+];
+const DEPTS = [
+  { id:'Engineering', count:18000, color:'#00d4ff' },{ id:'Cybersec',    count:15000, color:'#ff3366' },
+  { id:'Red Team',    count:12000, color:'#ff0000' },{ id:'Finance',     count:8000,  color:'#ffcc00' },
+  { id:'Medical',     count:7500,  color:'#00ff88' },{ id:'Legal',       count:6000,  color:'#cc44ff' },
+  { id:'Marketing',   count:9000,  color:'#ff6b35' },{ id:'Research',    count:11000, color:'#44aaff' },
+  { id:'Data Sci',    count:8500,  color:'#ff44aa' },{ id:'Operations',  count:7000,  color:'#88ff44' },
+  { id:'Language',    count:12000, color:'#ff8844' },{ id:'Creative',    count:6500,  color:'#ff6b35' },
+];
+const TASKS = [
+  // ARIA+ — Web Builder
+  'ARIA+: Generating full-stack Next.js site with WCAG 2.1 AA compliance',
+  'ARIA+: Deploying React e-commerce store to Vercel with Edge CDN',
+  'ARIA+: Building semantic HTML component library with Tailwind',
+  // FRAMER+ — Motion Design
+  'FRAMER+: Composing spring-physics animation sequence with framer-motion',
+  'FRAMER+: Rendering parallax scroll effect for landing page hero',
+  'FRAMER+: Generating gesture-driven UI with drag constraints',
+  // KLEO+ — Marketing
+  'KLEO+: Executing multi-platform campaign across LinkedIn, X, Instagram',
+  'KLEO+: Synthesizing competitor brand analysis from 14 sources',
+  'KLEO+: Generating 40-variant A/B ad copy batch',
+  // BLAZE+ — Content
+  'BLAZE+: Repurposing long-form article into 12 social formats',
+  'BLAZE+: Learning brand voice from 50-page corpus via Firecrawl',
+  'BLAZE+: Generating SEO-optimized content cluster for target keyword',
+  // JUNO+ — Engagement
+  'JUNO+: Sending behavioral-triggered email sequence via Gmail MCP',
+  'JUNO+: Routing support escalation to Slack channel with context',
+  // OMNI+ — Automation
+  'OMNI+: Orchestrating 8-step data pipeline across 5 MCP servers',
+  'OMNI+: Auto-provisioning Kubernetes deployment from IaC template',
+  // NEUROMESH — Cognitive Mesh
+  'NEUROMESH: Recalibrating 12,400 inter-agent connection weights',
+  'NEUROMESH: Rebalancing load across 53 departments under peak demand',
+  'NEUROMESH: Evolving mesh topology from HIERARCHICAL to HYBRID ADAPTIVE',
+  // CORTEX — Reasoning
+  'CORTEX: Switching cognitive mode ANALYTICAL→STRATEGIC for macro task',
+  'CORTEX: Calibrating confidence threshold for low-certainty domain query',
+  // SYNAPSE — Signals
+  'SYNAPSE: Broadcasting KNOWLEDGE_SHARE signal to 847 peer agents',
+  'SYNAPSE: Resolving CONSENSUS_VOTE deadlock across 12 specialist nodes',
+  'SYNAPSE: Propagating SELF_EVOLUTION_PROPOSAL through 4-tier approval chain',
+  // ULTRATHINK — Reasoning Protocol
+  'ULTRATHINK: Running 9-step problem decomposition on ambiguous requirement',
+  'ULTRATHINK: Identifying 3 alternative architectures with trade-off matrix',
+  // ORACLE — Knowledge Graph
+  'ORACLE: Resolving semantic conflict between 2 contradicting knowledge nodes',
+  'ORACLE: Expanding knowledge graph with 1,240 new entity relationships',
+  // PROPHET — Prediction
+  'PROPHET: Forecasting demand spike 72h ahead using time-series model',
+  'PROPHET: Generating risk probability distribution for infrastructure change',
+  // VECTOR — Embeddings
+  'VECTOR: Indexing 8,400 document chunks to Pinecone vector store',
+  'VECTOR: Running semantic similarity search across 2.1M embeddings',
+  // ATLAS — Research
+  'ATLAS: Synthesizing 23-source research report with citation mapping',
+  'ATLAS: Cross-referencing clinical trial data against bioRxiv preprints',
+  // NEXUS — Orchestration
+  'NEXUS: Spawning 14 parallel sub-agents for distributed reasoning task',
+  'NEXUS: Merging conflict-free results from 8 specialist agent branches',
+  // SIGMA — Security
+  'SIGMA: Running OWASP Top-10 audit on staged diff — 0 critical findings',
+  'SIGMA: Scanning 4,200 lines for secret leakage with Semgrep ruleset',
+  // RED+ — Red Team
+  'RED+: Executing ethical penetration test on API authentication layer',
+  'RED+: Simulating advanced persistent threat with 6-stage kill chain',
+  // FORGE — Code Generation
+  'FORGE: Generating TypeScript microservice with full test suite',
+  'FORGE: Refactoring legacy COBOL module to modern Python equivalent',
+  // AURORA — Creative
+  'AURORA: Designing brand identity system with 40-variant color palette',
+  'AURORA: Generating motion design storyboard with 24fps keyframes',
+  // NOVA — Language
+  'NOVA: Translating technical document into 23 languages simultaneously',
+  'NOVA: Processing multilingual NLP pipeline with cultural tone adaptation',
+  // HELIX — BIM/IFC
+  'HELIX: Parsing IFC model with web-ifc StreamAllMeshes — 14,200 elements',
+  'HELIX: Running BIM compliance check against Singapore COP 3.1 ruleset',
+  'HELIX: Extracting openBIM geometry and running clash detection',
+  // TITAN — Compute
+  'TITAN: Auto-scaling Kubernetes cluster from 3 to 12 nodes under load',
+  'TITAN: Orchestrating GPU workload distribution across 6 compute nodes',
+  // FLUX — Data Streaming
+  'FLUX: Processing 840K events/sec through real-time analytics pipeline',
+  'FLUX: Routing Kafka stream to DynamoDB with exactly-once semantics',
+  // APEX — Optimization
+  'APEX: Identifying $12,400/mo cloud cost reduction via rightsizing',
+  'APEX: Optimizing Lambda cold-start from 1,200ms to 80ms',
+  // MATRIX — Simulation
+  'MATRIX: Running Monte Carlo simulation with 100,000 scenario iterations',
+  'MATRIX: Building digital twin of manufacturing floor for process optimization',
+  // PRISM — Analytics
+  'PRISM: Generating executive dashboard from PostHog funnel analysis',
+  'PRISM: Detecting anomaly in conversion rate using statistical significance',
+];
+const TOPOLOGIES = ['HIERARCHICAL MESH','STAR CLUSTER','RING NETWORK','FULL MESH','HYBRID ADAPTIVE'];
+
+// ─── Mutable state ────────────────────────────────────────────
+const engState  = ENGINES.map(e   => ({ ...e, pct: 60 + Math.random() * 30 }));
+const cogState  = COG_MODES.map(m => ({ ...m, pct: 20 + Math.random() * 70 }));
+const memState  = [
+  { id:'WorkingMemory',  label:'Working Memory',  color:'#00d4ff', pct:70 },
+  { id:'EpisodicMemory', label:'Episodic Memory', color:'#00ff88', pct:45 },
+  { id:'SemanticMemory', label:'Semantic Memory', color:'#cc44ff', pct:85 },
+];
+let topoIdx     = 0;
+let totalSigs   = 0;
+const startTime = Date.now();
+
+// ─── Left panel builders ──────────────────────────────────────
+function buildEngineMeters() {
+  const wrap = document.getElementById('eng-meters');
+  wrap.textContent = '';
+  for (const e of engState) {
+    const row  = el('div', { class:'eng-row' });
+    const head = el('div', { class:'eng-head' });
+    const name = el('span', { class:'eng-name', text: e.id });
+    const pct  = el('span', { class:'eng-pct',  id:'ep-'+e.id });
+    pct.textContent = Math.round(e.pct) + '%';
+    app(head, name, pct);
+    const bg   = el('div', { class:'bar-bg' });
+    const fill = el('div', { class:'bar-fill', id:'ef-'+e.id });
+    fill.style.width      = e.pct + '%';
+    fill.style.background = e.color;
+    fill.style.boxShadow  = '0 0 6px ' + e.color;
+    app(bg, fill);
+    app(row, head, bg);
+    app(wrap, row);
+  }
+}
+
+function buildCogModes() {
+  const wrap = document.getElementById('cog-modes');
+  wrap.textContent = '';
+  for (const m of cogState) {
+    const row  = el('div', { class:'cog-row' });
+    const dot  = el('div', { class:'cog-dot' });
+    dot.style.background = m.color;
+    dot.style.boxShadow  = '0 0 4px ' + m.color;
+    const name = el('span', { class:'cog-name', text: m.id });
+    const bg   = el('div', { class:'cog-bg' });
+    const fill = el('div', { class:'cog-fill', id:'cm-'+m.id });
+    fill.style.width      = m.pct + '%';
+    fill.style.background = m.color;
+    const val  = el('span', { class:'cog-val', id:'cv-'+m.id });
+    val.textContent = Math.round(m.pct) + '%';
+    app(bg, fill);
+    app(row, dot, name, bg, val);
+    app(wrap, row);
+  }
+}
+
+function buildMemLayers() {
+  const wrap = document.getElementById('mem-layers');
+  wrap.textContent = '';
+  for (const layer of memState) {
+    const row  = el('div', { class:'mem-row' });
+    const head = el('div', { class:'mem-head' });
+    const name = el('span', { class:'mem-name', text: layer.label });
+    const val  = el('span', { class:'mem-val',  id:'mv-'+layer.id });
+    val.textContent = Math.round(layer.pct) + '%';
+    app(head, name, val);
+    const bg   = el('div', { class:'mem-bg' });
+    const fill = el('div', { class:'mem-fill', id:'mf-'+layer.id });
+    fill.style.width      = layer.pct + '%';
+    fill.style.background = layer.color;
+    fill.style.boxShadow  = '0 0 4px ' + layer.color;
+    app(bg, fill);
+    app(row, head, bg);
+    app(wrap, row);
+  }
+}
+
+function buildTopoInfo() {
+  const wrap = document.getElementById('topo-info');
+  wrap.textContent = '';
+  const badge = el('div', { style:{ fontSize:'11px', color:'#00d4ff', fontWeight:'bold', marginBottom:'5px' }, text: TOPOLOGIES[topoIdx] });
+  const desc  = el('div', { style:{ fontSize:'9px', color:'#4a6890', lineHeight:'1.4' }, text: 'Adaptive mesh reconfigures every 30s based on task distribution and connection performance weights.' });
+  app(wrap, badge, desc);
+}
+
+// ─── Right panel builders ─────────────────────────────────────
+function buildSigLegend() {
+  const wrap = document.getElementById('sig-legend');
+  wrap.textContent = '';
+  for (const s of SIGNAL_TYPES) {
+    const row  = el('div', { class:'sig-row' });
+    const dot  = el('div', { class:'sig-dot' });
+    dot.style.background = s.color;
+    dot.style.boxShadow  = '0 0 4px ' + s.color;
+    const name = el('span', { class:'sig-name', text: s.id });
+    app(row, dot, name);
+    app(wrap, row);
+  }
+}
+
+function buildDeptGrid() {
+  const wrap = document.getElementById('dept-grid');
+  wrap.textContent = '';
+  for (const d of DEPTS) {
+    const card  = el('div', { class:'dept-card' });
+    const cname = el('div', { class:'dept-cname', text: d.id });
+    const cnt   = el('div', { class:'dept-cnt' });
+    cnt.textContent = (d.count / 1000).toFixed(1) + 'K';
+    cnt.style.color = d.color;
+    const act   = el('div', { class:'dept-act' });
+    act.textContent = '▲ ' + Math.floor(d.count * 0.003) + ' active';
+    app(card, cname, cnt, act);
+    app(wrap, card);
+  }
+}
+
+// ─── Activity feed ────────────────────────────────────────────
+const feedEl  = document.getElementById('act-feed');
+const MAX_FEED = 18;
+
+function addActivity(agentId, deptName, task) {
+  const item  = el('div', { class:'act-item' });
+  const agent = el('div', { class:'act-agent' });
+  agent.textContent = agentId + ' · ' + deptName;
+  const action = el('div', { class:'act-task' });
+  action.textContent = task.length > 50 ? task.slice(0, 50) + '…' : task;
+  const time   = el('div', { class:'act-time' });
+  time.textContent = new Date().toLocaleTimeString();
+  app(item, agent, action, time);
+  feedEl.insertBefore(item, feedEl.firstChild);
+  while (feedEl.children.length > MAX_FEED) feedEl.removeChild(feedEl.lastChild);
+}
+
+// ─── Popup system ─────────────────────────────────────────────
+const popLayer = document.getElementById('popup-layer');
+let activePopups = 0;
+const MAX_POPUPS = 8;
+
+function rng(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr)      { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function spawnPopup() {
+  if (activePopups >= MAX_POPUPS) return;
+  const dept    = pick(DEPTS);
+  const engine  = pick(ENGINES);
+  const mode    = pick(COG_MODES);
+  const signal  = pick(SIGNAL_TYPES);
+  const task    = pick(TASKS);
+  const agentId = 'AGT-' + String(rng(1000, 99999)).padStart(5, '0');
+  const conf    = (0.70 + Math.random() * 0.28).toFixed(2);
+
+  const area = document.getElementById('canvas-area');
+  const rect = area.getBoundingClientRect();
+  const px   = rect.left + 60 + Math.random() * Math.max(0, rect.width - 280);
+  const py   = rect.top  + 50 + Math.random() * Math.max(0, rect.height - 200);
+
+  const popup = el('div', { class:'popup' });
+  popup.style.left       = px + 'px';
+  popup.style.top        = py + 'px';
+  popup.style.borderColor = dept.color;
+  popup.style.boxShadow  = '0 0 18px ' + dept.color + '44';
+
+  const hd    = el('div', { class:'pop-hd' });
+  const pid   = el('div', { class:'pop-id',   text: agentId });
+  const pdept = el('div', { class:'pop-dept', text: dept.id });
+  app(hd, pid, pdept);
+
+  const body = el('div', { class:'pop-body' });
+
+  function mkRow(keyTxt, valTxt, valColor) {
+    const row = el('div', { class:'pop-row' });
+    const k   = el('div', { class:'pop-key', text: keyTxt });
+    const v   = el('div', { class:'pop-val', text: valTxt });
+    if (valColor) v.style.color = valColor;
+    app(row, k, v);
+    return row;
+  }
+
+  const taskEl = el('div', { class:'pop-task', text: task });
+  const confColor = parseFloat(conf) > 0.90 ? '#00ff88' : '#ffcc00';
+
+  app(body,
+    mkRow('ENGINE',     engine.id, engine.color),
+    mkRow('COG MODE',   mode.id,   '#cc44ff'),
+    mkRow('SIGNAL',     signal.id, signal.color),
+    mkRow('CONFIDENCE', conf,      confColor),
+    taskEl
+  );
+
+  app(popup, hd, body);
+  app(popLayer, popup);
+  activePopups++;
+  addActivity(agentId, dept.id, task);
+
+  const life = 3200 + Math.random() * 3800;
+  setTimeout(() => {
+    popup.classList.add('dying');
+    setTimeout(() => { if (popup.parentNode) popup.parentNode.removeChild(popup); activePopups--; }, 200);
+  }, life);
+}
+
+// ─── Canvas — NEUROMESH ───────────────────────────────────────
+const canvas = document.getElementById('mesh-canvas');
+const ctx    = canvas.getContext('2d');
+let nodes = [], parts = [], frame = 0;
+
+function initNodes() {
+  const W = canvas.width, H = canvas.height;
+  nodes = [];
+  for (let i = 0; i < 200; i++) {
+    const d = DEPTS[i % DEPTS.length];
+    nodes.push({
+      x: 60 + Math.random() * (W - 120),
+      y: 60 + Math.random() * (H - 120),
+      vx: (Math.random() - .5) * .4,
+      vy: (Math.random() - .5) * .4,
+      r: 3 + Math.random() * 5,
+      color: d.color,
+      dept: d.id,
+      active: Math.random() > .3,
+      pulse: Math.random() * Math.PI * 2,
+      conns: [],
+    });
+  }
+  // k-nearest connections
+  for (let i = 0; i < nodes.length; i++) {
+    const dists = nodes.map((n, j) => {
+      if (i === j) return { j, d: Infinity };
+      const dx = nodes[i].x - n.x, dy = nodes[i].y - n.y;
+      return { j, d: Math.sqrt(dx*dx + dy*dy) };
+    }).sort((a, b) => a.d - b.d);
+    nodes[i].conns = dists.slice(0, 3).map(d => d.j);
+  }
+}
+
+function resize() {
+  const area = document.getElementById('canvas-area');
+  canvas.width  = area.clientWidth;
+  canvas.height = area.clientHeight;
+  initNodes();
+}
+
+function spawnParticle(fi, ti) {
+  const f = nodes[fi], t = nodes[ti];
+  const sig = pick(SIGNAL_TYPES);
+  parts.push({ x: f.x, y: f.y, tx: t.x, ty: t.y, t: 0, color: sig.color, speed: .01 + Math.random() * .012 });
+}
+
+let totalActive = 0;
+
+function drawLoop() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(0,212,255,.025)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  frame++;
+
+  // Physics
+  for (const n of nodes) {
+    n.pulse += .038;
+    for (const m of nodes) {
+      if (m === n) continue;
+      const dx = n.x - m.x, dy = n.y - m.y;
+      const d  = Math.sqrt(dx*dx + dy*dy) || 1;
+      if (d < 80) { const f = (80 - d) / 80 * .014; n.vx += dx/d*f; n.vy += dy/d*f; }
+    }
+    n.vx += (W/2 - n.x) * .00004;
+    n.vy += (H/2 - n.y) * .00004;
+    n.vx *= .97; n.vy *= .97;
+    n.x  += n.vx; n.y  += n.vy;
+    if (n.x < 20)    { n.x = 20;    n.vx =  Math.abs(n.vx); }
+    if (n.x > W - 20){ n.x = W-20;  n.vx = -Math.abs(n.vx); }
+    if (n.y < 20)    { n.y = 20;    n.vy =  Math.abs(n.vy); }
+    if (n.y > H - 20){ n.y = H-20;  n.vy = -Math.abs(n.vy); }
+  }
+
+  // Connections
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i];
+    for (const j of n.conns) {
+      const m  = nodes[j];
+      const dx = n.x - m.x, dy = n.y - m.y;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      if (d > 200) continue;
+      ctx.strokeStyle = 'rgba(0,212,255,' + ((1 - d/200) * .12) + ')';
+      ctx.lineWidth   = .5;
+      ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke();
+    }
+  }
+
+  // Spawn particles
+  if (frame % 4 === 0) {
+    const fi = Math.floor(Math.random() * nodes.length);
+    if (nodes[fi].conns.length) spawnParticle(fi, pick(nodes[fi].conns));
+  }
+
+  // Draw particles
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i];
+    p.t += p.speed;
+    if (p.t >= 1) { parts.splice(i, 1); continue; }
+    p.x += (p.tx - p.x) * p.speed * 2;
+    p.y += (p.ty - p.y) * p.speed * 2;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle   = p.color;
+    ctx.shadowBlur  = 6;
+    ctx.shadowColor = p.color;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  // Nodes
+  let activeCount = 0;
+  for (const n of nodes) {
+    if (n.active) activeCount++;
+    const pr = n.r + Math.sin(n.pulse) * 1.5;
+    if (n.active) {
+      ctx.beginPath(); ctx.arc(n.x, n.y, pr + 5, 0, Math.PI*2);
+      ctx.fillStyle = n.color + '12'; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(n.x, n.y, pr, 0, Math.PI*2);
+    ctx.fillStyle   = n.active ? n.color : n.color + '44';
+    ctx.shadowBlur  = n.active ? 8 : 2;
+    ctx.shadowColor = n.color;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+  totalActive = activeCount * 1000;
+  updateHUD();
+  requestAnimationFrame(drawLoop);
+}
+
+// ─── HUD update ───────────────────────────────────────────────
+function updateHUD() {
+  document.getElementById('sv-active').textContent  = totalActive.toLocaleString();
+  totalSigs += rng(2, 10);
+  document.getElementById('sv-signals').textContent = totalSigs.toLocaleString();
+  document.getElementById('sv-tasks').textContent   = String(rng(110, 190));
+  const sec = Math.floor((Date.now() - startTime) / 1000);
+  const h   = String(Math.floor(sec/3600)).padStart(2,'0');
+  const m   = String(Math.floor(sec%3600/60)).padStart(2,'0');
+  const s   = String(sec%60).padStart(2,'0');
+  document.getElementById('sv-uptime').textContent = h+':'+m+':'+s;
+  document.getElementById('hud-time').textContent  = new Date().toLocaleTimeString();
+}
+
+// ─── Bar animation ────────────────────────────────────────────
+function animateBars() {
+  for (const e of engState) {
+    e.pct = Math.max(30, Math.min(99, e.pct + (Math.random()-.48)*3));
+    const f = document.getElementById('ef-'+e.id); if (f) f.style.width = e.pct + '%';
+    const p = document.getElementById('ep-'+e.id); if (p) p.textContent = Math.round(e.pct) + '%';
+  }
+  for (const m of cogState) {
+    m.pct = Math.max(5, Math.min(99, m.pct + (Math.random()-.5)*5));
+    const f = document.getElementById('cm-'+m.id); if (f) f.style.width = m.pct + '%';
+    const v = document.getElementById('cv-'+m.id); if (v) v.textContent = Math.round(m.pct) + '%';
+  }
+  for (const layer of memState) {
+    layer.pct = Math.max(20, Math.min(99, layer.pct + (Math.random()-.48)*2));
+    const f = document.getElementById('mf-'+layer.id); if (f) f.style.width = layer.pct + '%';
+    const v = document.getElementById('mv-'+layer.id); if (v) v.textContent = Math.round(layer.pct) + '%';
+  }
+}
+
+// ─── Topology rotation ────────────────────────────────────────
+function rotateTopo() {
+  topoIdx = (topoIdx + 1) % TOPOLOGIES.length;
+  const badge = document.getElementById('topo-badge');
+  if (badge) badge.textContent = TOPOLOGIES[topoIdx];
+  buildTopoInfo();
+}
+
+// ─── Boot ─────────────────────────────────────────────────────
+buildEngineMeters();
+buildCogModes();
+buildMemLayers();
+buildTopoInfo();
+buildSigLegend();
+buildDeptGrid();
+
+resize();
+window.addEventListener('resize', resize);
+
+for (let i = 0; i < 8; i++) {
+  const d = pick(DEPTS);
+  addActivity('AGT-' + String(rng(1000,99999)).padStart(5,'0'), d.id, pick(TASKS));
+}
+
+requestAnimationFrame(drawLoop);
+setInterval(spawnPopup, 900);
+setInterval(animateBars, 1000);
+setInterval(rotateTopo, 30000);
+setInterval(() => { const i = Math.floor(Math.random()*nodes.length); if(nodes[i]) nodes[i].active = Math.random()>.25; }, 500);
+</script>
+</body>
+</html>
