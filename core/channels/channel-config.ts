@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * CHANNEL CONFIG — Single source of truth for all BBMW0 channels
+ * CHANNEL CONFIG  -  Single source of truth for all BBMW0 channels
  *
  * Two YouTube channels + Two Instagram accounts, each with unique
  * niche, target audience, posting schedule, and NanoBanana recipe preferences.
@@ -37,7 +37,7 @@ export interface ChannelConfig {
   id: string;
   platform: Platform;
   displayName: string;
-  handle: string;               // @handle — fill from env or hardcode
+  handle: string;               // @handle  -  fill from env or hardcode
   channelId: string;            // YouTube channel ID / Instagram account ID
   niche: ContentNiche;
   subNiches: string[];          // 3-5 specific topics within the niche
@@ -80,7 +80,7 @@ export interface ChannelConfig {
 // ─── Channel Definitions ─────────────────────────────────────────────────────
 
 export const CHANNELS: ChannelConfig[] = [
-  // ── Channel 1: YouTube — BBMW0 AI Empire ──────────────────────────────────
+  // ── Channel 1: YouTube  -  BBMW0 AI Empire ──────────────────────────────────
   {
     id: "yt-ai-empire",
     platform: "youtube",
@@ -113,7 +113,7 @@ export const CHANNELS: ChannelConfig[] = [
         dayOfWeek: [1, 3, 5], // Mon, Wed, Fri
         timeUtc: "18:00",
         timeBst: "19:00",
-        label: "Evening peak — long-form",
+        label: "Evening peak  -  long-form",
       },
       {
         dayOfWeek: [0, 1, 2, 3, 4, 5, 6], // daily
@@ -153,7 +153,7 @@ export const CHANNELS: ChannelConfig[] = [
     targetEngagementRate: 4.5,
   },
 
-  // ── Channel 2: YouTube — BBMW0 Architect ──────────────────────────────────
+  // ── Channel 2: YouTube  -  BBMW0 Architect ──────────────────────────────────
   {
     id: "yt-architect",
     platform: "youtube",
@@ -186,7 +186,7 @@ export const CHANNELS: ChannelConfig[] = [
         dayOfWeek: [2, 4, 6], // Tue, Thu, Sat
         timeUtc: "17:00",
         timeBst: "18:00",
-        label: "Evening peak — long-form",
+        label: "Evening peak  -  long-form",
       },
       {
         dayOfWeek: [0, 1, 2, 3, 4, 5, 6],
@@ -226,7 +226,7 @@ export const CHANNELS: ChannelConfig[] = [
     targetEngagementRate: 5.0,
   },
 
-  // ── Channel 3: Instagram — bbmw0_ai ───────────────────────────────────────
+  // ── Channel 3: Instagram  -  bbmw0_ai ───────────────────────────────────────
   {
     id: "ig-ai",
     platform: "instagram",
@@ -304,7 +304,7 @@ export const CHANNELS: ChannelConfig[] = [
     targetEngagementRate: 6.0,
   },
 
-  // ── Channel 4: Instagram — bbmw0_architect ────────────────────────────────
+  // ── Channel 4: Instagram  -  bbmw0_architect ────────────────────────────────
   {
     id: "ig-architect",
     platform: "instagram",

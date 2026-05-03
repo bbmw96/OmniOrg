@@ -269,7 +269,7 @@ function getIdleWorker(dept?: string): AgentWorker | undefined {
     if (w.status === "cooldown" && w.cooldownUntil !== undefined && now < w.cooldownUntil) {
       return false;
     }
-    // Worker has exited cooldown — reset to idle
+    // Worker has exited cooldown  -  reset to idle
     if (w.status === "cooldown") {
       w.status = "idle";
       w.cooldownUntil = undefined;
@@ -496,7 +496,7 @@ function checkEngineHealth(): void {
   }
 
   if (!anyHealthy) {
-    log("warn", "No AI engines are healthy — check environment variables");
+    log("warn", "No AI engines are healthy  -  check environment variables");
   } else {
     const healthyList = Object.entries(engineHealthMap)
       .filter(([, v]) => v)
@@ -597,7 +597,7 @@ function startDispatchLoop(): void {
     for (const task of tasks) {
       const worker = getIdleWorker();
       if (!worker) {
-        // No worker available — put task back in queue
+        // No worker available  -  put task back in queue
         task.status = "queued";
         continue;
       }
@@ -658,7 +658,7 @@ export async function startDaemon(): Promise<void> {
 
   // 3. Log startup banner
   log("info", "═══════════════════════════════════════════════════════════");
-  log("info", `  OmniOrg Background Daemon v${DAEMON_VERSION} — STARTING`);
+  log("info", `  OmniOrg Background Daemon v${DAEMON_VERSION}  -  STARTING`);
   log("info", `  Agents loaded   : ${AGENT_POOL.length.toLocaleString()}`);
   log("info", `  Max concurrency : ${MAX_CONCURRENT_WORKERS} workers`);
   log("info", `  Host            : ${os.hostname()} (${os.platform()}/${os.arch()})`);
@@ -684,7 +684,7 @@ export async function startDaemon(): Promise<void> {
 
   // 7. Register graceful shutdown handlers
   const shutdown = (signal: string) => {
-    log("info", `Received ${signal} — shutting down gracefully...`);
+    log("info", `Received ${signal}  -  shutting down gracefully...`);
     stopDaemon();
     process.exit(0);
   };

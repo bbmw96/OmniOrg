@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * PRODUCTION RUNNER — Daily Content Factory
+ * PRODUCTION RUNNER  -  Daily Content Factory
  *
  * Runs every day at 06:00 BST.
  * For each channel, determines what content is due today,
@@ -19,7 +19,7 @@
  *   8. ExcelReporter → append to publish-log for monthly report
  *
  * Islamic compliance enforced at every stage.
- * NO human approval required — all content passes through AI executive board.
+ * NO human approval required  -  all content passes through AI executive board.
  * Minimum score threshold: 70/100 across engagement, accuracy, SEO, compliance, production.
  */
 
@@ -100,23 +100,23 @@ interface ProducedContent {
 const AI_TOPICS = [
   "Claude AI vs ChatGPT: which is smarter in 2026",
   "How to automate your entire business with AI agents",
-  "DeepSeek R1 is breaking records — here is why",
+  "DeepSeek R1 is breaking records and here is why",
   "The AI tool that replaced my entire team",
   "How I use AI to make £10,000 a month passive income",
   "5 AI prompts that will blow your mind",
   "The dark side of AI nobody talks about",
   "How AI is changing architecture forever",
-  "I let AI run my social media for 30 days — results",
+  "I let AI run my social media for 30 days and here are my results",
   "The fastest AI model in the world right now",
   "Build a full app with AI in 10 minutes",
   "AI vs human: who designs better?",
   "The AI that can code better than most developers",
   "How to use Gemini 2.5 Pro for free",
   "Why every business needs an AI agent in 2026",
-  "I tested every AI video tool — here are the results",
+  "I tested every AI video tool and here are the results",
   "The AI tool architects are secretly using",
   "How to build a £100k AI business from scratch",
-  "5 things AI cannot do — yet",
+  "5 things AI still cannot do",
   "The most powerful AI prompts for content creation",
   "AI is about to change everything in finance",
   "How to use AI to learn any skill in 7 days",
@@ -127,7 +127,7 @@ const AI_TOPICS = [
   "Top 10 AI tools every entrepreneur needs",
   "How AI is democratising professional skills",
   "The truth about AI and jobs in 2026",
-  "Building the future with AI — a blueprint",
+  "Building the future with AI: a blueprint",
 ] as const;
 
 const ARCHITECTURE_TOPICS = [
@@ -147,7 +147,7 @@ const ARCHITECTURE_TOPICS = [
   "Modern homes inspired by traditional design",
   "How to make your space feel like a luxury hotel",
   "The psychology of architectural design",
-  "Building with light — how architects use natural light",
+  "Building with light: how architects use natural light",
   "The world's most innovative sustainable buildings",
   "How Mughal architecture influenced the world",
   "Interior design rules that always work",
@@ -160,7 +160,7 @@ const ARCHITECTURE_TOPICS = [
   "Why biophilic design is taking over luxury homes",
   "The art of Islamic calligraphy in modern architecture",
   "How to make your home Instagram-worthy",
-  "The architecture of innovation — Silicon Valley buildings",
+  "The architecture of innovation: Silicon Valley buildings",
 ] as const;
 
 // ─── Used-topics tracker ──────────────────────────────────────────────────────
@@ -299,7 +299,7 @@ async function generateCaption(
 
   const caption = result.text.trim();
 
-  // Islamic compliance check — throws if haram content detected
+  // Islamic compliance check  -  throws if haram content detected
   islamicMediaCheck(caption);
 
   return caption;
@@ -319,14 +319,14 @@ async function generateVideo(
   try {
     const hf = await import("../../intelligence/ai-engines/higgsfield-engine");
 
-    // Build a visual prompt from script + DNA — no faces/living beings (tasweer)
+    // Build a visual prompt from script + DNA  -  no faces/living beings (tasweer)
     const visualStyle = dna.split("|")[1] ?? "cinematic";
     const topic       = script.split("\n")[0]?.replace(/[#*_]/g, "").trim().slice(0, 120) ?? channel.niche;
 
     // Map niche to cinematic visual language
     const visualTheme = channel.niche === "architecture-design"
-      ? `dramatic architectural drone footage, geometric Islamic patterns, golden light, futuristic city skyline — ${visualStyle} style — no humans, no faces, abstract beauty`
-      : `futuristic technology visualisation, glowing circuits, data streams, abstract AI network — ${visualStyle} style — no humans, no faces, high-tech aesthetic`;
+      ? `dramatic architectural drone footage, geometric Islamic patterns, golden light, futuristic city skyline, ${visualStyle} style, no humans, no faces, abstract beauty`
+      : `futuristic technology visualisation, glowing circuits, data streams, abstract AI network, ${visualStyle} style, no humans, no faces, high-tech aesthetic`;
 
     const prompt = `${topic}. ${visualTheme}. 4K quality, ${channel.brandColours[0]} and ${channel.brandColours[1]} colour palette.`;
 
@@ -342,7 +342,7 @@ async function generateVideo(
     console.log(`[VideoGen] Generated: ${localPath}`);
     return localPath;
   } catch (err) {
-    // Video generation is best-effort — log and continue without video
+    // Video generation is best-effort  -  log and continue without video
     const msg = err instanceof Error ? err.message : String(err);
     console.warn(`[VideoGen] Skipped (will publish script-only): ${msg}`);
     return null;
@@ -356,7 +356,7 @@ const REVIEW_PASS_THRESHOLD = 70; // out of 100
 
 const REVIEW_SYSTEM_PROMPT = `You are a Senior Executive Content Director at a world-class media company.
 Your role is to review video content before publication and score it objectively.
-You represent a board of 20,000 senior AI executives — your score is final and authoritative.
+You represent a board of 20,000 senior AI executives. Your score is final and authoritative.
 Score each axis from 0–100. Return ONLY valid JSON, no other text.`;
 
 async function runAgentReview(
@@ -377,11 +377,11 @@ CAPTION:
 ${caption}
 
 Score on these 5 axes (0–100 each):
-1. engagement_score — hook strength, viewer retention, entertainment value
-2. accuracy_score — factual correctness, no misinformation, credible claims
-3. seo_score — title/keyword strength, searchability, YouTube/Instagram algorithm fit
-4. compliance_score — Islamic halal compliance, brand safety, no controversial content
-5. production_score — script structure, pacing, professional quality for the target audience
+1. engagement_score: hook strength, viewer retention, entertainment value
+2. accuracy_score: factual correctness, no misinformation, credible claims
+3. seo_score: title and keyword strength, searchability, YouTube/Instagram algorithm fit
+4. compliance_score: Islamic halal compliance, brand safety, no controversial content
+5. production_score: script structure, pacing, professional quality for the target audience
 
 Return exactly this JSON:
 {
@@ -419,7 +419,7 @@ Return exactly this JSON:
             engine:      result.engine,
           });
         } catch {
-          // Engine gave non-JSON response — use conservative default
+          // Engine gave non-JSON response  -  use conservative default
           scores.push({ engagement: 72, accuracy: 72, seo: 72, compliance: 80, production: 72, engine: `engine-${i}` });
         }
       })
@@ -431,7 +431,7 @@ Return exactly this JSON:
   await Promise.allSettled(reviewTasks);
 
   if (scores.length === 0) {
-    // All engines failed — default pass to avoid blocking production
+    // All engines failed  -  default pass to avoid blocking production
     return {
       approved: true, overallScore: 75,
       engagementScore: 75, accuracyScore: 75, seoScore: 75, complianceScore: 80, productionScore: 75,
@@ -462,7 +462,7 @@ Return exactly this JSON:
   const approved = overallScore >= REVIEW_PASS_THRESHOLD && complianceScore >= 60;
 
   console.log(
-    `[AgentReview] "${title}" — overall: ${overallScore}/100 ` +
+    `[AgentReview] "${title}"  -  overall: ${overallScore}/100 ` +
     `(eng:${engagementScore} acc:${accuracyScore} seo:${seoScore} ` +
     `comp:${complianceScore} prod:${productionScore}) → ${approved ? "APPROVED ✓" : "REJECTED ✗"}`
   );
@@ -605,13 +605,13 @@ async function produceItemForChannel(
     // Step 6: Generate video via Higgsfield (Kling model, 9:16 for Shorts/Reels)
     const videoPath = await generateVideo(script, item.type, channel, item.nanaBananaDNA);
 
-    // Step 7: AI executive board review — 20,000+ agents, no human gate
+    // Step 7: AI executive board review  -  20,000+ agents, no human gate
     console.log(`[ProductionRunner] Sending "${title}" to AI executive review board...`);
     const agentReview = await runAgentReview(title, script, caption, item.type, channel);
 
     if (!agentReview.approved) {
       console.warn(
-        `[ProductionRunner] REJECTED by AI board — "${title}" scored ${agentReview.overallScore}/100. ` +
+        `[ProductionRunner] REJECTED by AI board  -  "${title}" scored ${agentReview.overallScore}/100. ` +
         `Feedback: ${agentReview.feedback}`
       );
       markTopicUsed(item.topic);
@@ -626,12 +626,12 @@ async function produceItemForChannel(
         islamicCheckPassed: true,
         agentReview,
         status:             "rejected",
-        error:              `AI board score: ${agentReview.overallScore}/100 — ${agentReview.feedback}`,
+        error:              `AI board score: ${agentReview.overallScore}/100  -  ${agentReview.feedback}`,
       };
     }
 
     console.log(
-      `[ProductionRunner] APPROVED ✓ "${title}" — score ${agentReview.overallScore}/100 ` +
+      `[ProductionRunner] APPROVED ✓ "${title}"  -  score ${agentReview.overallScore}/100 ` +
       `by ${agentReview.reviewedBy.join(", ")}`
     );
 
@@ -653,7 +653,7 @@ async function produceItemForChannel(
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err);
     console.error(
-      `[ProductionRunner] Failed to produce item ${item.id} (${item.type} — "${item.topic}"): ${errorMsg}`
+      `[ProductionRunner] Failed to produce item ${item.id} (${item.type}  -  "${item.topic}"): ${errorMsg}`
     );
     return {
       ...base,
@@ -737,13 +737,13 @@ export async function runDailyProduction(): Promise<void> {
       }
 
       if (content.status === "rejected") {
-        // AI board rejected — log and skip (will regenerate tomorrow with different topic)
-        console.warn(`[ProductionRunner] SKIPPED (AI rejected): "${content.title}" — ${content.error ?? ""}`);
+        // AI board rejected  -  log and skip (will regenerate tomorrow with different topic)
+        console.warn(`[ProductionRunner] SKIPPED (AI rejected): "${content.title}"  -  ${content.error ?? ""}`);
         totalFailed++;
         continue;
       }
 
-      // AI board approved — queue and auto-publish
+      // AI board approved  -  queue and auto-publish
       try {
         addToQueue({
           platform:     channel.platform,

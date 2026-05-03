@@ -3,7 +3,7 @@
  * SOCIAL PUBLISHER - OmniOrg Social Media Auto-Publishing Engine
  *
  * Uses Composio (already connected) for all YouTube and Instagram publishing.
- * No separate OAuth tokens needed — Composio handles auth via connected accounts.
+ * No separate OAuth tokens needed  -  Composio handles auth via connected accounts.
  *
  * Connected accounts (from composio.dev dashboard):
  *   YouTube Ch1:  youtube_tao-juang  (BBM0 / @bbm0902)
@@ -11,8 +11,8 @@
  *   Instagram:    instagram_stays-moo  (@ai_game_odyssey)
  *
  * Flow:
- *   YouTube  — stage file → YOUTUBE_MULTIPART_UPLOAD_VIDEO via Composio
- *   Instagram — video_url (CDN) → INSTAGRAM_POST_IG_USER_MEDIA → PUBLISH
+ *   YouTube   -  stage file → YOUTUBE_MULTIPART_UPLOAD_VIDEO via Composio
+ *   Instagram  -  video_url (CDN) → INSTAGRAM_POST_IG_USER_MEDIA → PUBLISH
  *
  * Islamic compliance check runs on every caption and title before publishing.
  */
@@ -231,7 +231,7 @@ export async function uploadToYouTube(req: YouTubeUploadRequest): Promise<string
   const chIdx             = req.channelIndex ?? 1;
   const connectedAccount  = YT_ACCOUNTS[chIdx] ?? YT_ACCOUNTS[1];
 
-  // Resolve video path — download from URL to temp if needed
+  // Resolve video path  -  download from URL to temp if needed
   let localPath = req.videoPath;
   let isTemp    = false;
 
@@ -291,7 +291,7 @@ export async function publishToInstagram(req: InstagramPostRequest): Promise<str
 
   if (req.videoPath) {
     if (req.videoPath.startsWith("http")) {
-      // CDN URL: pass directly — Instagram fetches it (no signing, no query params)
+      // CDN URL: pass directly  -  Instagram fetches it (no signing, no query params)
       mediaInput = {
         ig_user_id:  igUserId,
         video_url:   req.videoPath,
@@ -402,7 +402,7 @@ export async function processQueue(): Promise<void> {
     try {
       if (job.platform === "youtube") {
         if (!job.videoPath) {
-          throw new Error("[Queue] YouTube job has no videoPath — skipping until video is generated.");
+          throw new Error("[Queue] YouTube job has no videoPath  -  skipping until video is generated.");
         }
         if (!job.title) {
           throw new Error("[Queue] YouTube job requires a title.");
@@ -418,7 +418,7 @@ export async function processQueue(): Promise<void> {
 
       } else if (job.platform === "instagram") {
         if (!job.videoPath && !job.imagePath) {
-          throw new Error("[Queue] Instagram job has no videoPath or imagePath — skipping.");
+          throw new Error("[Queue] Instagram job has no videoPath or imagePath  -  skipping.");
         }
         job.publishedUrl = await publishToInstagram({
           imagePath:    job.imagePath,

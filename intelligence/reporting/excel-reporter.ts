@@ -1,6 +1,6 @@
 // Created by BBMW0 Technologies | bbmw0.com
 /**
- * EXCEL REPORTER — CSV + HTML executive dashboard for monthly content analytics
+ * EXCEL REPORTER  -  CSV + HTML executive dashboard for monthly content analytics
  *
  * Reads from publish-log-YYYY-MM.jsonl, generates:
  *   - omniorg-report-YYYY-MM-summary.csv
@@ -169,7 +169,7 @@ export function buildChannelSummary(
       avgEngagementRate: 0,
       estimatedAdRevenue: 0,
       subscriberGain: 0,
-      topPerformingTitle: "—",
+      topPerformingTitle: " - ",
       topPerformingViews: 0,
     };
   }
@@ -186,7 +186,7 @@ export function buildChannelSummary(
     channelItems.reduce((s, i) => s + i.engagementRate, 0) /
     channelItems.length;
 
-  // YouTube CPM only — Instagram has no AdSense
+  // YouTube CPM only  -  Instagram has no AdSense
   const platform = channelItems[0].platform;
   const estimatedAdRevenue =
     platform === "youtube"
@@ -432,7 +432,7 @@ function buildHtml(
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OmniOrg Report — ${month}</title>
+  <title>OmniOrg Report  -  ${month}</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
@@ -688,7 +688,7 @@ function buildHtml(
   </div>
 
   <!-- All Content -->
-  <div class="section-title">All Content — sorted by views</div>
+  <div class="section-title">All Content  -  sorted by views</div>
   <div class="table-wrap">
     <table>
       <thead>
