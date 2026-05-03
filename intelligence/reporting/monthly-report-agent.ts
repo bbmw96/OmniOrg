@@ -336,7 +336,7 @@ async function sendMonthlyEmail(
 
   const { error } = await resend.emails.send({
     from: "OmniOrg Reports <reports@agents.bbmw0.com>",
-    to: ["up866106@gmail.com"],
+    to: ["up866106@gmail.com", "bbmw0@hotmail.com"],
     subject: `JiaWen money Claude Code project  -  ${label}`,
     html: finalHtml,
   });
