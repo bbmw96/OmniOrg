@@ -2,7 +2,7 @@
 /**
  * GRABBIT+ ENGINE
  *
- * Content intelligence engine — equivalent to Grabbit Chrome extension.
+ * Content intelligence engine  -  equivalent to Grabbit Chrome extension.
  * But fully server-side, no browser extension required.
  *
  * Capabilities:
@@ -10,7 +10,7 @@
  *   - Bulk-fetch and Readability-clean content from multiple URLs
  *   - AI product comparison across up to 5 URLs (Claude)
  *   - AI article summarisation with key takeaways and tags
- *   - YouTube transcript extraction (InnerTube API — no API key needed)
+ *   - YouTube transcript extraction (InnerTube API  -  no API key needed)
  *   - Export results as Markdown, JSON, or plain text
  *
  * Exceeds Grabbit by:
@@ -216,7 +216,7 @@ export async function grabYouTubeTranscript(urlOrId: string): Promise<YouTubeTra
 
 /**
  * Summarise a single article/page with Claude.
- * Key takeaways + tags + conclusion — same output format as Grabbit Premium.
+ * Key takeaways + tags + conclusion  -  same output format as Grabbit Premium.
  */
 export async function summarisePage(page: GrabbedPage): Promise<AiSummary> {
   const resp = await anthropic.messages.create({
@@ -245,7 +245,7 @@ ${page.text.slice(0, 8000)}`,
 
 /**
  * Compare up to 5 products/pages with Claude.
- * Winner + feature table + pros/cons + verdict — same as Grabbit AI Compare.
+ * Winner + feature table + pros/cons + verdict  -  same as Grabbit AI Compare.
  */
 export async function comparePages(pages: GrabbedPage[]): Promise<AiComparison> {
   if (pages.length < 2) throw new Error("Need at least 2 pages to compare");

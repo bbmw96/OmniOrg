@@ -2,7 +2,7 @@
 /**
  * NOTEBOOKLM+ ENGINE
  *
- * Web-to-NotebookLM content sync — equivalent to WebSync for NotebookLM extension.
+ * Web-to-NotebookLM content sync  -  equivalent to WebSync for NotebookLM extension.
  * But runs headlessly, no Chrome extension, no 50-source cap workaround needed.
  *
  * Architecture:
@@ -23,7 +23,7 @@
  *   - Works without Chrome (headless Playwright)
  *   - Can aggregate 100s of URLs into a single .txt source (bypasses 50-source cap)
  *   - Integrates with OmniOrg research pipeline (Grabbit+, content scheduler)
- *   - No per-account subscription — runs on your own Google account
+ *   - No per-account subscription  -  runs on your own Google account
  */
 
 import { chromium, Browser, BrowserContext, Page } from "playwright";
@@ -128,7 +128,7 @@ async function crawlSite(startUrl: string, depth: number): Promise<ScrapedSource
 
 /**
  * Aggregate multiple scraped sources into a single .txt file.
- * One file can represent hundreds of pages — bypasses the 50-source cap
+ * One file can represent hundreds of pages  -  bypasses the 50-source cap
  * by packaging everything as a single text source in NotebookLM.
  */
 export function exportToTxt(sources: ScrapedSource[], notebookName: string): string {
@@ -159,7 +159,7 @@ async function launchBrowser(headless: boolean): Promise<{ browser: Browser; ctx
  * Requires the user to be logged into Google in the default Chrome profile
  * (storageState path) OR a fresh Google login will be required.
  *
- * NotebookLM has no public REST API — this replicates the exact UI flow:
+ * NotebookLM has no public REST API  -  this replicates the exact UI flow:
  *   "Add source" → "Website" → paste URL → confirm
  */
 async function pushUrlToNotebook(page: Page, notebookName: string, url: string): Promise<void> {
@@ -287,7 +287,7 @@ export async function syncToNotebookLM(opts: NotebookSyncOptions): Promise<SyncR
   } catch (err) {
     errors.push(`Playwright session error: ${err}`);
     if (sourcesAdded === 0 && exportedFile) {
-      console.warn(`[NotebookLM+] Playwright failed — use the exported file: ${exportedFile}`);
+      console.warn(`[NotebookLM+] Playwright failed  -  use the exported file: ${exportedFile}`);
     }
   } finally {
     await browser?.close();
@@ -299,7 +299,7 @@ export async function syncToNotebookLM(opts: NotebookSyncOptions): Promise<SyncR
 /**
  * Export-only mode: produce a .txt bundle without any Playwright automation.
  * Drag the output file into NotebookLM's "Upload" source type.
- * Aggregates unlimited URLs into one file — circumvents the 50-source cap.
+ * Aggregates unlimited URLs into one file  -  circumvents the 50-source cap.
  */
 export async function exportForNotebookLM(urls: string[], notebookName: string, crawlDepth = 0): Promise<string> {
   const sources: ScrapedSource[] = [];

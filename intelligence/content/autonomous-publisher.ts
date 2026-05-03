@@ -31,6 +31,9 @@ import { contentOrchestrator }                          from "./content-orchestr
 import { viralGameGenerator }                           from "./viral-game-generator";
 import { contentScheduler }                             from "./content-scheduler";
 import { composioPublisher }                            from "./composio-publisher";
+import { engagementAgent }                              from "./engagement-agent";
+import { videoProductionAgent }                         from "./video-production-agent";
+import { stageVideoFile }                               from "./composio-executor";
 import { agentSecurity }                                from "../security/agent-security-engine";
 import { alertActionRequired, alertCritical, alertInfo, alertWarning } from "./email-notifier";
 import type { ChannelProfile }                          from "./content-orchestrator";
@@ -41,6 +44,36 @@ import type { ScheduledPost }                           from "./content-schedule
 const QUALITY_THRESHOLD    = 70;   // minimum content score to auto-publish
 const DUPLICATE_WINDOW_DAYS = 90;  // days to look back for duplicate detection
 const UPLOAD_LOG_PATH      = path.join(__dirname, "../../results/upload-log.json");
+const GAMES_RESULTS_DIR    = path.join(__dirname, "../../results");
+
+/**
+ * Scans the results folder for generated game packages and returns all
+ * Google Play package names (com.bbmw0.<conceptId>).
+ * New games are picked up automatically with no manual code changes needed.
+ */
+function discoverGooglePlayPackages(): string[] {
+  if (!fs.existsSync(GAMES_RESULTS_DIR)) return [];
+  try {
+    return fs.readdirSync(GAMES_RESULTS_DIR)
+      .filter(entry => {
+        const manifestPath = path.join(GAMES_RESULTS_DIR, entry, "capacitor-manifest.json");
+        return fs.existsSync(manifestPath);
+      })
+      .map(entry => {
+        try {
+          const manifest = JSON.parse(
+            fs.readFileSync(path.join(GAMES_RESULTS_DIR, entry, "capacitor-manifest.json"), "utf8")
+          ) as { appId?: string };
+          return manifest.appId ?? "";
+        } catch {
+          return "";
+        }
+      })
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
 
 // ── CHANNEL PROFILES ──────────────────────────────────────────────────────────
 
@@ -52,8 +85,11 @@ const BBMW0_MAIN_PROFILE: ChannelProfile = {
   targetAudience:     "Content creators, freelancers, and side-hustlers who want to use AI to grow faster",
   platforms:          ["instagram", "youtube"],
   contentGoal:        "grow-fast",
-  monetisationGoal:   "Reach 1,000 YouTube subscribers for YPP. Reach 10,000 Instagram followers for Reels Bonus.",
-  postsPerWeekTarget: 14,
+  // Target: £20,000/channel by July 2026 via AdSense + affiliate + sponsorships
+  // 49 posts/week = 7/day (5 Shorts + 1 long-form on YouTube, 1 Reel on Instagram)
+  // Shorts drive subs fastest; long-form drives watch hours for YPP
+  monetisationGoal:   "Hit 1,000 YouTube subscribers for YPP and 10,000 Instagram followers for Reels Bonus. Embed affiliate links in every video description. Add sponsorship slot to every script.",
+  postsPerWeekTarget: 49,
   youtubeSubscribers: 0,
   youtubeWatchHours:  0,
   instagramFollowers: 0,
@@ -67,8 +103,12 @@ const BBMW0_GAMES_PROFILE: ChannelProfile = {
   targetAudience:     "Indie developers, gamers curious about AI, tech enthusiasts",
   platforms:          ["youtube"],
   contentGoal:        "build-authority",
-  monetisationGoal:   "Showcase each new game release. Drive downloads and channel growth.",
-  postsPerWeekTarget: 7,
+  // Target: £20,000/channel by July 2026 via AdMob + Google Play + AdSense
+  // 35 posts/week = 5 Shorts/day showing AI game dev speed-runs + 1 weekly long-form devlog
+  // Shorts: 30-60s clips  -  concept to playable in 60 seconds, behind-the-scenes AI prompts
+  // Long-form: full devlog each Monday showing entire game creation from idea to Play Store
+  monetisationGoal:   "Drive Google Play installs for AdMob revenue (day-1 earning). Hit 1,000 YouTube subscribers for YPP. Every video description links to Play Store. AdMob banner + interstitial in every game. Add sponsorship slot to weekly devlog.",
+  postsPerWeekTarget: 35,
   youtubeSubscribers: 0,
   youtubeWatchHours:  0,
 };
@@ -173,15 +213,19 @@ function runQualityGate(post: ScheduledPost, log: UploadLogEntry[]): QualityResu
 // ── AUTONOMOUS PUBLISH LOOP ────────────────────────────────────────────────────
 
 export interface DailyRunResult {
-  runId:        string;
-  startedAt:    string;
-  completedAt:  string;
-  channels:     string[];
-  totalQueued:  number;
+  runId:         string;
+  startedAt:     string;
+  completedAt:   string;
+  channels:      string[];
+  totalQueued:   number;
   autoPublished: number;
-  blocked:      number;
-  gamesCreated: number;
-  errors:       string[];
+  blocked:       number;
+  gamesCreated:  number;
+  engagement: {
+    repliesSent: number;
+    byPlatform:  Record<string, { replied: number; skipped: number }>;
+  };
+  errors:        string[];
 }
 
 export class AutonomousPublisher {
@@ -199,6 +243,7 @@ export class AutonomousPublisher {
       autoPublished: 0,
       blocked:      0,
       gamesCreated: 0,
+      engagement:   { repliesSent: 0, byPlatform: {} },
       errors:       [],
     };
 
@@ -274,8 +319,37 @@ export class AutonomousPublisher {
       }
     }
 
+    // ── 4. Engagement sweep: reply to comments and reviews ────────────────────
+    try {
+      // Pull recently published IDs from upload log so we check the right content
+      const recentLog    = log.filter(e => {
+        const cutoff = new Date(Date.now() - 30 * 86400000).toISOString();
+        return e.uploadedAt >= cutoff;
+      });
+      const ytMainIds    = recentLog.filter(e => e.platform === "youtube" && e.contentId.startsWith("bbmw0-main")).map(e => e.contentId);
+      const ytGamesIds   = recentLog.filter(e => e.platform === "youtube" && e.contentId.startsWith("bbmw0-games")).map(e => e.contentId);
+      const igIds        = recentLog.filter(e => e.platform === "instagram").map(e => e.contentId);
+
+      const engageResult = await engagementAgent.runDailySweep({
+        youtubeMainVideoIds:  ytMainIds,
+        youtubeGamesVideoIds: ytGamesIds,
+        instagramMediaIds:    igIds,
+        googlePlayPackages:   discoverGooglePlayPackages(),
+      });
+
+      result.engagement.repliesSent = engageResult.totalReplied;
+      result.engagement.byPlatform  = engageResult.byPlatform;
+      if (engageResult.errors.length > 0) {
+        result.errors.push(...engageResult.errors.map(e => `[engagement] ${e}`));
+      }
+    } catch (err: unknown) {
+      const msg = String(err);
+      result.errors.push(`Engagement sweep failed: ${msg}`);
+      await alertWarning("Daily engagement sweep failed", msg);
+    }
+
     result.completedAt = new Date().toISOString();
-    console.log(`[Empire] Daily cycle complete. Published: ${result.autoPublished}, Blocked: ${result.blocked}`);
+    console.log(`[Empire] Daily cycle complete. Published: ${result.autoPublished}, Blocked: ${result.blocked}, Replies: ${result.engagement.repliesSent}`);
 
     // Alert if anything was blocked
     if (result.blocked > 0) {
@@ -302,6 +376,29 @@ export class AutonomousPublisher {
       return log;
     }
 
+    // Produce video then stage to Composio S3 so dispatch has an s3key
+    if (post.platform === "youtube" || post.format === "reel") {
+      try {
+        console.log(`[Empire] Producing video for: ${post.postId}`);
+        const video = await videoProductionAgent.produce(post);
+        if (!video.success || !video.videoPath) {
+          console.warn(`[Empire] Video production failed for ${post.postId}: ${video.error ?? "no videoPath"}`);
+        } else {
+          console.log(`[Empire] Video ready: ${video.videoPath} (${video.durationSec}s)`);
+          post.videoPath = video.videoPath;
+          try {
+            const toolkit = post.platform === "instagram" ? "instagram" : "youtube";
+            post.videoS3Key = await stageVideoFile(video.videoPath, toolkit);
+            console.log(`[Empire] Video staged to Composio S3: ${post.videoS3Key}`);
+          } catch (stageErr: unknown) {
+            console.warn(`[Empire] S3 staging failed for ${post.postId}: ${String(stageErr)}`);
+          }
+        }
+      } catch (videoErr: unknown) {
+        console.warn(`[Empire] Video production threw for ${post.postId}: ${String(videoErr)}`);
+      }
+    }
+
     // Approve and dispatch
     try {
       const approved = contentScheduler.approve(post.postId, "autonomous-publisher");
@@ -310,6 +407,9 @@ export class AutonomousPublisher {
         result.blocked++;
         return log;
       }
+      // Copy staged video fields from the mutable post onto the approved snapshot
+      if (post.videoS3Key) approved.videoS3Key = post.videoS3Key;
+      if (post.videoPath)  approved.videoPath  = post.videoPath;
       const dispatch = await composioPublisher.dispatch(approved, false);
 
       if (dispatch.success) {

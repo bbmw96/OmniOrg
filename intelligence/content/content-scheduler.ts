@@ -40,6 +40,10 @@ export interface ScheduledPost {
   videoScript?: string;
   visualConcept?: string;
 
+  // Video file (set after production + staging)
+  videoPath?: string;               // Local MP4 path from video-production-agent
+  videoS3Key?: string;              // Composio S3 key after composio.files.upload()
+
   // Schedule
   scheduledFor: string;             // ISO datetime
   timezone: string;

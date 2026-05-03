@@ -156,6 +156,18 @@ export class ViralGameGenerator {
             '- Footer branding: "Powered by AI · @bbm0902" in small text\n' +
             "- No external fonts that require CORS\n" +
             "- Game must match the concept exactly\n" +
+            "ADMOB MONETISATION (required):\n" +
+            "- Add a 320x50 banner ad placeholder div at the bottom of the page with id='admob-banner'.\n" +
+            "  Style it: position fixed, bottom 0, width 100%, height 50px, background #f0f0f0, text-align center, line-height 50px, font-size 12px, z-index 9999.\n" +
+            "  Inner text: 'Advertisement' (replaced by native AdMob SDK at runtime).\n" +
+            "- Add body padding-bottom of 56px so game content is not hidden behind the banner.\n" +
+            "- After 3 game-over events, show a full-screen interstitial overlay div with id='admob-interstitial'.\n" +
+            "  Style: position fixed, inset 0, background rgba(0,0,0,0.9), color white, display flex, align-items center, justify-content center, z-index 10000.\n" +
+            "  Include a 'Continue' button that dismisses the overlay. Inner text: 'Ad loading... (native ad shown here on device)'.\n" +
+            "  Track game-over count in a variable called admobInterstitialCount.\n" +
+            "  Reset the counter after showing the interstitial.\n" +
+            "- Add a window.AdMob namespace stub so the Capacitor plugin can override it:\n" +
+            "  window.AdMob = window.AdMob || { showBanner: ()=>{}, showInterstitial: ()=>{}, initialize: ()=>{} };\n" +
             "Output ONLY the complete HTML document starting with <!DOCTYPE html>",
         },
       ],
@@ -249,6 +261,17 @@ export class ViralGameGenerator {
           style: "dark",
           backgroundColor: "#000000",
         },
+        AdMob: {
+          // Replace with real App ID from AdMob console (admob.google.com)
+          appId: "ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX",
+          // Banner ad unit ID (320x50, anchored bottom)
+          bannerAdId: "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX",
+          // Interstitial ad unit ID (shown every 3 game-overs)
+          interstitialAdId: "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX",
+          // Use test IDs during development: ca-app-pub-3940256099942544/6300978111 (banner)
+          //                                  ca-app-pub-3940256099942544/1033173712 (interstitial)
+          testingDevices: [],
+        },
       },
       android: {
         buildOptions: {
@@ -270,11 +293,21 @@ export class ViralGameGenerator {
       `[ ] Game tested on Android (Chrome mobile) and iOS (Safari), tap events work correctly`,
       `[ ] Verify localStorage high-score persists across sessions`,
       `[ ] Test share button: copies score message to clipboard`,
+      `[ ] Verify admob-banner div renders at bottom (50px height, fixed)`,
+      `[ ] Verify interstitial overlay appears after 3rd game-over and dismisses on Continue`,
       `[ ] Run game.html through HTML validator (validator.w3.org)`,
+      `[ ] Install AdMob Capacitor plugin: npm install @capacitor-community/admob`,
+      `[ ] Create AdMob account at admob.google.com (free, Google account required)`,
+      `[ ] Create AdMob app entry for "${concept.title}" (Android)`,
+      `[ ] Replace placeholder App ID in capacitor-manifest.json with real AdMob App ID`,
+      `[ ] Create Banner ad unit and replace bannerAdId in capacitor-manifest.json`,
+      `[ ] Create Interstitial ad unit and replace interstitialAdId in capacitor-manifest.json`,
       `[ ] Wrap in Capacitor: npx cap add android && npx cap add ios`,
       `[ ] Replace webDir dist content with built game.html`,
+      `[ ] Add AdMob initialisation to android/app/src/main/java/.../MainActivity.java`,
       `[ ] Generate signed APK: npx cap build android --release`,
-      `[ ] Test APK on physical Android device`,
+      `[ ] Test APK on physical Android device  -  confirm real banner ad loads`,
+      `[ ] Test interstitial shows after 3 game-over cycles on device`,
       `[ ] Generate 512x512 app icon PNG from iconPrompt (asset-prompts.md)`,
       `[ ] Generate 5 portrait screenshots (1080x1920) from screenshotPrompts`,
       `[ ] Generate feature graphic (1024x500) from featureGraphicPrompt`,
@@ -287,6 +320,7 @@ export class ViralGameGenerator {
       `[ ] Submit for review (typically 1-3 days)`,
       `[ ] Tag git commit: ${quarter}-${concept.id}-published`,
       `[ ] Post launch announcement on X/Twitter with #${concept.id.replace(/-/g, "")} hashtag`,
+      `[ ] Pin Google Play Store link in BBMW0 Games YouTube channel description`,
     ];
   }
 

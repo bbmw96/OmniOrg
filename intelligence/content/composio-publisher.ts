@@ -5,14 +5,18 @@
  * Handles actual delivery of approved content packages to
  * Instagram and YouTube via the Composio MCP connection.
  *
- * ACCOUNT DETAILS (from active Composio connections):
- *   Instagram:       @ai_game_odyssey  , ig_user_id: 26759002047072119
- *   YouTube (main):  @bbmw.0 (Mohammed), channel: UCSRkqZ0PckW8ae-cnZcN1hw
- *   YouTube (bbm0902): @bbm0902        , email: bbmw96@gmail.com
- *                    ⚠️  CONNECT ACTION REQUIRED:
- *                    Go to composio.dev → Apps → YouTube → Add Account
- *                    Sign in with bbmw96@gmail.com to connect @bbm0902.
- *                    Shorts only, no long-form on this channel.
+ * ACTIVE COMPOSIO CONNECTIONS (all 3 YouTube accounts verified):
+ *   Instagram:         @ai_game_odyssey    ig_user_id: 26759002047072119
+ *                      entity: instagram_stays-moo
+ *   YouTube (main):    @bbmw.0 (Mohammed)  channel: UCSRkqZ0PckW8ae-cnZcN1hw
+ *                      entity: youtube_boris-stasis   (up866106@gmail.com)
+ *   YouTube (bbm0902): @bbm0902
+ *                      entity: youtube_tao-juang      (bbmw96@gmail.com)
+ *   YouTube (games):   @BBMW0 Games
+ *                      entity: youtube_crag-macies    (up866106@gmail.com)
+ *
+ *   If a video dispatches to the wrong channel, swap tao-juang/crag-macies
+ *   in COMPOSIO_ACCOUNTS below and re-run.
  *
  * POLICY:
  *   - Only posts with approvedForPosting = true are ever delivered
@@ -30,6 +34,7 @@
  */
 
 import type { ScheduledPost } from "./content-scheduler";
+import { executeComposioPlan } from "./composio-executor";
 
 // ── ACCOUNT CONSTANTS ──────────────────────────────────────────────────────────
 
@@ -49,14 +54,23 @@ export const COMPOSIO_ACCOUNTS = {
     contentType: "all" as const,
   },
   youtubeBbm0902: {
-    channelId:   "",   // Populated once bbmw96@gmail.com is connected in Composio
-    handle:      "@bbm0902",
-    name:        "bbm0902",
-    accountId:   "youtube_bbm0902",   // Assigned by Composio on connection
-    email:       "bbmw96@gmail.com",
-    contentType: "shorts-only" as const,
-    connectionRequired: true,
-    connectionInstructions: "composio.dev → Apps → YouTube → Add Account → Sign in with bbmw96@gmail.com",
+    channelId:          "",
+    handle:             "@bbm0902",
+    name:               "bbm0902",
+    accountId:          "youtube_tao-juang",
+    email:              "bbmw96@gmail.com",
+    contentType:        "shorts-only" as const,
+    connectionRequired: false,
+    subscriberCount:    1,   // as of 2026-05-02  -  update via YouTube API
+  },
+  youtubeGames: {
+    channelId:   "",
+    handle:      "@BBMW0Games",
+    name:        "BBMW0 Games",
+    accountId:   "youtube_crag-macies",
+    email:       "up866106@gmail.com",
+    contentType: "all" as const,
+    connectionRequired: false,
   },
 } as const;
 
@@ -233,13 +247,6 @@ export class ComposioPublisherEngine {
    * Shorts are ≤ 60 seconds, vertical (9:16), title must NOT exceed 100 chars.
    */
   getBbm0902ShortPlan(payload: YouTubePublishPayload): object[] {
-    if (COMPOSIO_ACCOUNTS.youtubeBbm0902.connectionRequired) {
-      console.warn(
-        "  ⚠️  @bbm0902 Composio connection not yet set up.\n" +
-        `     → ${COMPOSIO_ACCOUNTS.youtubeBbm0902.connectionInstructions}\n` +
-        "     Execution plan generated but cannot be sent until connected."
-      );
-    }
     const title       = `#Shorts ${payload.title}`.slice(0, 100);
     const description = `${payload.description}\n\n#Shorts`.slice(0, 5000);
 
@@ -281,6 +288,50 @@ export class ComposioPublisherEngine {
     ];
   }
 
+  /**
+   * Returns the Composio tool calls to upload a video to the BBMW0 Games channel.
+   * Uses the youtube_crag-macies entity (connected, verified).
+   */
+  getGamesUploadPlan(payload: YouTubePublishPayload): object[] {
+    const title       = payload.title.slice(0, 100);
+    const description = payload.description.slice(0, 5000);
+    return [
+      {
+        tool:   "YOUTUBE_MULTIPART_UPLOAD_VIDEO",
+        params: {
+          title,
+          description,
+          tags:          payload.tags.slice(0, 30),
+          categoryId:    payload.categoryId,
+          privacyStatus: payload.privacyStatus,
+          videoFile: {
+            name:      `${payload.contentId}.mp4`,
+            mimetype:  "video/mp4",
+            s3key:     payload.videoS3Key ?? "UPLOAD_FILE_FIRST",
+          },
+          accountId: COMPOSIO_ACCOUNTS.youtubeGames.accountId,
+        },
+        storeAs: "video_id",
+        extract: "data.video.id",
+      },
+      ...(payload.thumbnailUrl ? [{
+        tool:   "YOUTUBE_UPDATE_THUMBNAIL",
+        params: { video_id: "{{video_id}}", thumbnailUrl: payload.thumbnailUrl },
+      }] : []),
+      {
+        tool:   "YOUTUBE_UPDATE_VIDEO",
+        params: {
+          video_id:       "{{video_id}}",
+          title,
+          description,
+          tags:           payload.tags,
+          category_id:    payload.categoryId,
+          privacy_status: payload.privacyStatus,
+        },
+      },
+    ];
+  }
+
   async dispatch(post: ScheduledPost, dryRun = false): Promise<DispatchResult> {
     if (post.status !== "approved") {
       return {
@@ -301,6 +352,7 @@ export class ComposioPublisherEngine {
         caption:     post.caption ?? "",
         approvedBy:  post.approvedBy ?? "system",
         shareToFeed: true,
+        ...(post.videoS3Key ? { videoS3Key: post.videoS3Key } : {}),
       };
       plan = this.getInstagramReelPlan(payload);
     } else {
@@ -312,8 +364,15 @@ export class ComposioPublisherEngine {
         categoryId:    YOUTUBE_CATEGORIES["Entertainment"],
         privacyStatus: "public",
         approvedBy:    post.approvedBy ?? "system",
+        ...(post.videoS3Key ? { videoS3Key: post.videoS3Key } : {}),
       };
-      plan = this.getYouTubeUploadPlan(payload);
+      if (post.tenantId === "bbmw0-games") {
+        plan = this.getGamesUploadPlan(payload);
+      } else if (post.format === "short") {
+        plan = this.getBbm0902ShortPlan(payload);
+      } else {
+        plan = this.getYouTubeUploadPlan(payload);
+      }
     }
 
     if (dryRun) {
@@ -324,12 +383,28 @@ export class ComposioPublisherEngine {
 
     try {
       console.log(`[ComposioPublisher] Submitting ${post.platform} post ${post.postId} to Composio...`);
-      const jobId = `composio-${Date.now()}-${post.postId.slice(-6)}`;
-      console.log(`[ComposioPublisher] Job queued: ${jobId}`);
-      plan.forEach((step: any, i: number) => {
-        console.log(`  Step ${i + 1}: ${step.tool}`);
-      });
-      return { success: true, platform: post.platform, contentId: post.postId, dryRun: false, jobId };
+      const accountId = post.platform === "instagram"
+        ? COMPOSIO_ACCOUNTS.instagram.accountId
+        : post.tenantId === "bbmw0-games"
+          ? COMPOSIO_ACCOUNTS.youtubeGames.accountId
+          : post.format === "short"
+            ? COMPOSIO_ACCOUNTS.youtubeBbm0902.accountId
+            : COMPOSIO_ACCOUNTS.youtube.accountId;
+
+      const { stored } = await executeComposioPlan(
+        (plan as Array<{ tool: string; params: Record<string, unknown>; storeAs?: string; extract?: string }>),
+        accountId,
+      );
+
+      const publishedId = stored.published_media_id ?? stored.video_id;
+      console.log(`[ComposioPublisher] Published: ${publishedId}`);
+      return {
+        success:     true,
+        platform:    post.platform,
+        contentId:   post.postId,
+        dryRun:      false,
+        publishedId,
+      };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       console.error(`[ComposioPublisher] Dispatch failed for post ${post.postId}:`, message);
@@ -418,13 +493,14 @@ export interface PostSlot {
 }
 
 export interface DispatchResult {
-  success:   boolean;
-  platform:  "instagram" | "youtube";
-  contentId: string;
-  dryRun:    boolean;
-  plan?:     object[];
-  jobId?:    string;
-  error?:    string;
+  success:     boolean;
+  platform:    "instagram" | "youtube";
+  contentId:   string;
+  dryRun:      boolean;
+  plan?:       object[];
+  jobId?:      string;
+  publishedId?: string;
+  error?:      string;
 }
 
 export const composioPublisher = new ComposioPublisherEngine();

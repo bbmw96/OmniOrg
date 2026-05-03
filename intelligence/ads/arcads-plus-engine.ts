@@ -3,11 +3,11 @@
  * ARCADS+ ENGINE
  *
  * Islamic-compliant UGC-style ad video production engine.
- * Equivalent to Arcads.ai — but fully owned, zero SaaS fees, no AI faces.
+ * Equivalent to Arcads.ai  -  but fully owned, zero SaaS fees, no AI faces.
  *
  * Islamic compliance: ZERO faces, figures, or living beings in any output.
  * All visuals are abstract motion graphics + text-on-screen over voiceover.
- * This is not a limitation — it is a clean, professional differentiator.
+ * This is not a limitation  -  it is a clean, professional differentiator.
  *
  * Capabilities:
  *   - Ad script generation from product/service description (Claude)
@@ -56,7 +56,7 @@ export interface AdVariant {
 
 export interface AdScene {
   index:       number;
-  visual:      string;   // Abstract visual description — NO faces
+  visual:      string;   // Abstract visual description  -  NO faces
   narration:   string;   // Voiceover text for this scene
   duration:    number;   // Seconds
   textOverlay: string;   // On-screen text/caption
@@ -82,7 +82,7 @@ function enforceIslamicPolicy(scene: AdScene): AdScene {
   const lower = scene.visual.toLowerCase();
   for (const term of FORBIDDEN_VISUAL_TERMS) {
     if (lower.includes(term)) {
-      console.warn(`[Arcads+] Scene ${scene.index} visual blocked (contains '${term}') — replaced with abstract.`);
+      console.warn(`[Arcads+] Scene ${scene.index} visual blocked (contains '${term}')  -  replaced with abstract.`);
       scene.visual = "abstract geometric light pattern, data particles, premium product showcase, no living beings";
     }
   }
@@ -106,14 +106,14 @@ async function generateAdScript(brief: AdBrief, variantIndex: number): Promise<{
 You create video ad scripts for ${brief.platform} ads.
 All visual descriptions MUST be abstract, geometric, typographic, or product-focused.
 NEVER describe faces, people, animals, anime, cartoons, or any living being in visuals.
-Islamic content compliance is MANDATORY — only abstract/geometric/product visuals.`;
+Islamic content compliance is MANDATORY  -  only abstract/geometric/product visuals.`;
 
   const prompt = `Create ad variant #${variantIndex + 1} for:
 Product: ${brief.productName}
 ${brief.productUrl ? `URL: ${brief.productUrl}` : ""}
 Description: ${brief.description}
 Target audience: ${brief.targetAudience}
-Tone: ${brief.tone} — ${toneGuide[brief.tone]}
+Tone: ${brief.tone}  -  ${toneGuide[brief.tone]}
 CTA: ${brief.callToAction}
 Duration: ${brief.duration}s (${sceneCount} scenes)
 Language: ${brief.language ?? "English (UK)"}
@@ -125,7 +125,7 @@ Return valid JSON matching this schema exactly:
   "scenes": [
     {
       "index": 0,
-      "visual": "abstract/geometric/product visual description — NO faces/people/animals",
+      "visual": "abstract/geometric/product visual description  -  NO faces/people/animals",
       "narration": "spoken text for this scene",
       "duration": 5,
       "textOverlay": "bold on-screen text line"
@@ -159,7 +159,7 @@ async function produceAdVideo(variant: AdVariant): Promise<string> {
 
   // Build a produce-video.py compatible payload
   const payload = {
-    topic:    `${variant.brief.productName} — Ad Variant ${variant.variantId}`,
+    topic:    `${variant.brief.productName}  -  Ad Variant ${variant.variantId}`,
     platform: variant.brief.platform === "tiktok" ? "instagram" : variant.brief.platform,
     format:   variant.brief.platform === "youtube" ? "shorts" : "reels",
     language: variant.language,

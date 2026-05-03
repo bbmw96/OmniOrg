@@ -1,13 +1,35 @@
 /**
  * AXIOM AUTH: OmniOrg Proprietary Authentication
+ *
  * JWT-based with tenant isolation, API key hashing, and role-based access.
  * No third-party auth dependency. Fully owned.
+ *
+ * KEY ROTATION - zero broken sessions:
+ *   To rotate AXIOM_JWT_SECRET safely:
+ *   1. Generate new secret: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+ *   2. Set AXIOM_JWT_SECRET_OLD = current AXIOM_JWT_SECRET value
+ *   3. Set AXIOM_JWT_SECRET = new value
+ *   4. Deploy - new tokens use new key; old tokens (up to 1h TTL) still validate against old key
+ *   5. After 1 hour: remove AXIOM_JWT_SECRET_OLD from .env
+ *   Both keys active simultaneously = zero session breaks during rotation.
  */
 
 import { IncomingMessage } from "http";
 import { createHmac, randomBytes, createHash } from "crypto";
 
-const JWT_SECRET = process.env.AXIOM_JWT_SECRET ?? randomBytes(64).toString("hex");
+// Primary signing key (new tokens use this)
+const JWT_SECRET_PRIMARY = process.env.AXIOM_JWT_SECRET
+  ?? randomBytes(64).toString("hex");
+
+// Legacy key only active during rotation grace period (remove after 1h)
+const JWT_SECRET_OLD = process.env.AXIOM_JWT_SECRET_OLD ?? null;
+
+// Both keys are checked during verification - tokens signed by either are valid
+const JWT_VERIFY_KEYS: string[] = [
+  JWT_SECRET_PRIMARY,
+  ...(JWT_SECRET_OLD ? [JWT_SECRET_OLD] : []),
+];
+
 const API_KEY_STORE = new Map<string, { tenantId: string; plan: string; hashedKey: string }>();
 
 export interface AuthResult {
@@ -22,7 +44,8 @@ export interface JWTPayload {
   plan: string;
   iat: number;
   exp: number;
-  jti: string; // JWT ID (prevents replay attacks)
+  jti: string;   // JWT ID - prevents replay attacks
+  kid: string;   // Key ID - tracks which secret signed this token
 }
 
 export class AxiomAuth {
@@ -31,7 +54,7 @@ export class AxiomAuth {
     const rawKey = `omniorg_${randomBytes(32).toString("hex")}`;
     const hashedKey = createHash("sha256").update(rawKey).digest("hex");
     API_KEY_STORE.set(tenantId, { tenantId, plan, hashedKey });
-    return rawKey; // Only returned once: store it securely
+    return rawKey;   // Only returned once - store it securely
   }
 
   /** Generate a short-lived JWT from an API key */
@@ -46,8 +69,9 @@ export class AxiomAuth {
       tenantId,
       plan: stored.plan,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour
+      exp: Math.floor(Date.now() / 1000) + 3600,   // 1 hour
       jti: randomBytes(16).toString("hex"),
+      kid: "primary",   // Always sign new tokens with primary key
     };
 
     return AxiomAuth.signJWT(payload);
@@ -64,7 +88,6 @@ export class AxiomAuth {
     }
 
     if (apiKeyHeader) {
-      // Direct API key auth (less preferred: use for server-to-server)
       for (const [tenantId, stored] of API_KEY_STORE.entries()) {
         const hashed = createHash("sha256").update(apiKeyHeader).digest("hex");
         if (hashed === stored.hashedKey) {
@@ -81,8 +104,9 @@ export class AxiomAuth {
 
   private static signJWT(payload: JWTPayload): string {
     const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString("base64url");
-    const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
-    const sig = createHmac("sha256", JWT_SECRET).update(`${header}.${body}`).digest("base64url");
+    const body   = Buffer.from(JSON.stringify(payload)).toString("base64url");
+    // Always sign with PRIMARY key
+    const sig = createHmac("sha256", JWT_SECRET_PRIMARY).update(`${header}.${body}`).digest("base64url");
     return `${header}.${body}.${sig}`;
   }
 
@@ -91,9 +115,18 @@ export class AxiomAuth {
     if (parts.length !== 3) return { valid: false, tenantId: "", plan: "", reason: "Malformed token" };
 
     const [header, body, sig] = parts;
-    const expectedSig = createHmac("sha256", JWT_SECRET).update(`${header}.${body}`).digest("base64url");
 
-    if (sig !== expectedSig) return { valid: false, tenantId: "", plan: "", reason: "Invalid signature" };
+    // Try every active key - supports graceful rotation without breaking existing tokens
+    let signatureValid = false;
+    for (const secret of JWT_VERIFY_KEYS) {
+      const expected = createHmac("sha256", secret).update(`${header}.${body}`).digest("base64url");
+      if (sig === expected) {
+        signatureValid = true;
+        break;
+      }
+    }
+
+    if (!signatureValid) return { valid: false, tenantId: "", plan: "", reason: "Invalid signature" };
 
     try {
       const payload: JWTPayload = JSON.parse(Buffer.from(body, "base64url").toString());
