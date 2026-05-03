@@ -5,6 +5,8 @@
  * All outbound HTTP requests in OmniOrg route through this module.
  * Your real IP address never reaches target servers when a proxy is configured.
  *
+ * Uses undici (Node 18+ built-in) for proxy support - no external ESM packages needed.
+ *
  * Configuration via .env:
  *   OMNIORG_PROXY_URL=socks5://127.0.0.1:1080   (Mullvad / ProtonVPN SOCKS5)
  *   OMNIORG_PROXY_URL=http://127.0.0.1:8888      (HTTP proxy / Burp / Charles)
@@ -17,11 +19,8 @@
  *   4. Set OMNIORG_PROXY_URL=socks5://127.0.0.1:1080
  *
  * When OMNIORG_PROXY_URL is not set: standard fetch is used (no proxy).
- * No crash, no failure - proxy is opt-in and silently skipped if unconfigured.
  */
 
-import { SocksProxyAgent } from "socks-proxy-agent";
-import { HttpsProxyAgent } from "https-proxy-agent";
 import { config as loadEnv } from "dotenv";
 import path from "path";
 
@@ -29,27 +28,37 @@ loadEnv({ path: path.resolve(__dirname, "../.env") });
 
 const PROXY_URL = process.env.OMNIORG_PROXY_URL ?? null;
 
-// Build agent once at startup - reused for all requests
-let _agent: SocksProxyAgent | HttpsProxyAgent<string> | null = null;
+// Lazy-loaded dispatcher (initialised once on first proxied request)
+let _dispatcher: object | null | undefined = undefined;
 
-function getAgent(): SocksProxyAgent | HttpsProxyAgent<string> | null {
-  if (!PROXY_URL) return null;
-  if (_agent) return _agent;
+function getDispatcher(): object | null {
+  if (_dispatcher !== undefined) return _dispatcher;
 
-  try {
-    if (PROXY_URL.startsWith("socks")) {
-      _agent = new SocksProxyAgent(PROXY_URL);
-      console.log(`[ProxyFetch] SOCKS5 proxy active: ${PROXY_URL.replace(/:[^:@]+@/, ":***@")}`);
-    } else {
-      _agent = new HttpsProxyAgent(PROXY_URL);
-      console.log(`[ProxyFetch] HTTP proxy active: ${PROXY_URL.replace(/:[^:@]+@/, ":***@")}`);
-    }
-  } catch (err) {
-    console.error(`[ProxyFetch] Failed to initialise proxy agent: ${err}. Using direct connection.`);
+  if (!PROXY_URL) {
+    _dispatcher = null;
     return null;
   }
 
-  return _agent;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const undici = require("undici") as {
+      ProxyAgent: new (opts: { uri: string }) => object;
+      Socks5ProxyAgent: new (opts: { uri: string }) => object;
+    };
+
+    if (PROXY_URL.startsWith("socks")) {
+      _dispatcher = new undici.Socks5ProxyAgent({ uri: PROXY_URL });
+      console.log(`[ProxyFetch] SOCKS5 proxy active: ${PROXY_URL.replace(/:[^:@]+@/, ":***@")}`);
+    } else {
+      _dispatcher = new undici.ProxyAgent({ uri: PROXY_URL });
+      console.log(`[ProxyFetch] HTTP proxy active: ${PROXY_URL.replace(/:[^:@]+@/, ":***@")}`);
+    }
+  } catch (err) {
+    console.error(`[ProxyFetch] Failed to initialise proxy dispatcher: ${err}. Using direct connection.`);
+    _dispatcher = null;
+  }
+
+  return _dispatcher;
 }
 
 /**
@@ -65,19 +74,17 @@ export async function proxyFetch(
   url: string | URL,
   init?: RequestInit,
 ): Promise<Response> {
-  const agent = getAgent();
+  const dispatcher = getDispatcher();
 
-  if (!agent) {
-    // No proxy configured - use standard fetch
+  if (!dispatcher) {
     return fetch(url, init);
   }
 
-  // Node 18+ fetch supports dispatcher/agent via undici options
-  // Cast to any to pass the agent through - undici accepts this
+  // undici's fetch accepts a `dispatcher` option not in standard TS RequestInit
   return fetch(url, {
     ...init,
-    // @ts-expect-error - undici accepts agent option not in TS types
-    agent,
+    // @ts-expect-error - undici dispatcher option not in standard RequestInit types
+    dispatcher,
   });
 }
 

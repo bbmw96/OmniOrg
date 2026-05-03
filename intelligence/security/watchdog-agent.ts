@@ -238,21 +238,57 @@ export function startEnvIntegrityMonitor(): void {
 // ── Outbound request monitor ──────────────────────────────────────────────────
 
 const ALLOWED_OUTBOUND_HOSTS = new Set([
+  // Anthropic
   "api.anthropic.com",
+  // Google AI
   "generativelanguage.googleapis.com",
   "notebooklm.google.com",
+  "accounts.google.com",
+  // YouTube
   "www.youtube.com",
   "youtube.com",
+  "youtu.be",
+  "www.youtube.com",
+  // Social / Meta
   "graph.instagram.com",
+  // Composio
   "backend.composio.dev",
   "api.composio.dev",
+  // Email (Resend)
   "resend.com",
   "api.resend.com",
+  // HeyGen
   "heygen.com",
   "api.heygen.com",
+  // Higgsfield
+  "platform.higgsfield.ai",
+  // ElevenLabs
   "api.elevenlabs.io",
+  "elevenlabs.io",
+  // Runway
   "api.runwayml.com",
+  "runwayml.com",
+  // Kling / Kuaishou
+  "klingai.com",
+  "api.klingai.com",
+  // Pika
+  "api.pika.art",
+  "pika.art",
+  // Perplexity
   "api.perplexity.ai",
+  "perplexity.ai",
+  // Search APIs
+  "api.search.brave.com",
+  "html.duckduckgo.com",
+  "duckduckgo.com",
+  // Minimax
+  "api.minimaxi.chat",
+  "api.minimax.io",
+  // OpenAI (for Llama/Ollama compatibility shim)
+  "api.openai.com",
+  // Local Ollama (loopback - safe)
+  "localhost",
+  "127.0.0.1",
 ]);
 
 /**
