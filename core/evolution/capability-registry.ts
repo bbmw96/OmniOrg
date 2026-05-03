@@ -160,6 +160,30 @@ const CAPABILITIES: Capability[] = [
     status:      "active",
     requiresKeys: ["ANTHROPIC_API_KEY"],
   },
+  {
+    id:          "deepseek",
+    name:        "DeepSeek+ AI",
+    module:      "intelligence/ai-engines/deepseek-engine",
+    description: "DeepSeek V3 chat + R1 chain-of-thought reasoning + coder mode",
+    status:      "active",
+    requiresKeys: ["DEEPSEEK_API_KEY"],
+  },
+  {
+    id:          "glm",
+    name:        "GLM+ AI",
+    module:      "intelligence/ai-engines/glm-engine",
+    description: "ZhipuAI GLM-4 multimodal engine with 1M context and ultra-cheap flash tier",
+    status:      "active",
+    requiresKeys: ["ZHIPUAI_API_KEY"],
+  },
+  {
+    id:          "engine-router",
+    name:        "Engine Router",
+    module:      "core/engine-router",
+    description: "Capability-based inter-engine dispatch mesh with automatic fallback chains",
+    status:      "active",
+    requiresKeys: [],
+  },
 ];
 
 // ─── Functions ────────────────────────────────────────────────────────────────
