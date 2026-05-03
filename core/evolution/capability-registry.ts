@@ -184,6 +184,22 @@ const CAPABILITIES: Capability[] = [
     status:      "active",
     requiresKeys: [],
   },
+  {
+    id:          "multi-engine-script",
+    name:        "Multi-Engine Script Writer",
+    module:      "intelligence/content/multi-engine-script-writer",
+    description: "Fires all 7 LLMs simultaneously and returns the best script by score",
+    status:      "active",
+    requiresKeys: [],
+  },
+  {
+    id:          "master-factory",
+    name:        "Master Content Factory",
+    module:      "intelligence/content/master-content-factory",
+    description: "End-to-end YouTube/Instagram production: script + SEO + video + voice + captions + publish",
+    status:      "active",
+    requiresKeys: [],
+  },
 ];
 
 // ─── Functions ────────────────────────────────────────────────────────────────
