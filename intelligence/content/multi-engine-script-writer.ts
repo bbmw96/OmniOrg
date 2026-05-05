@@ -264,7 +264,7 @@ function parseScript(text: string, brief: ScriptBrief): ScriptPackage {
 
 /**
  * Fire all available LLM engines simultaneously and return the best script.
- * Always returns a valid ScriptPackage -- falls back to best available attempt.
+ * Always returns a valid ScriptPackage; falls back to best available attempt.
  */
 export async function generateMultiEngineScript(
   brief: ScriptBrief,

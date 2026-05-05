@@ -7,7 +7,7 @@ import { runDailyProduction } from "../intelligence/content/production-runner";
 async function main(): Promise<void> {
   const now = new Date();
   console.log(`[Empire] ═══════════════════════════════════════════`);
-  console.log(`[Empire] Daily Content Empire — ${now.toISOString()}`);
+  console.log(`[Empire] Daily Content Empire: ${now.toISOString()}`);
   console.log(`[Empire] ═══════════════════════════════════════════\n`);
 
   // Stage 1: Legacy autonomous publisher (existing content cycle)
@@ -19,7 +19,7 @@ async function main(): Promise<void> {
     console.error("[Empire] Stage 1 error (non-fatal, continuing):", err);
   }
 
-  // Stage 2: NanoBanana production runner — all 4 channels, all AI engines
+  // Stage 2: NanoBanana production runner: all 4 channels, all AI engines
   console.log("\n[Empire] Stage 2: NanoBanana production runner...");
   try {
     await runDailyProduction();
